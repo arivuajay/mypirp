@@ -1,27 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "{{admin}}".
+ * This is the model class for table "dmv_admin_resources".
  *
- * The followings are the available columns in table '{{admin}}':
+ * The followings are the available columns in table 'dmv_admin_resources':
+ * @property integer $adres_id
  * @property integer $admin_id
- * @property string $admin_name
- * @property string $admin_password
- * @property string $admin_status
- * @property string $admin_email
- * @property string $created_date
- * @property string $admin_last_login
- * @property integer $admin_login_ip
+ * @property integer $resource_id
+ * @property string $created_at
+ * @property string $modified_at
+ *
+ * The followings are the available model relations:
+ * @property DmvResources $resource
+ * @property DmvAdmin $admin
  */
-class Admin extends CActiveRecord {
-
-    public $current_password, $re_password;
+class DmvAdminResources extends CActiveRecord {
 
     /**
      * @return string the associated database table name
      */
     public function tableName() {
-        return '{{dmv_admin}}';
+        return 'dmv_admin_resources';
     }
 
     /**
@@ -31,27 +30,12 @@ class Admin extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, password, email,domain_url , client_name', 'required'),
-            array('username, email,domain_url', 'unique'),
-            array('domain_url', 'url', 'defaultScheme' => 'http'),
-            array('email', 'email'),
-            array('email', 'required', 'on' => 'forgotpassword'),
-            array('password,current_password,re_password', 'required', 'on' => 'changepassword'),
-            array('current_password', 'compare', 'compareAttribute' => 're_password', 'on' => 'changepassword'),
-            array('password', 'equalPasswords', 'on' => 'changepassword'),
-            array('username, password, email', 'length', 'max' => 255),
-            array('status', 'length', 'max' => 1),
+            //array('admin_id, resource_id, created_at, modified_at', 'required'),
+            array('admin_id, resource_id', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('username, password, email,modified_at,domain_url,client_name', 'safe', 'on' => 'search'),
+            array('adres_id, admin_id, resource_id, created_at, modified_at', 'safe', 'on' => 'search'),
         );
-    }
-
-    public function equalPasswords($attribute, $params) {
-        $admin = Admin::model()->findByPk(Yii::app()->user->id);
-        if ($this->$attribute != "" && $admin->password != Myclass::refencryption($this->$attribute)) {
-            $this->addError($attribute, Myclass::t('APP12'));
-        }
     }
 
     public function behaviors() {
@@ -71,7 +55,8 @@ class Admin extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'dmvAdminResources' => array(self::HAS_MANY, 'DmvAdminResources', 'admin_id'),  
+            'resource' => array(self::BELONGS_TO, 'DmvResources', 'resource_id'),
+            'admin' => array(self::BELONGS_TO, 'DmvAdmin', 'admin_id'),
         );
     }
 
@@ -80,14 +65,11 @@ class Admin extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Myclass::t('APP1'),
-            'username' => Myclass::t('APP3'),
-            'password' => Myclass::t('APP4'),
-            'status' => Myclass::t('APP5'),
-            'email' => Myclass::t('APP6'),
-            'current_password' => Myclass::t('APP7'),
-            're_password' => Myclass::t('APP8'),
-            'modified_at' => "Last modified",
+            'adres_id' => Myclass::t('Adres'),
+            'admin_id' => Myclass::t('Admin'),
+            'resource_id' => Myclass::t('Resource'),
+            'created_at' => Myclass::t('Created At'),
+            'modified_at' => Myclass::t('Modified At'),
         );
     }
 
@@ -108,14 +90,17 @@ class Admin extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->admin_id);
-        $criteria->compare('username', $this->username, true);
-        $criteria->compare('password', $this->password, true);
-        $criteria->compare('status', $this->status, true);
-        $criteria->compare('email', $this->email, true);
+        $criteria->compare('adres_id', $this->adres_id);
+        $criteria->compare('admin_id', $this->admin_id);
+        $criteria->compare('resource_id', $this->resource_id);
+        $criteria->compare('created_at', $this->created_at, true);
+        $criteria->compare('modified_at', $this->modified_at, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
         ));
     }
 
@@ -123,10 +108,18 @@ class Admin extends CActiveRecord {
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return Admin the static model class
+     * @return DmvAdminResources the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    public function dataProvider() {
+        return new CActiveDataProvider($this, array(
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
     }
 
 }

@@ -19,8 +19,7 @@
         $cs->registerCssFile($themeUrl . '/build/css/custom.min.css');
         $cs->registerCssFile($themeUrl . '/css/custom.css');
         $cs->registerScript('initial', 'var basepath = "' . Yii::app()->baseUrl . '";');
-        ?>
-       
+        ?>      
     </head>
     <body class="nav-md">
         <div class="container body">

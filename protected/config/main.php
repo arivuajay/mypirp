@@ -15,7 +15,7 @@ return array(
         'application.components.*',
     ),
     'modules' => array(
-       'site','webpanel', 'suadmin',
+       'webpanel', 'suadmin',
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -64,7 +64,7 @@ return array(
         'db' => require(dirname(__FILE__) . '/database.php'),
         
         'errorHandler' => array(
-            'errorAction' => 'site/default/error',
+            'errorAction' => 'webadmin/default/error',
         ),
         'log' => array(
             'class' => 'CLogRouter',
@@ -81,7 +81,7 @@ return array(
     ),
     // application-level parameters that can be accessed
     //setting the basic language value
-    'defaultController' => 'site/default/index',
+    'defaultController' => 'webpanel/default/index',
     // using Yii::app()->params['paramName']
     'params' => require(dirname(__FILE__) . '/params.php'),
     'timeZone' => 'Asia/Calcutta',

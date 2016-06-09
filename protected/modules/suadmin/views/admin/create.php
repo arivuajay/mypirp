@@ -19,7 +19,7 @@ $this->breadcrumbs = array(
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">                  
             <div class="x_content"> 
-                <?php $this->renderPartial('_form', array('model' => $model)); ?>
+                <?php $this->renderPartial('_form', array('model' => $model,'resources'=>$resources)); ?>
             </div>
         </div>
     </div>

@@ -21,7 +21,7 @@ $this->breadcrumbs = array(
             <?php
             $gridColumns = array(
                 'username',
-                'email',
+                'email',              
                 array(
                     'header' => 'status',
                     'name' => 'status',
@@ -45,7 +45,15 @@ $this->breadcrumbs = array(
                     'header' => 'Actions',
                     'class' => 'booster.widgets.TbButtonColumn',
                     'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                    'template' => '&nbsp;{update}&nbsp;&nbsp;{delete}',
+                    'template' => '{view}&nbsp;{update}&nbsp;&nbsp;{delete}',
+                    'buttons' => array
+                        (
+                        'view' => array
+                            (
+                            'url' => '$data->domain_url',
+                            'options'=>array('target'=>'_blank')
+                        ),                        
+                    ),
                 )
             );
 

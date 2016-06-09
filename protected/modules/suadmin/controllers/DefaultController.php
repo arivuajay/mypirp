@@ -27,6 +27,7 @@ class DefaultController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('logout', 'index', 'profile','changepassword'),
                 'users' => array('@'),
+                'expression'=> 'AdminIdentity::checkAdmin()',
             ),
             array('deny', // deny all users
                 'users' => array('*'),

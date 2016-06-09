@@ -48,7 +48,7 @@ class SuAdminIdentity extends CUserIdentity {
         $this->_id = $user->id;
         $this->setState('username', $user->username);
         $this->setState('v1', $user->email);
-        $this->setState('role', 'admin');
+        $this->setState('role', 'suadmin');
         //$this->setState('role', $user->role);
         //$this->setState('rolename', $user->roleMdl->Description);
         return;
@@ -74,10 +74,10 @@ class SuAdminIdentity extends CUserIdentity {
     
     public static function checkAdmin() {
         $return = false;
-        if(isset(Yii::app()->user->id)){
+        if(isset(Yii::app()->user->role)){
             //$user = User::model()->find('id = :U', array(':U' => Yii::app()->user->id));
             //$return = $user->role == 1;
-            $return = (Yii::app()->user->id==1)?true:false;
+            $return = (Yii::app()->user->role=="suadmin")?true:false;
         }
         return $return;
     }
