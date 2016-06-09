@@ -1,0 +1,35 @@
+<?php
+
+return array(
+    'APP1'   => "Admin Id",
+    'APP2'   => "Nom",
+    'APP3'   => "Nom d'utilisateur",
+    'APP4'   => "Mot de passe",
+    'APP5'   => "statut",
+    'APP6'   => "Courriel",
+    'APP7'   => "Mot de passe actuel",
+    'APP8'   => "Retaper le mot de passe",
+    'APP9'   => "Date de création",
+    'APP10'  => "Administrateur dernière connexion",
+    'APP11'  => "Admin login Ip",
+    'APP12'  => "Ancien mot de passe est incorrect.",
+    'APP13'  => "Souviens-toi de moi",
+    'APP14'  => "Nom d'utilisateur ou mot de passe incorrect . S'il vous plaît essayer à nouveau.",
+    'APP15'  => "Adresse Email Incorrecte. S'il vous plaît essayer à nouveau.",
+    'APP16'  => "Mot de passe Admin de réinitialisation",
+    'APP17'  => "Vérifiez votre e-mail pour plus d'instructions.",
+    'APP18'  => 'Le mot de passe a été changé avec succès.',
+    'APP19'  => 'Mot de passe ne change pas.',
+    'APP20'  => 'Profil mis à jour avec succès',
+    'APP21'  => 'S\'inscrire',
+    'APP22'  => 'S\'il vous plaît remplir les champs ci-dessous pour vous identifier:',
+    'APP23'  => 'J\'ai oublié mon mot de passe',
+    'APP24'  => 'S\'identifier',
+    'APP25'  => 'Sauvegarder',
+    'APP26'  => 'Changer Le Mot De Passe',
+    'APP27'  => 'Mot De Passe Oublié',
+    'APP28'  => 'Envoyer',
+    'APP29'  => 'Mon Profil',
+  
+);
+?>

@@ -1,0 +1,35 @@
+<?php
+
+return array(
+    'APP1'   => "Admin Id",
+    'APP2'   => "Name",
+    'APP3'   => "User name",
+    'APP4'   => "Password",
+    'APP5'   => "Status",
+    'APP6'   => "Email",
+    'APP7'   => "Current password",
+    'APP8'   => "Re-type password",
+    'APP9'   => "Created date",
+    'APP10'  => "Admin last login",
+    'APP11'  => "Admin login Ip",
+    'APP12'  => "Old password is incorrect.",
+    'APP13'  => "Remember me",
+    'APP14'  => "Incorrect user name or password. Please try again.",
+    'APP15'  => "Incorrect Email. Please try again.",
+    'APP16'  => "Admin reset password",
+    'APP17'  => "Check your email for further instructions.",
+    'APP18'  => 'Password changed successfully!!!',
+    'APP19'  => 'Password not changed.',
+    'APP20'  => 'Profile updated successfully!!!',
+    'APP21'  => 'Sign In',
+    'APP22'  => 'Please fill out the following fields to login:',
+    'APP23'  => 'I forgot my password',
+    'APP24'  => 'Login',
+    'APP25'  => 'Save',
+    'APP26'  => 'Change Password',
+    'APP27'  => 'Forgot Password',
+    'APP28'  => 'Send',
+    'APP29'  => 'My Profile',
+   
+);    
+?>
