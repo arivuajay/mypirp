@@ -83,6 +83,7 @@ class DmvAffiliateInfo extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
              'affiliateCommission' => array(self::HAS_ONE, 'DmvAffiliateCommission', 'affiliate_id'),
+             'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'affiliate_id'),  
         );
     }
 
@@ -203,6 +204,22 @@ class DmvAffiliateInfo extends CActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+    
+    public function getConcatened()
+    {
+        return $this->agency_code.' '.$this->agency_name;
+    }
+    
+    public static function all_affliates() {
+        $criteria = new CDbCriteria; 
+        $criteria->condition = "admin_id = :admin_id";
+        $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        $criteria->order = 'agency_code ASC';   
+       
+        $affiliate_list = DmvAffiliateInfo::model()->findAll($criteria);
+        $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened'); 
+        return $val;
     }
 
     public function dataProvider() {

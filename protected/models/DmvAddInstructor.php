@@ -25,6 +25,7 @@
  */
 class DmvAddInstructor extends CActiveRecord
 {
+        public $Affiliate;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -41,8 +42,9 @@ class DmvAddInstructor extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('instructor_ss, instructor_last_name, ins_first_name, instructor_initial, instructor_suffix, instructor_code, instructor_client_id, gender, addr1, addr2, city, zip, phone', 'required'),
+			array('instructor_last_name, ins_first_name, instructor_code', 'required'),
 			array('instructor_ss, instructor_suffix, instructor_code', 'length', 'max'=>10),
+                        array('instructor_code','unique'),
 			array('instructor_last_name, ins_first_name, state', 'length', 'max'=>20),
 			array('instructor_initial', 'length', 'max'=>5),
 			array('instructor_client_id', 'length', 'max'=>11),
@@ -50,7 +52,7 @@ class DmvAddInstructor extends CActiveRecord
 			array('addr1, addr2', 'length', 'max'=>50),
 			array('city', 'length', 'max'=>30),
 			array('zip, phone', 'length', 'max'=>15),
-			array('instructor_dob, created_date', 'safe'),
+			array('instructor_dob, created_date,Affiliate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('instructor_id, instructor_ss, instructor_last_name, ins_first_name, instructor_initial, instructor_suffix, instructor_code, instructor_client_id, instructor_dob, enabled, gender, addr1, addr2, city, state, zip, phone, created_date', 'safe', 'on'=>'search'),
@@ -65,6 +67,7 @@ class DmvAddInstructor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'instructor_id'),  
 		);
 	}
 
@@ -75,22 +78,22 @@ class DmvAddInstructor extends CActiveRecord
 	{
 		return array(
 			'instructor_id' => Myclass::t('Instructor'),
-			'instructor_ss' => Myclass::t('Instructor Ss'),
-			'instructor_last_name' => Myclass::t('Instructor Last Name'),
-			'ins_first_name' => Myclass::t('Ins First Name'),
-			'instructor_initial' => Myclass::t('Instructor Initial'),
-			'instructor_suffix' => Myclass::t('Instructor Suffix'),
+			'instructor_ss' => Myclass::t('Instructor SS'),
+			'instructor_last_name' => Myclass::t('Last Name'),
+			'ins_first_name' => Myclass::t('First Name'),
+			'instructor_initial' => Myclass::t('Initial'),
+			'instructor_suffix' => Myclass::t('Suffix'),
 			'instructor_code' => Myclass::t('Instructor Code'),
-			'instructor_client_id' => Myclass::t('Instructor Client'),
-			'instructor_dob' => Myclass::t('Instructor Dob'),
+			'instructor_client_id' => Myclass::t('Instructor Client ID'),
+			'instructor_dob' => Myclass::t('DOB'),
 			'enabled' => Myclass::t('Enabled'),
 			'gender' => Myclass::t('Gender'),
-			'addr1' => Myclass::t('Addr1'),
-			'addr2' => Myclass::t('Addr2'),
+			'addr1' => Myclass::t('Instructor Address1'),
+			'addr2' => Myclass::t('Address2'),
 			'city' => Myclass::t('City'),
 			'state' => Myclass::t('State'),
 			'zip' => Myclass::t('Zip'),
-			'phone' => Myclass::t('Phone'),
+			'phone' => Myclass::t('Phone #'),
 			'created_date' => Myclass::t('Created Date'),
 		);
 	}

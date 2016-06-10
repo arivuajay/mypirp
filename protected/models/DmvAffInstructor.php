@@ -41,6 +41,8 @@ class DmvAffInstructor extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Affliate' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+                    'Instructor' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
 		);
 	}
 
