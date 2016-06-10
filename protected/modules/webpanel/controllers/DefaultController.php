@@ -37,11 +37,10 @@ class DefaultController extends Controller {
 
     public function actionIndex() 
     {      
-        //$total_websites = Websites::model()->count();
-       // $total_courses  = Courses::model()->count();
-        $total_websites = "12313";
-        $total_courses  = "12313";
-        $this->render('index', array('total_websites' => $total_websites,'total_courses' => $total_courses));
+        $condition = "admin_id =".Yii::app()->user->admin_id;
+        $total_affiliates = DmvAffiliateInfo::model()->count($condition);
+        $total_instructors = "0";
+        $this->render('index', compact('total_affiliates','total_instructors'));
     }
     
 

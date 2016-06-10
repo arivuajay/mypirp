@@ -18,11 +18,8 @@
             'encodeLabel' => false,
             'activateItems' => true,
             'items' => array(
-                array('label' => '<i class="fa fa-user"></i> <span>Affliates</span>', 'url' => array('/webpanel/admin'), 'active' => $_controller == 'adminController' , 'visible' => (Yii::app()->user->id==1)?"1":"0"),
-                array('label' => '<i class="fa fa-newspaper-o"></i> <span>Instructures</span>', 'url' => array('/webpanel/websites'), 'active' => $_controller == 'websiteController'),
-                array('label' => '<i class="fa fa-calendar"></i> <span>Shedules</span>', 'url' => array('/webpanel/courses'), 'active' => $_controller == 'coursesController'),
-                array('label' => '<i class="fa fa-calendar"></i> <span>Payments</span>', 'url' => array('/webpanel/courses'), 'active' => $_controller == 'coursesController'),
-                array('label' => '<i class="fa fa-user"></i> <span>Manage Students</span>', 'url' => array('/webpanel/courses'), 'active' => $_controller == 'coursesController'),
+                array('label' => '<i class="fa fa-users"></i> <span>Affliates</span>', 'url' => array('/webpanel/affiliates'), 'active' => $_controller == 'affiliatesController'),
+                array('label' => '<i class="fa fa-users"></i> <span>Instructors</span>', 'url' => array('/webpanel/instructors'), 'active' => $_controller == 'instructorsController'),               
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));

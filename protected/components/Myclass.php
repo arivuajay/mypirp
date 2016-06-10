@@ -199,5 +199,13 @@ class Myclass extends CController {
             return $totalusers;
         }
     }
+    
+    public static function getallcountries($id = null) {
+        $criteria = new CDbCriteria;       
+        $criteria->order = 'country_desc ASC';       
+        $country = DmvCountry::model()->findAll($criteria);
+        $val = CHtml::listData($country, 'id', 'country_desc');
+        return $val;
+    }
        
 }
