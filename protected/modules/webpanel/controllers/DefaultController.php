@@ -46,7 +46,9 @@ class DefaultController extends Controller {
         $condition = "admin_id =".Yii::app()->user->admin_id;
         $total_messages = DmvPostMessage::model()->count($condition);
         
-        $this->render('index', compact('total_affiliates','total_instructors','total_messages'));
+        $total_schedules = "100";
+        
+        $this->render('index', compact('total_affiliates','total_instructors','total_messages','total_schedules'));
     }
     
 
