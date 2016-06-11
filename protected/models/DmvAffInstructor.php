@@ -99,6 +99,17 @@ class DmvAffInstructor extends CActiveRecord
 		return parent::model($className);
 	}
         
+        public static function get_ins_affliates($id = null)
+	{
+            $criteria = new CDbCriteria; 
+            $criteria->condition = "instructor_id = :instructor_id";
+            $criteria->params=(array(':instructor_id'=>$id));
+
+            $affiliate_list = DmvAffInstructor::model()->findAll($criteria);
+            $val = CHtml::listData($affiliate_list, 'affiliate_id', 'affiliate_id'); 
+            return $val;
+        }
+        
         public function dataProvider() {
             return new CActiveDataProvider($this, array(
                 'pagination' => array(

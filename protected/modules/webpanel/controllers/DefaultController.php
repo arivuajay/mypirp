@@ -39,7 +39,10 @@ class DefaultController extends Controller {
     {      
         $condition = "admin_id =".Yii::app()->user->admin_id;
         $total_affiliates = DmvAffiliateInfo::model()->count($condition);
-        $total_instructors = "0";
+        
+        $condition = "admin_id =".Yii::app()->user->admin_id;
+        $total_instructors = DmvAddInstructor::model()->count($condition);
+        
         $this->render('index', compact('total_affiliates','total_instructors'));
     }
     

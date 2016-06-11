@@ -114,7 +114,10 @@ class DmvAddInstructor extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria=new CDbCriteria;                
+                
+                $criteria->condition = "admin_id = :admin_id";
+                $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
 
 		$criteria->compare('instructor_id',$this->instructor_id);
 		$criteria->compare('instructor_ss',$this->instructor_ss,true);
@@ -153,6 +156,7 @@ class DmvAddInstructor extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
         
         public function dataProvider() {
             return new CActiveDataProvider($this, array(

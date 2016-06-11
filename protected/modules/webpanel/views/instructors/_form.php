@@ -28,8 +28,8 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'Affiliate', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">                       
-                        <?php                         
-                        $htmlOptions = array('size' => '5', 'multiple' => 'true', 'id' => 'MasterSelectBox', 'class' => 'form-control',"empty"=>"- ALL -");
+                        <?php                       
+                        $htmlOptions = array('size' => '5', 'multiple' => 'true', 'id' => 'MasterSelectBox', 'class' => 'form-control', 'options' => $x_aff);
                         echo $form->listBox($model, 'Affiliate', $affiliates, $htmlOptions);
                         ?>
                     </div>
@@ -80,7 +80,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'instructor_code', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'instructor_code', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>
+                        <?php echo $form->textField($model, 'instructor_code', array('class' => 'form-control', 'size' => 10, 'maxlength' => 4)); ?>
                         <?php echo $form->error($model, 'instructor_code'); ?>
                     </div>
                 </div>
@@ -103,14 +103,14 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                         <?php echo $form->error($model, 'instructor_dob'); ?>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <?php echo $form->labelEx($model, 'gender', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'gender', array('class' => 'form-control', 'size' => 1, 'maxlength' => 1)); ?>
-                        <?php echo $form->error($model, 'gender'); ?>
+                
+                 <div class="form-group">
+                        <?php echo $form->labelEx($model, 'gender', array('class' => 'col-sm-2 control-label')); ?>
+                        <div class="col-sm-5">
+                            <?php echo $form->dropDownList($model, 'gender', array( "" => "-Select One-","M" => "Male", "F" => "Female"), array('class' => 'form-control')); ?> 
+                            <?php echo $form->error($model, 'gender'); ?>
+                        </div>
                     </div>
-                </div>
 
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'addr1', array('class' => 'col-sm-2 control-label')); ?>
