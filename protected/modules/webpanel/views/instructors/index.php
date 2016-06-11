@@ -21,7 +21,7 @@ $cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $c
 </div>
 
 <div class="col-lg-12 col-md-12">&nbsp;</div>
-
+<?php  $this->renderPartial('_search', compact('model', 'affiliates','instructors'));?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
@@ -59,3 +59,26 @@ $cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $c
         ?>
     </div>
 </div>
+
+<?php 
+$ajaxInstructorsUrl  = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
+?>
+<script type="text/javascript">
+    $(document).ready(function(){    
+        //$.fn.dataTableExt.sErrMode = 'throw';   
+        $("#DmvAddInstructor_Affiliate").change(function(){
+        var id=$(this).val();
+        var dataString = 'id='+ id;
+        
+            $.ajax({
+                type: "POST",
+                url: '<?php echo $ajaxInstructorsUrl;?>',
+                data: dataString,
+                cache: false,
+                success: function(html){             
+                    $("#DmvAddInstructor_Instructor").html(html);
+                }
+             });
+        });
+      });
+</script>
