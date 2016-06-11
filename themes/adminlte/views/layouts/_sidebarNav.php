@@ -19,7 +19,8 @@
             'activateItems' => true,
             'items' => array(
                 array('label' => '<i class="fa fa-users"></i> <span>Affliates</span>', 'url' => array('/webpanel/affiliates'), 'active' => $_controller == 'affiliatesController'),
-                array('label' => '<i class="fa fa-users"></i> <span>Instructors</span>', 'url' => array('/webpanel/instructors'), 'active' => $_controller == 'instructorsController'),               
+                array('label' => '<i class="fa fa-users"></i> <span>Instructors</span>', 'url' => array('/webpanel/instructors'), 'active' => $_controller == 'instructorsController'),
+                array('label' => '<i class="fa fa-newspaper-o"></i> <span>Messages</span>', 'url' => array('/webpanel/messages'), 'active' => $_controller == 'messagesController'),               
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));
