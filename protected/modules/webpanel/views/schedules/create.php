@@ -2,7 +2,7 @@
 /* @var $this SchedulesController */
 /* @var $model DmvClasses */
 
-$this->title='Create Schedule';
+$this->title='Add Schedule';
 $this->breadcrumbs=array(
 	'Schedules'=>array('index'),
 	$this->title,
@@ -10,5 +10,5 @@ $this->breadcrumbs=array(
 ?>
 
 <div class="user-create">
-    <?php $this->renderPartial('_form', array('model'=>$model)); ?>
+    <?php $this->renderPartial('_form',compact('model','affiliates','instructors'));?>
 </div>

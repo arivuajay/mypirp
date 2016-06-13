@@ -1,110 +1,65 @@
 <?php
-/* @var $this SchedulesController */
-/* @var $model DmvClasses */
+/* @var $this NewsManagementController */
+/* @var $model NewsManagement */
 /* @var $form CActiveForm */
 ?>
+<div class="col-lg-12 col-md-12">
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="glyphicon glyphicon-search"></i>  Search
+                </h3>
+                <div class="clearfix"></div>
+            </div>
 
-<div class="wide form">
+            <section class="content">
+                <div class="row">
+                    <?php
+                    $form = $this->beginWidget('CActiveForm', array(
+                        'id' => 'schedules-search-form',
+                        'method' => 'get',
+                        'action' => array('/webpanel/schedules/index/'),
+                        'htmlOptions' => array('role' => 'form')
+                    ));
+                    ?>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'agencycode', array('class' => ' control-label')); ?>
+                            <?php echo $form->textField($model, 'agencycode', array('class' => 'form-control')); ?>
+                        </div>
+                    </div> 
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'action'=>Yii::app()->createUrl($this->route),
-	'method'=>'get',
-)); ?>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>
+                            </div>   
+                        </div>
+                    </div> 
 
-	<div class="row">
-		<?php echo $form->label($model,'clas_id'); ?>
-		<?php echo $form->textField($model,'clas_id',array('class'=>'form-control')); ?>
-	</div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>
+                            </div> 
+                        </div>
+                    </div> 
 
-	<div class="row">
-		<?php echo $form->label($model,'affiliate_id'); ?>
-		<?php echo $form->textField($model,'affiliate_id',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'clas_date'); ?>
-		<?php echo $form->textField($model,'clas_date',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'clas_name'); ?>
-		<?php echo $form->textField($model,'clas_name',array('class'=>'form-control','size'=>50,'maxlength'=>50)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'start_time'); ?>
-		<?php echo $form->textField($model,'start_time',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'end_time'); ?>
-		<?php echo $form->textField($model,'end_time',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'date2'); ?>
-		<?php echo $form->textField($model,'date2',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'start_time2'); ?>
-		<?php echo $form->textField($model,'start_time2',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'end_time2'); ?>
-		<?php echo $form->textField($model,'end_time2',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'location'); ?>
-		<?php echo $form->textField($model,'location',array('class'=>'form-control','size'=>50,'maxlength'=>50)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'loc_addr'); ?>
-		<?php echo $form->textField($model,'loc_addr',array('class'=>'form-control','size'=>30,'maxlength'=>30)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'loc_city'); ?>
-		<?php echo $form->textField($model,'loc_city',array('class'=>'form-control','size'=>20,'maxlength'=>20)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'loc_state'); ?>
-		<?php echo $form->textField($model,'loc_state',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'zip'); ?>
-		<?php echo $form->textField($model,'zip',array('class'=>'form-control','size'=>10,'maxlength'=>10)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'country'); ?>
-		<?php echo $form->textField($model,'country',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'instructor_id'); ?>
-		<?php echo $form->textField($model,'instructor_id',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'show_admin'); ?>
-		<?php echo $form->textField($model,'show_admin',array('class'=>'form-control','size'=>1,'maxlength'=>1)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'pending'); ?>
-		<?php echo $form->textField($model,'pending',array('class'=>'form-control')); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Search'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- search-form -->
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <?php echo CHtml::submitButton('Filter', array('class' => 'btn btn-primary form-control')); ?>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                  
+                    <?php $this->endWidget(); ?>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

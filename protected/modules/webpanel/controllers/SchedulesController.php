@@ -62,7 +62,9 @@ class SchedulesController extends Controller
 	public function actionCreate()
 	{
 		$model=new DmvClasses;
-
+                
+                $affiliates = DmvAffiliateInfo::all_affliates();
+                $instructors = array();
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
@@ -75,9 +77,7 @@ class SchedulesController extends Controller
                         }
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+		$this->render('create',compact('model','affiliates','instructors'));
 	}
 
 	/**

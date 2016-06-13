@@ -203,10 +203,15 @@ class InstructorsController extends Controller {
     
     public function actiongetinstructors()
     {
-        $options = '';
-        $afid = isset($_POST['id']) ? $_POST['id'] : '';              
+        $options = '';       
+        $afid = isset($_POST['id']) ? $_POST['id'] : '';   
+        
+        /* Using in schedules form and instrucor search */
+        $default_val = isset($_POST['form']) ? "Select One" : 'ALL'; 
+        $default_option_val = isset($_POST['form']) ? "" : '0'; 
+        
         if ($afid != '') {   
-            $options = "<option value='0'>- ALL -</option>";
+            $options = "<option value='".$default_option_val."'>".$default_val."</option>";
             $data_instructors = DmvAddInstructor::all_instructors($afid);
             foreach ($data_instructors as $k => $info) {
                 $options .= "<option value='" . $k . "'>" . $info . "</option>";
