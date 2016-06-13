@@ -15,7 +15,7 @@ return array(
         'application.components.*',
     ),
     'modules' => array(
-       'webpanel', 'suadmin',
+       'webpanel', 'suadmin','affiliate',
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -49,6 +49,10 @@ return array(
         'suadmin' => array(
             'allowAutoLogin' => true,
             'loginUrl' => array('/suadmin/default/login'),
+        ),
+        'affiliate' => array(
+            'allowAutoLogin' => true,
+            'loginUrl' => array('/affiliate/default/login'),
         ),
         'user'=>array(
             // enable cookie-based authentication
