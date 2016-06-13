@@ -158,6 +158,11 @@ class SchedulesController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        
+//        $querydel	 = "Delete from dmv_payment where class_id='$id'";
+//        $querydel2	= "Delete from dmv_print_certificate where class_id='$id'";
+//        $querydel3	= "Delete from dmv_students  where clas_id='$id'";
+        
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -181,19 +186,6 @@ class SchedulesController extends Controller {
         ));
     }
 
-    /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new DmvClasses('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['DmvClasses']))
-            $model->attributes = $_GET['DmvClasses'];
-
-        $this->render('admin', array(
-            'model' => $model,
-        ));
-    }
 
     /**
      * Returns the data model based on the primary key given in the GET variable.

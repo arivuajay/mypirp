@@ -40,6 +40,6 @@ return array(
     'PAGE_SIZE' => 15,
   
     // retailer logo path
-    'IMG_PATH' => 'uploads/',   
+    'IMG_PATH' => 'messagedoc/',   
    
 );
