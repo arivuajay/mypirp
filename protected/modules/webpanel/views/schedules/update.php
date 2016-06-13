@@ -2,7 +2,7 @@
 /* @var $this SchedulesController */
 /* @var $model DmvClasses */
 
-$this->title='Update schedule: '. $model->clas_id;
+$this->title='Update schedule';
 $this->breadcrumbs=array(
 	'Schedules'=>array('index'),
 	'Update schedule',

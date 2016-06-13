@@ -40,7 +40,7 @@ class DmvClasses extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('affiliate_id, instructor_id, clas_name, start_time, end_time, location, loc_addr, loc_city, zip', 'required'),
+            array('affiliate_id, instructor_id, start_time, end_time, location, loc_city, country,clas_date', 'required'),
             array('affiliate_id, country, instructor_id, pending', 'numerical', 'integerOnly' => true),
             array('clas_name, location', 'length', 'max' => 50),
             array('start_time, end_time, start_time2, end_time2, loc_state, zip', 'length', 'max' => 10),
@@ -52,7 +52,7 @@ class DmvClasses extends CActiveRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('clas_id, affiliate_id, clas_date, clas_name, start_time, end_time, date2, start_time2, end_time2, location, loc_addr, loc_city, loc_state, zip, country, instructor_id, show_admin, pending', 'safe', 'on' => 'search'),
-            array('instructor_id', 'compositeUniqueKeysValidator'),
+            array('*', 'compositeUniqueKeysValidator'),
          );
     }
     
@@ -71,9 +71,9 @@ class DmvClasses extends CActiveRecord {
             'ECompositeUniqueKeyValidatable' => array(
                 'class' => 'ext.ECompositeUniqueKeyValidatable',
                 'uniqueKeys' => array(
-                    'attributes' => 'affiliate_id, instructor_id',
+                    'attributes' => 'affiliate_id, instructor_id, clas_date, start_time, end_time',
                     'errorAttributes' => 'composite_error',                  
-                    'errorMessage' => 'Data already taken'
+                    'errorMessage' => 'Schedule already exist!!'
                 )
             ),
         );
@@ -106,7 +106,7 @@ class DmvClasses extends CActiveRecord {
             'start_time2' => Myclass::t('Start Time2'),
             'end_time2' => Myclass::t('End Time2'),
             'location' => Myclass::t('Location'),
-            'loc_addr' => Myclass::t('Loc Addr'),
+            'loc_addr' => Myclass::t('Location Address'),
             'loc_city' => Myclass::t('City'),
             'loc_state' => Myclass::t('State'),
             'zip' => Myclass::t('Zip'),

@@ -2,6 +2,14 @@
 /* @var $this SchedulesController */
 /* @var $model DmvClasses */
 /* @var $form CActiveForm */
+
+$themeUrl = $this->themeUrl;
+$cs = Yii::app()->getClientScript();
+$cs_pos_end = CClientScript::POS_END;
+
+$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
+$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
+$country = Myclass::getallcountries();
 ?>
 
 <div class="row">
@@ -18,7 +26,12 @@
             ));
             ?>
             <div class="box-body">
-                  <?php echo $form->error($model, 'composite_error'); ?>
+                <div class="form-group">
+                    <div class="col-sm-2">&nbsp;</div>
+                    <div class="col-sm-5">
+                        <?php echo $form->error($model, 'composite_error'); ?>
+                    </div>
+                </div>
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'affiliate_id', array('class' => 'col-sm-2 control-label')); ?>                   
                     <div class="col-sm-5">
@@ -37,8 +50,11 @@
 
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'clas_date', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control')); ?>
+                    <div class="col-sm-5">                          
+                        <div class="input-group">
+                            <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                            <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date')); ?>
+                        </div> 
                         <?php echo $form->error($model, 'clas_date'); ?>
                     </div>
                 </div>
@@ -46,7 +62,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'start_time', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'start_time', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>
+                        <?php echo $form->textField($model, 'start_time', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>(Example: 9:00 am)
                         <?php echo $form->error($model, 'start_time'); ?>
                     </div>
                 </div>
@@ -54,23 +70,26 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'end_time', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'end_time', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>
+                        <?php echo $form->textField($model, 'end_time', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>(Example: 3:00 pm)
                         <?php echo $form->error($model, 'end_time'); ?>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'date2', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'date2', array('class' => 'form-control')); ?>
+                    <div class="col-sm-5">                          
+                        <div class="input-group">
+                            <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                            <?php echo $form->textField($model, 'date2', array('class' => 'form-control date')); ?>
+                        </div> 
                         <?php echo $form->error($model, 'date2'); ?>
-                    </div>
+                    </div>                    
                 </div>
 
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'start_time2', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'start_time2', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>
+                        <?php echo $form->textField($model, 'start_time2', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>(Example: 9:00 am)
                         <?php echo $form->error($model, 'start_time2'); ?>
                     </div>
                 </div>
@@ -78,7 +97,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'end_time2', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'end_time2', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>
+                        <?php echo $form->textField($model, 'end_time2', array('class' => 'form-control', 'size' => 10, 'maxlength' => 10)); ?>(Example: 3:00 pm)
                         <?php echo $form->error($model, 'end_time2'); ?>
                     </div>
                 </div>
@@ -126,27 +145,28 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'country', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'country', array('class' => 'form-control')); ?>
+                        <?php echo $form->dropDownList($model, 'country', $country, array('class' => 'form-control', 'empty' => Myclass::t('Select Country'))); ?>                          
                         <?php echo $form->error($model, 'country'); ?>
                     </div>
                 </div>
 
-
-                <div class="form-group">
-                    <?php echo $form->labelEx($model, 'show_admin', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'show_admin', array('class' => 'form-control', 'size' => 1, 'maxlength' => 1)); ?>
-                        <?php echo $form->error($model, 'show_admin'); ?>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <?php echo $form->labelEx($model, 'pending', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->textField($model, 'pending', array('class' => 'form-control')); ?>
-                        <?php echo $form->error($model, 'pending'); ?>
-                    </div>
-                </div>
+                <?php
+                if ($model->isNewRecord) {
+                    for ($j = 3; $j <= 10; $j++) {
+                        ?>
+                        <div class="form-group">                   
+                            <label class='col-sm-2 control-label' >Date<?php echo $j; ?></label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                    <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date">
+                                </div> 
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
 
             </div><!-- /.box-body -->
             <div class="box-footer">
@@ -165,6 +185,10 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
 ?>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('.year').datepicker({dateFormat: 'yyyy'});
+        $('.date').datepicker({format: 'yyyy-mm-dd'});
+
         //$.fn.dataTableExt.sErrMode = 'throw';   
         $("#DmvClasses_affiliate_id").change(function () {
             var id = $(this).val();

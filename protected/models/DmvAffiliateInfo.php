@@ -112,7 +112,7 @@ class DmvAffiliateInfo extends CActiveRecord {
             'city' => Myclass::t('City'),
             'state' => Myclass::t('State'),
             'zip' => Myclass::t('Zip'),
-            'country_code' => Myclass::t('Country Code'),
+            'country_code' => Myclass::t('Country'),
             'last_name' => Myclass::t('Contact Last Name'),
             'first_name' => Myclass::t('Contact First Name'),
             'initial' => Myclass::t('Contact Middle Initial'),
