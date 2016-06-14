@@ -168,6 +168,21 @@ class DmvClasses extends CActiveRecord {
             )
         ));
     }
+    
+     public function getConcatened()
+    {
+        return date("F d,Y", strtotime($this->clas_date)) . " " . $this->start_time . " to " . $this->end_time; 
+    }
+    
+    public static function all_classes($affid = null){
+        $criteria = new CDbCriteria;
+        $criteria->condition = "affiliate_id = :affiliate_id";
+        $criteria->params = (array(':affiliate_id' => $affid));    
+      
+        $classed_list = DmvClasses::model()->findAll($criteria);
+        $val = CHtml::listData($classed_list, 'clas_id', 'concatened');
+        return $val;  
+    }
 
     /**
      * Returns the static model of the specified AR class.

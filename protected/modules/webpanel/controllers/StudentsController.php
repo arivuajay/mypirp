@@ -28,7 +28,7 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents','managestudents','viewstudents'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents','managestudents','viewstudents','getclasses'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -117,6 +117,12 @@ class StudentsController extends Controller {
      */
     public function actionCreate() {
         $model = new Students;
+        $model->scenario = "create";
+        
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('' => '- Select One -');
+        $affiliates = $firstItem + $affiliates_arr;
+        $classes = array();
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -128,11 +134,40 @@ class StudentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
+        
+        if ($model->dob == "0000-00-00") {
+            $model->dob = "";
+        }
+        if ($model->course_completion_date == "0000-00-00") {
+            $model->course_completion_date = "";
+        }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+        $this->render('create', compact('model','affiliates','classes'));
     }
+    
+    public function actionGetclasses()
+    {
+        $options = '';       
+        $affid = isset($_POST['id']) ? $_POST['id'] : '';   
+        
+        /* Using in schedules form and instrucor search */
+        //$default_val = isset($_POST['form']) ? "Select One" : 'ALL'; 
+        //$default_option_val = isset($_POST['form']) ? "" : '0'; 
+         $options = "<option value=''>Select Class</option>";
+        if ($affid != '') { 
+            $data_Classes = DmvClasses::all_classes($affid);
+            foreach ($data_Classes as $k => $info) {
+                $options .= "<option value='" . $k . "'>" . $info . "</option>";
+            }
+        }
+        echo $options;
+        exit;
+    }    
+    
+    public function all_classes($cid)
+    {
+        
+    }        
 
     /**
      * Updates a particular model.

@@ -42,7 +42,7 @@ class Students extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('stud_suffix, notes', 'required'),
+			array('affiliate_id, clas_id,first_name,last_name,gender,dob,licence_number,address1', 'required', 'on'=>'create'),
 			array('affiliate_id, clas_id', 'numerical', 'integerOnly'=>true),
 			array('first_name, last_name, city, zip, phone, licence_number', 'length', 'max'=>20),
 			array('middle_name, stud_suffix, state', 'length', 'max'=>10),
@@ -91,7 +91,7 @@ class Students extends CActiveRecord
 			'email' => Myclass::t('Email'),
 			'gender' => Myclass::t('Gender'),
 			'dob' => Myclass::t('Dob'),
-			'licence_number' => Myclass::t('Licence Number'),
+			'licence_number' => Myclass::t('Driver License Number'),
 			'notes' => Myclass::t('Notes'),
 			'course_completion_date' => Myclass::t('Course Completion Date'),
 		);
@@ -120,24 +120,28 @@ class Students extends CActiveRecord
                     $criteria->condition = "affiliate_id = :affiliate_id and clas_id = :clas_id";
                     $criteria->params=(array(':affiliate_id'=>$this->affiliate_id,':clas_id'=>$this->clas_id));
                 }    
-
-		$criteria->compare('student_id',$this->student_id);		
-		$criteria->compare('first_name',$this->first_name,true);
+                
+                $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
+                $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+                
+                if($this->licence_number!="")
+                $criteria->addCondition("licence_number=".$this->licence_number);                
+			
+		$criteria->compare('t.first_name',$this->first_name,true);
 		$criteria->compare('middle_name',$this->middle_name,true);
-		$criteria->compare('last_name',$this->last_name,true);
+		$criteria->compare('t.last_name',$this->last_name,true);
 		$criteria->compare('stud_suffix',$this->stud_suffix,true);
-		$criteria->compare('address1',$this->address1,true);
-		$criteria->compare('address2',$this->address2,true);
-		$criteria->compare('city',$this->city,true);
-		$criteria->compare('state',$this->state,true);
-		$criteria->compare('zip',$this->zip,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('gender',$this->gender,true);
-		$criteria->compare('dob',$this->dob,true);
-		$criteria->compare('licence_number',$this->licence_number,true);
-		$criteria->compare('notes',$this->notes,true);
+		$criteria->compare('t.address1',$this->address1,true);
+		$criteria->compare('t.city',$this->city,true);
+		$criteria->compare('t.state',$this->state,true);
+		$criteria->compare('t.zip',$this->zip,true);
+		$criteria->compare('t.phone',$this->phone,true);
+		$criteria->compare('t.email',$this->email,true);
+		$criteria->compare('t.gender',$this->gender,true);		
 		$criteria->compare('course_completion_date',$this->course_completion_date,true);
+                
+                $criteria->with = array("dmvAffiliateInfo",'dmvClasses');
+                $criteria->together = true;
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

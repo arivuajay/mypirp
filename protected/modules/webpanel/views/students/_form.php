@@ -30,7 +30,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     <div class="col-sm-5">
                         <?php
                         if ($model->isNewRecord) {
-                            echo $form->textField($model, 'affiliate_id', array('class' => 'form-control'));
+                            echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control'));
                             echo $form->error($model, 'affiliate_id');
                         } else {
                             echo $model->dmvAffiliateInfo->agency_code;
@@ -44,7 +44,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     <div class="col-sm-5">
                         <?php
                         if ($model->isNewRecord) {
-                            echo $form->textField($model, 'clas_id', array('class' => 'form-control'));
+                            echo $form->dropDownList($model, 'clas_id', $classes, array('class' => 'form-control',"empty"=>"Select Class"));
                             echo $form->error($model, 'clas_id');
                         } else {
                             echo $model->dmvClasses->clas_date;
@@ -202,10 +202,28 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         </div>
     </div><!-- ./col -->
 </div>
+<?php 
+$ajaxClassUrl  = Yii::app()->createUrl('/webpanel/students/getclasses');
+?>
 <script type="text/javascript">
     $(document).ready(function () {
 
         $('.year').datepicker({dateFormat: 'yyyy'});
         $('.date').datepicker({format: 'yyyy-mm-dd'});
+        
+        $("#Students_affiliate_id").change(function(){
+        var id=$(this).val();
+        var dataString = 'id='+ id;
+        
+            $.ajax({
+                type: "POST",
+                url: '<?php echo $ajaxClassUrl;?>',
+                data: dataString,
+                cache: false,
+                success: function(html){             
+                    $("#Students_clas_id").html(html);
+                }
+             });
+        });
     });
 </script>
