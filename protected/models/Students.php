@@ -48,7 +48,7 @@ class Students extends CActiveRecord
 			array('middle_name, stud_suffix, state', 'length', 'max'=>10),
 			array('address1, address2, email', 'length', 'max'=>50),
 			array('gender', 'length', 'max'=>1),
-			array('dob, course_completion_date', 'safe'),
+			array('dob, course_completion_date,notes', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on'=>'search'),
@@ -63,6 +63,9 @@ class Students extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    
+                    'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'clas_id'),
+                    'dmvAffiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
 		);
 	}
 
@@ -73,8 +76,8 @@ class Students extends CActiveRecord
 	{
 		return array(
 			'student_id' => Myclass::t('Student'),
-			'affiliate_id' => Myclass::t('Affiliate'),
-			'clas_id' => Myclass::t('Clas'),
+			'affiliate_id' => Myclass::t('Agency Code'),
+			'clas_id' => Myclass::t('Class Date'),
 			'first_name' => Myclass::t('First Name'),
 			'middle_name' => Myclass::t('Middle Name'),
 			'last_name' => Myclass::t('Last Name'),
@@ -111,10 +114,14 @@ class Students extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+               
+                if($this->affiliate_id!="" && $this->clas_id!="")
+                {    
+                    $criteria->condition = "affiliate_id = :affiliate_id and clas_id = :clas_id";
+                    $criteria->params=(array(':affiliate_id'=>$this->affiliate_id,':clas_id'=>$this->clas_id));
+                }    
 
-		$criteria->compare('student_id',$this->student_id);
-		$criteria->compare('affiliate_id',$this->affiliate_id);
-		$criteria->compare('clas_id',$this->clas_id);
+		$criteria->compare('student_id',$this->student_id);		
 		$criteria->compare('first_name',$this->first_name,true);
 		$criteria->compare('middle_name',$this->middle_name,true);
 		$criteria->compare('last_name',$this->last_name,true);

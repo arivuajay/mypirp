@@ -85,6 +85,7 @@ class DmvAffiliateInfo extends CActiveRecord {
              'affiliateCommission' => array(self::HAS_ONE, 'DmvAffiliateCommission', 'affiliate_id'),
              'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'affiliate_id'),  
              'affSchedules' => array(self::HAS_MANY, 'DmvClasses', 'affiliate_id'),  
+             'students' => array(self::HAS_MANY, 'Students', 'affiliate_id'), 
         );
     }
 
@@ -212,14 +213,29 @@ class DmvAffiliateInfo extends CActiveRecord {
         return $this->agency_code.' '.$this->agency_name;
     }
     
-    public static function all_affliates() {
-        $criteria = new CDbCriteria; 
+    public function getConcatened_search()
+    {
+       return $this->agency_name. " (".$this->agency_code.")"; 
+    }        
+    
+    public static function all_affliates($status = null) {
+        $criteria = new CDbCriteria;      
+         
         $criteria->condition = "admin_id = :admin_id";
         $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        
+        if($status!="")
+        $criteria->addCondition("enabled='$status'");
+           
         $criteria->order = 'agency_code ASC';   
        
         $affiliate_list = DmvAffiliateInfo::model()->findAll($criteria);
+        
+        if($status!="")
+        $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened_search'); 
+        else    
         $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened'); 
+       
         return $val;
     }
 

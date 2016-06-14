@@ -22,7 +22,8 @@
                 array('label' => '<i class="fa fa-users"></i> <span>Instructors</span>', 'url' => array('/webpanel/instructors'), 'active' => $_controller == 'instructorsController'),
                 array('label' => '<i class="fa fa-envelope-o"></i> <span>Messages</span>', 'url' => array('/webpanel/messages'), 'active' => $_controller == 'messagesController'),
                 array('label' => '<i class="fa fa-file"></i> <span>Documents</span>', 'url' => array('/webpanel/postdocument'), 'active' => $_controller == 'postdocumentController'),               
-                array('label' => '<i class="fa fa fa-list"></i> <span>Schedules</span>', 'url' => array('/webpanel/schedules'), 'active' => $_controller == 'schedulesController'),               
+                array('label' => '<i class="fa fa fa-list"></i> <span>Schedules</span>', 'url' => array('/webpanel/schedules'), 'active' => $_controller == 'schedulesController'),
+                array('label' => '<i class="fa fa fa-users"></i> <span>Manage students</span>', 'url' => array('/webpanel/students/managestudents'), 'active' => $_controller == 'studentsController'),               
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));

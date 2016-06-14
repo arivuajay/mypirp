@@ -25,7 +25,7 @@
  */
 class DmvClasses extends CActiveRecord {
     
-    public $agencycode,$start_date,$end_date,$composite_error;
+    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid;
     /**
      * @return string the associated database table name
      */
@@ -47,7 +47,7 @@ class DmvClasses extends CActiveRecord {
             array('loc_addr', 'length', 'max' => 30),
             array('loc_city', 'length', 'max' => 20),
             array('show_admin', 'length', 'max' => 1),
-            array('clas_date, date2,agencycode,start_date,end_date,composite_error', 'safe'),
+            array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname', 'safe'),
             //array('affiliate_id, instructor_id, start_time, end_time,clas_date','unique',),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
@@ -88,6 +88,7 @@ class DmvClasses extends CActiveRecord {
         return array(
             'Affliate' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
             'Instructor' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
+            'studentsCount' => array(self::STAT, 'Students', 'clas_id'),
         );
     }
 
@@ -114,6 +115,7 @@ class DmvClasses extends CActiveRecord {
             'instructor_id' => Myclass::t('Instructor'),
             'show_admin' => Myclass::t('Show Admin'),
             'pending' => Myclass::t('Pending'),
+            'affiliateid' => "Affiliate"
         );
     }
 
@@ -133,13 +135,19 @@ class DmvClasses extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
+                
+        if($this->affiliateid!="")
+        $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
+        
+        if($this->agencycode!="")
+        $criteria->addCondition("Affliate.agency_code = '".$this->agencycode."'");    
+        
+        if($this->agencyname!="")
+        $criteria->compare('Affliate.agency_name', $this->agencyname, true);
         
         $criteria->addCondition("show_admin = 'Y'");
         
         $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id);
-        
-        if($this->agencycode!="")
-        $criteria->addCondition("Affliate.agency_code = '".$this->agencycode."'");    
         
         if($this->start_date!="" && $this->end_date!="")
         {    
@@ -148,6 +156,7 @@ class DmvClasses extends CActiveRecord {
         }    
         
         $criteria->with = array("Affliate",'Instructor');
+        $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
             'sort' => array(

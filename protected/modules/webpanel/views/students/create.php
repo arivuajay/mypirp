@@ -2,9 +2,9 @@
 /* @var $this StudentsController */
 /* @var $model Students */
 
-$this->title='Create Students';
+$this->title='Create Student';
 $this->breadcrumbs=array(
-	'Students'=>array('index'),
+	'Create Student'=>array('index'),
 	$this->title,
 );
 ?>
