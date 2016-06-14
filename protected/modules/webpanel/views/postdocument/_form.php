@@ -67,7 +67,6 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 
 <script type="text/javascript">
     $(document).ready(function () {
-
         $('.year').datepicker({dateFormat: 'yyyy'});
         $('.date').datepicker({format: 'yyyy-mm-dd'});
     });

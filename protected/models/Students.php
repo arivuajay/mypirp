@@ -1,0 +1,161 @@
+<?php
+
+/**
+ * This is the model class for table "dmv_students".
+ *
+ * The followings are the available columns in table 'dmv_students':
+ * @property integer $student_id
+ * @property integer $affiliate_id
+ * @property integer $clas_id
+ * @property string $first_name
+ * @property string $middle_name
+ * @property string $last_name
+ * @property string $stud_suffix
+ * @property string $address1
+ * @property string $address2
+ * @property string $city
+ * @property string $state
+ * @property string $zip
+ * @property string $phone
+ * @property string $email
+ * @property string $gender
+ * @property string $dob
+ * @property string $licence_number
+ * @property string $notes
+ * @property string $course_completion_date
+ */
+class Students extends CActiveRecord
+{
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'dmv_students';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			//array('stud_suffix, notes', 'required'),
+			array('affiliate_id, clas_id', 'numerical', 'integerOnly'=>true),
+			array('first_name, last_name, city, zip, phone, licence_number', 'length', 'max'=>20),
+			array('middle_name, stud_suffix, state', 'length', 'max'=>10),
+			array('address1, address2, email', 'length', 'max'=>50),
+			array('gender', 'length', 'max'=>1),
+			array('dob, course_completion_date', 'safe'),
+			// The following rule is used by search().
+			// @todo Please remove those attributes that should not be searched.
+			array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on'=>'search'),
+		);
+	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+		);
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'student_id' => Myclass::t('Student'),
+			'affiliate_id' => Myclass::t('Affiliate'),
+			'clas_id' => Myclass::t('Clas'),
+			'first_name' => Myclass::t('First Name'),
+			'middle_name' => Myclass::t('Middle Name'),
+			'last_name' => Myclass::t('Last Name'),
+			'stud_suffix' => Myclass::t('Stud Suffix'),
+			'address1' => Myclass::t('Address1'),
+			'address2' => Myclass::t('Address2'),
+			'city' => Myclass::t('City'),
+			'state' => Myclass::t('State'),
+			'zip' => Myclass::t('Zip'),
+			'phone' => Myclass::t('Phone'),
+			'email' => Myclass::t('Email'),
+			'gender' => Myclass::t('Gender'),
+			'dob' => Myclass::t('Dob'),
+			'licence_number' => Myclass::t('Licence Number'),
+			'notes' => Myclass::t('Notes'),
+			'course_completion_date' => Myclass::t('Course Completion Date'),
+		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('student_id',$this->student_id);
+		$criteria->compare('affiliate_id',$this->affiliate_id);
+		$criteria->compare('clas_id',$this->clas_id);
+		$criteria->compare('first_name',$this->first_name,true);
+		$criteria->compare('middle_name',$this->middle_name,true);
+		$criteria->compare('last_name',$this->last_name,true);
+		$criteria->compare('stud_suffix',$this->stud_suffix,true);
+		$criteria->compare('address1',$this->address1,true);
+		$criteria->compare('address2',$this->address2,true);
+		$criteria->compare('city',$this->city,true);
+		$criteria->compare('state',$this->state,true);
+		$criteria->compare('zip',$this->zip,true);
+		$criteria->compare('phone',$this->phone,true);
+		$criteria->compare('email',$this->email,true);
+		$criteria->compare('gender',$this->gender,true);
+		$criteria->compare('dob',$this->dob,true);
+		$criteria->compare('licence_number',$this->licence_number,true);
+		$criteria->compare('notes',$this->notes,true);
+		$criteria->compare('course_completion_date',$this->course_completion_date,true);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+                        'pagination' => array(
+                            'pageSize' => PAGE_SIZE,
+                        )
+		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Students the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+        
+        public function dataProvider() {
+            return new CActiveDataProvider($this, array(
+                'pagination' => array(
+                    'pageSize' => PAGE_SIZE,
+                )
+            ));
+        }
+}

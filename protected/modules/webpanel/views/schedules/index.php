@@ -45,10 +45,16 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{update}&nbsp;&nbsp;{delete}',
+                'template' => '{update}&nbsp;&nbsp;{delete}&nbsp;&nbsp;{add_students}',
+                'buttons' => array(
+                    'add_students' => array(
+                        'label' => "<i class='fa fa-list-ol'></i>",
+                        'url' => 'Yii::app()->createAbsoluteUrl("/webpanel/students/addbulkstudents/aid/".$data->affiliate_id."/cid/".$data->clas_id)',
+                        'options' => array('class' => 'newWindow','title' => 'Add Bulk Students'),
+                    ),
+                ),
             )
-        );
-
+        );     
         $this->widget('booster.widgets.TbExtendedGridView', array(
             //'filter' => $model,
             'type' => 'striped bordered datatable',

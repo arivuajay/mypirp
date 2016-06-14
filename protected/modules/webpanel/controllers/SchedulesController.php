@@ -159,10 +159,9 @@ class SchedulesController extends Controller {
      */
     public function actionDelete($id) {
         
-//        $querydel	 = "Delete from dmv_payment where class_id='$id'";
-//        $querydel2	= "Delete from dmv_print_certificate where class_id='$id'";
-//        $querydel3	= "Delete from dmv_students  where clas_id='$id'";
-        
+        Payment::model()->deleteAll("class_id='$id'");
+        PrintCertificate::model()->deleteAll("class_id='$id'");
+        Students::model()->deleteAll("clas_id='$id'");
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
