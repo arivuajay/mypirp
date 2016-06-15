@@ -16,123 +16,127 @@
  * @property string $moneyorder_number
  * @property integer $total_students
  */
-class Payment extends CActiveRecord
-{
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'dmv_payment';
-	}
+class Payment extends CActiveRecord {
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('payment_type, cheque_number', 'required'),
-			array('class_id, total_students', 'numerical', 'integerOnly'=>true),
-			array('payment_amount', 'numerical'),
-			array('payment_type', 'length', 'max'=>2),
-			array('cheque_number', 'length', 'max'=>15),
-			array('payment_complete, print_certificate', 'length', 'max'=>1),
-			array('moneyorder_number', 'length', 'max'=>20),
-			array('payment_date, payment_notes', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on'=>'search'),
-		);
-	}
+    public $affcode, $start_date, $end_date,$affiliatesid;
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'dmv_payment';
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'payment_id' => Myclass::t('Payment'),
-			'class_id' => Myclass::t('Class'),
-			'payment_date' => Myclass::t('Payment Date'),
-			'payment_amount' => Myclass::t('Payment Amount'),
-			'payment_type' => Myclass::t('Payment Type'),
-			'cheque_number' => Myclass::t('Cheque Number'),
-			'payment_complete' => Myclass::t('Payment Complete'),
-			'payment_notes' => Myclass::t('Payment Notes'),
-			'print_certificate' => Myclass::t('Print Certificate'),
-			'moneyorder_number' => Myclass::t('Moneyorder Number'),
-			'total_students' => Myclass::t('Total Students'),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+             array('affiliatesid,class_id', 'required',"on"=>"create"),
+            array('payment_type,payment_date,payment_amount', 'required'),
+            array('class_id, total_students', 'numerical', 'integerOnly' => true),
+            array('payment_amount', 'numerical'),
+            array('payment_type', 'length', 'max' => 2),
+            array('cheque_number', 'length', 'max' => 15),
+            array('payment_complete, print_certificate', 'length', 'max' => 1),
+            array('moneyorder_number', 'length', 'max' => 20),
+            array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid', 'safe'),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'class_id'),
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'payment_id' => Myclass::t('Payment'),
+            'class_id' => Myclass::t('Class Name'),
+            'payment_date' => Myclass::t('Payment Date'),
+            'payment_amount' => Myclass::t('Payment Amount'),
+            'payment_type' => Myclass::t('Payment Type'),
+            'cheque_number' => Myclass::t('Cheque Number'),
+            'payment_complete' => Myclass::t('Mark as payment complete'),
+            'payment_notes' => Myclass::t('Payment Notes'),
+            'print_certificate' => Myclass::t('Print Certificate'),
+            'moneyorder_number' => Myclass::t('Moneyorder Number'),
+            'total_students' => Myclass::t('Total Students'),
+            'affcode' => 'Agency Code',
+            'affiliatesid' => 'Agency'
+        );
+    }
 
-		$criteria->compare('payment_id',$this->payment_id);
-		$criteria->compare('class_id',$this->class_id);
-		$criteria->compare('payment_date',$this->payment_date,true);
-		$criteria->compare('payment_amount',$this->payment_amount);
-		$criteria->compare('payment_type',$this->payment_type,true);
-		$criteria->compare('cheque_number',$this->cheque_number,true);
-		$criteria->compare('payment_complete',$this->payment_complete,true);
-		$criteria->compare('payment_notes',$this->payment_notes,true);
-		$criteria->compare('print_certificate',$this->print_certificate,true);
-		$criteria->compare('moneyorder_number',$this->moneyorder_number,true);
-		$criteria->compare('total_students',$this->total_students);
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => PAGE_SIZE,
-                        )
-		));
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Payment the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
         
-        public function dataProvider() {
-            return new CActiveDataProvider($this, array(
-                'pagination' => array(
-                    'pageSize' => PAGE_SIZE,
-                )
-            ));
+        if ($this->start_date != "" && $this->end_date != "") {
+            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->start_date . "' AND dmvClasses.clas_date <= '" . $this->end_date . "'");
         }
+        
+        if ($this->affcode != "") {
+            $criteria->addCondition("Affliate.agency_code='" . $this->affcode . "'");
+        }
+
+        $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
+        $criteria->together = true;
+
+        return new CActiveDataProvider($this, array(
+            'sort' => array(
+                'defaultOrder' => 'payment_date ASC',
+            ),
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Payment the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
+
+    public function dataProvider() {
+        return new CActiveDataProvider($this, array(
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+
 }

@@ -88,6 +88,7 @@ class DmvClasses extends CActiveRecord {
         return array(
             'Affliate' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
             'Instructor' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
+            'Payment' => array(self::HAS_MANY, 'Payment', 'class_id'),
             'studentsCount' => array(self::STAT, 'Students', 'clas_id'),
         );
     }

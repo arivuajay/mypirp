@@ -207,5 +207,15 @@ class Myclass extends CController {
         $val = CHtml::listData($country, 'id', 'country_desc');
         return $val;
     }
+    
+    public static function card_types()
+    {
+        $card = array();
+        $card['CC'] = 'Credit Card';
+        $card['CQ']= 'Check';
+        $card['CA']= 'Cash';
+        $card['MO']= 'Money Order';
+        return $card;
+    }        
        
 }

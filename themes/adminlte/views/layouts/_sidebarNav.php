@@ -26,6 +26,7 @@
                 array('label' => '<i class="fa fa fa-users"></i> <span>Manage students</span>', 'url' => array('/webpanel/students/managestudents')),
                 array('label' => '<i class="fa fa fa-search"></i> <span>Search students</span>', 'url' => array('/webpanel/students/index')),               
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print students</span>', 'url' => array('/webpanel/students/printstudents')),               
+                array('label' => '<i class="fa fa fa-dollar"></i> <span>Payments</span>', 'url' => array('/webpanel/payments')),               
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));
