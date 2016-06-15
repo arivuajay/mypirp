@@ -13,12 +13,14 @@ $cs_pos_end = CClientScript::POS_END;
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Students', array('/admin/students/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); ?>
     </div>
 </div>
 
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
+
+<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "") { ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
@@ -51,7 +53,7 @@ $cs_pos_end = CClientScript::POS_END;
         );
 
         $this->widget('booster.widgets.TbExtendedGridView', array(
-          //  'filter' => $model,
+            //  'filter' => $model,
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
@@ -62,3 +64,4 @@ $cs_pos_end = CClientScript::POS_END;
         ?>
     </div>
 </div>
+<?php }?>

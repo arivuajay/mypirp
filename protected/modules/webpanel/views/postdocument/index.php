@@ -47,7 +47,6 @@ $cs_pos_end = CClientScript::POS_END;
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
-            'emptyText' => 'Ops, nothing to show!',
             'template' => '<div class="panel panel-primary">'
             . '<div class="panel-heading">'
             . '<div class="pull-right">{summary}</div>'
@@ -56,8 +55,6 @@ $cs_pos_end = CClientScript::POS_END;
             . '<div class="panel-body">{items}{pager}</div>'
             . '</div>',
             'columns' => $gridColumns,
-            'summaryText' => 'asdas',
-            'emptyText' => 'Ops, nothing to show!',
                 )
         );
         ?>

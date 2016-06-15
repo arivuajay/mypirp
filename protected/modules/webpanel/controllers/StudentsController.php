@@ -28,7 +28,7 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents','managestudents','viewstudents','getclasses'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -41,6 +41,13 @@ class StudentsController extends Controller {
         );
     }
 
+    public function checkVisible($print_certificate) {
+        if ($print_certificate != "" && $print_certificate != "Y")
+            return false;
+        else
+            return true;
+    }
+
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
@@ -49,6 +56,40 @@ class StudentsController extends Controller {
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
+    }
+
+    public function actionPrintstudents() {
+        $model = new Students('search');
+
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('0' => '- ALL -');
+        $affiliates = $firstItem + $affiliates_arr;
+
+        $instructors_arr = DmvAddInstructor::all_instructors();
+        $scndItem = array('0' => '- None -');
+        $instructors = $scndItem + $instructors_arr;
+
+
+
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['Students']))
+            $model->attributes = $_GET['Students'];
+
+        $this->render('printstudents', compact('model', 'affiliates', 'instructors'));
+    }
+
+    public function getcertificatenumber($student_id, $clas_id) {
+        $certificate_number = "-";
+
+        if ($student_id != "" && $clas_id != "") {
+            $condition = "student_id=" . $student_id . " and class_id=" . $clas_id;
+            $certificate_result = PrintCertificate::model()->find($condition);
+
+            if (!empty($certificate_result))
+                $certificate_number = $certificate_result->certificate_number;
+        }
+
+        return $certificate_number;
     }
 
     public function actionAddbulkstudents($aid, $cid) {
@@ -60,7 +101,7 @@ class StudentsController extends Controller {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
                     $model->affiliate_id = $aid;
-                    $model->clas_id = $cid;                   
+                    $model->clas_id = $cid;
                     $model->save();
                     $flag++;
                 }
@@ -85,32 +126,36 @@ class StudentsController extends Controller {
         $this->render('addbulkstudents', compact('model'));
     }
 
-    public function actionManagestudents()
-    {
+    public function actionManagestudents() {
         $model = new DmvClasses;
         $affiliates = DmvAffiliateInfo::all_affliates("Y");
-        
+
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['DmvClasses']))
-        $model->attributes = $_GET['DmvClasses'];       
-        
-        $this->render('managestudents', compact('model','affiliates'));
-    }  
-    
-    public function actionViewstudents($aid,$cid)
-    {
+            $model->attributes = $_GET['DmvClasses'];
+
+        $this->render('managestudents', compact('model', 'affiliates'));
+    }
+
+    public function actionViewstudents($aid, $cid) {
         $model = new Students('search');
-       
+        $print_certificate = "N";
+
         $model->unsetAttributes();  // clear any default values
-        
+
         $model->affiliate_id = $aid;
-        $model->clas_id =   $cid;       
-                
+        $model->clas_id = $cid;
+
         if (isset($_GET['Students']))
-        $model->attributes = $_GET['Students'];
-       
-        $this->render('viewstudents', compact('model'));
-    }        
+            $model->attributes = $_GET['Students'];
+
+        if ($cid != "") {
+            $print_certificate = Payment::model()->find("class_id=" . $cid)->print_certificate;
+        }
+
+        $this->render('viewstudents', compact('model', 'print_certificate'));
+    }
+
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -118,7 +163,7 @@ class StudentsController extends Controller {
     public function actionCreate() {
         $model = new Students;
         $model->scenario = "create";
-        
+
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $firstItem = array('' => '- Select One -');
         $affiliates = $firstItem + $affiliates_arr;
@@ -134,7 +179,7 @@ class StudentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
-        
+
         if ($model->dob == "0000-00-00") {
             $model->dob = "";
         }
@@ -142,19 +187,18 @@ class StudentsController extends Controller {
             $model->course_completion_date = "";
         }
 
-        $this->render('create', compact('model','affiliates','classes'));
+        $this->render('create', compact('model', 'affiliates', 'classes'));
     }
-    
-    public function actionGetclasses()
-    {
-        $options = '';       
-        $affid = isset($_POST['id']) ? $_POST['id'] : '';   
-        
+
+    public function actionGetclasses() {
+        $options = '';
+        $affid = isset($_POST['id']) ? $_POST['id'] : '';
+
         /* Using in schedules form and instrucor search */
         //$default_val = isset($_POST['form']) ? "Select One" : 'ALL'; 
         //$default_option_val = isset($_POST['form']) ? "" : '0'; 
-         $options = "<option value=''>Select Class</option>";
-        if ($affid != '') { 
+        $options = "<option value=''>Select Class</option>";
+        if ($affid != '') {
             $data_Classes = DmvClasses::all_classes($affid);
             foreach ($data_Classes as $k => $info) {
                 $options .= "<option value='" . $k . "'>" . $info . "</option>";
@@ -162,12 +206,7 @@ class StudentsController extends Controller {
         }
         echo $options;
         exit;
-    }    
-    
-    public function all_classes($cid)
-    {
-        
-    }        
+    }
 
     /**
      * Updates a particular model.
@@ -184,18 +223,18 @@ class StudentsController extends Controller {
             $model->attributes = $_POST['Students'];
             if ($model->save()) {
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
-                $this->redirect(array('students/viewstudents/aid/'.$model->affiliate_id.'/cid/'.$model->clas_id));
+                $this->redirect(array('students/viewstudents/aid/' . $model->affiliate_id . '/cid/' . $model->clas_id));
             }
         }
-        
+
         if ($model->course_completion_date == "0000-00-00") {
             $model->course_completion_date = "";
         }
-        
+
         if ($model->dob == "0000-00-00") {
-         $model->dob = "";
+            $model->dob = "";
         }
-        
+
 
         $this->render('update', array(
             'model' => $model,

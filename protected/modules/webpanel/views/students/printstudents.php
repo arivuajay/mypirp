@@ -1,0 +1,202 @@
+<?php
+/* @var $this SchedulesController */
+/* @var $dataProvider CActiveDataProvider */
+
+$this->title = 'Print Students';
+$this->breadcrumbs = array(
+    'Print Students',
+);
+$themeUrl = $this->themeUrl;
+$cs = Yii::app()->getClientScript();
+$cs_pos_end = CClientScript::POS_END;
+
+$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
+$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
+?>
+<div class="col-lg-12 col-md-12">&nbsp;</div>
+
+<div class="col-lg-12 col-md-12">
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="glyphicon glyphicon-search"></i>  Search
+                </h3>
+                <div class="clearfix"></div>
+            </div>
+
+            <section class="content">
+                <div class="row">
+                    <?php
+                    $form = $this->beginWidget('CActiveForm', array(
+                        'id' => 'instructors-search-form',
+                        'method' => 'get',
+                        'action' => array('/webpanel/students/printstudents/'),
+                        'htmlOptions' => array('role' => 'form')
+                    ));
+                    ?>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'startdate', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date')); ?>                               
+                            </div>   
+                            <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'enddate', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date')); ?>                               
+                            </div> 
+                            <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'affiliateid', array('class' => ' control-label')); ?> 
+                            <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control')); ?>            
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'instructorid', array('class' => ' control-label')); ?> 
+                            <?php echo $form->dropDownList($model, 'instructorid', $instructors, array('class' => 'form-control')); ?>     
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-2 col-md-2">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <?php echo CHtml::submitButton('Filter', array("id" => 'print_res', 'class' => 'btn btn-primary form-control')); ?>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>                  
+                    <?php $this->endWidget(); ?>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<?php
+if ($model->startdate != "" && $model->enddate != "") {
+
+
+    $aff_info = ($model->affiliate_id > 0) ? "<strong>" . $model->dmvAffiliateInfo->agency_name . " " . $model->dmvAffiliateInfo->agency_code . "</strong>" : "";
+    $date_disp = "From " . date("d/m/Y", strtotime($model->startdate)) . " until " . date("d/m/Y", strtotime($model->enddate));
+    ?>
+    <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>
+
+    <div class="col-lg-12 col-md-12">&nbsp;</div>
+
+    <div id="Getprintval">
+        <div class="col-lg-12 col-md-12">
+            <div class="row">
+                <?php
+                $gridColumns = array(
+                    array(
+                        'header' => 'Certificate Number',
+                        'name' => 'certificatenumber',
+                        'value' => function($data) {
+                            echo $this->getcertificatenumber($data->student_id, $data->clas_id);
+                        },
+                    ),
+                    'last_name',
+                    'first_name',
+                    'licence_number',
+                    array(
+                        'header' => 'DOB',
+                        'name' => 'dob',
+                        'value' => function($data) {
+                            echo ($data->dob != "") ? date("d/m/Y", strtotime($data->dob)) : "-";
+                        }
+                    ),
+                    array(
+                        'header' => 'Gender',
+                        'name' => 'gender',
+                        'value' => function($data) {
+                            if ($data->gender ==
+                                    "M")
+                                echo "Male";
+                            elseif ($data->
+                                    gender == "F")
+                                echo "Female";
+                            else
+                                echo "-";
+                        }
+                    ),
+                );
+
+                $this->widget('booster.widgets.TbExtendedGridView', array(
+                    //  'filter' => $model,
+                    'type' => 'striped bordered datatable',
+                    'enableSorting' => false,
+                    'dataProvider' => $model->search(),
+                    'responsiveTable' => true,
+                    'template' => '<div class="panel panel-primary">'
+                    . '<div class="panel-heading">'
+                    . '<div class="pull-right">{summary}</div>'
+                    . '<h3 class="panel-title"> Students by Agency </h3>'
+                    . '</div>'
+                    . '<div class="panel-body">'
+                    . '<p><h4>' . $aff_info . ' ' . $date_disp . ' </h4></p>'
+                    . '{items}{pager}</div>'
+                    . '</div>',
+                    'columns' => $gridColumns
+                        )
+                );
+                ?>
+            </div>
+        </div>
+    </div>
+<?php }
+?>
+<?php
+$js = <<< EOD
+$(document).ready(function(){
+ 
+$("#printdiv").click(function() {   
+    var innerContents = document.getElementById("Getprintval").innerHTML;
+    var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+    popupWinindow.document.open();
+    popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
+});     
+
+$("#print_res").click(function() {
+    var startdate = $("#Students_startdate").val();
+    var enddate = $("#Students_enddate").val();
+        
+    $("#startdate_error").hide();    
+    $("#enddate_error").hide();
+   
+   if(startdate=="")
+    {
+        $("#startdate_error").show();
+        return false;
+    }
+    
+   if(enddate=="")
+    {
+        $("#enddate_error").show();
+        return false;
+    }
+        
+    return true;
+        
+});   
+        
+$('.year').datepicker({ dateFormat: 'yyyy' }); 
+$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
+    
+});
+EOD;
+Yii::app()->clientScript->registerScript('_form_instructor', $js);
+?>

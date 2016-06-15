@@ -26,6 +26,7 @@
  */
 class Students extends CActiveRecord
 {
+    public $instructorid,$startdate,$enddate,$certificatenumber;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -48,7 +49,7 @@ class Students extends CActiveRecord
 			array('middle_name, stud_suffix, state', 'length', 'max'=>10),
 			array('address1, address2, email', 'length', 'max'=>50),
 			array('gender', 'length', 'max'=>1),
-			array('dob, course_completion_date,notes', 'safe'),
+			array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on'=>'search'),
@@ -94,6 +95,10 @@ class Students extends CActiveRecord
 			'licence_number' => Myclass::t('Driver License Number'),
 			'notes' => Myclass::t('Notes'),
 			'course_completion_date' => Myclass::t('Course Completion Date'),
+                        'affiliateid' => "Delivery Agency School",
+                        'instructorid'=>'Instructor Name',
+                        'startdate' => "Start Date",
+                        'enddate' => "End Date"
 		);
 	}
 
@@ -125,7 +130,22 @@ class Students extends CActiveRecord
                 $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
                 
                 if($this->licence_number!="")
-                $criteria->addCondition("licence_number=".$this->licence_number);                
+                $criteria->addCondition("licence_number=".$this->licence_number); 
+                
+                if($this->startdate!="" && $this->enddate!="")
+                {    
+                   $criteria->addCondition("dmvClasses.clas_date >= '".$this->startdate."' AND dmvClasses.clas_date <= '".$this->enddate."'");  
+                   
+                   if($this->affiliate_id>0)
+                    {    
+                        $criteria->addCondition('t.affiliate_id = '.$this->affiliate_id);
+                    }  
+                    
+                    if($this->instructorid>0)
+                    {    
+                        $criteria->addCondition('dmvClasses.instructor_id = '.$this->instructorid);
+                    }  
+                }  
 			
 		$criteria->compare('t.first_name',$this->first_name,true);
 		$criteria->compare('middle_name',$this->middle_name,true);

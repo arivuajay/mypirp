@@ -28,18 +28,30 @@ $cs_pos_end = CClientScript::POS_END;
             'city',
             'phone',
             'email',
-            'gender',
+            array(
+                'header' => 'Gender',
+                'name' => 'gender',
+                'value' => function($data) {
+                    if ($data->gender == "M")
+                        echo "Male";
+                    elseif ($data->gender == "F")
+                        echo "Female";
+                    else
+                        echo "-";
+                }
+            ),
             'licence_number',
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'visible' => $this->checkVisible($print_certificate) //custom function 
             )
         );
 
         $this->widget('booster.widgets.TbExtendedGridView', array(
-            'filter' => $model,
+            //  'filter' => $model,
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
