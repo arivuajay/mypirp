@@ -36,7 +36,8 @@ class LeadersGuide extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('client_type, guide_fee, payment_type, cheque_number', 'required'),
+                        array('affiliate_id', 'required' , 'on'=>"create"),
+			array('guide_fee, payment_type,payment_date,payment_amount', 'required'),
 			array('affiliate_id, instructor_id, number_of_guides', 'numerical', 'integerOnly'=>true),
 			array('payment_amount, guide_fee, shipping_fee', 'numerical'),
 			array('client_type, guide_instructor, payment_complete', 'length', 'max'=>1),
@@ -46,6 +47,7 @@ class LeadersGuide extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('guide_id, affiliate_id, instructor_id, client_type, guide_instructor, payment_date, number_of_guides, payment_amount, guide_fee, shipping_fee, payment_type, cheque_number, payment_complete', 'safe', 'on'=>'search'),
+                        array('cheque_number,instructor_id', 'Checknotempty'),
 		);
 	}
 
@@ -57,8 +59,25 @@ class LeadersGuide extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'affiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+                    'instructorInfo' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
 		);
 	}
+        
+         public function checknotempty($attribute_name, $params) {
+
+        if ($this->payment_type == "CQ" && $this->cheque_number == '') {
+            $this->addError('cheque_number', "Please enter cheque number.");
+            return false;
+        }
+        
+        if ($this->guide_instructor == "1" && $this->instructor_id == '') {
+            $this->addError('instructor_id', "Please select instructor.");
+            return false;
+        }
+        
+        return true;
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -67,10 +86,10 @@ class LeadersGuide extends CActiveRecord
 	{
 		return array(
 			'guide_id' => Myclass::t('Guide'),
-			'affiliate_id' => Myclass::t('Affiliate'),
+			'affiliate_id' => Myclass::t('Delivery Agency School'),
 			'instructor_id' => Myclass::t('Instructor'),
 			'client_type' => Myclass::t('Client Type'),
-			'guide_instructor' => Myclass::t('Guide Instructor'),
+			'guide_instructor' => Myclass::t('Appiled for instructor'),
 			'payment_date' => Myclass::t('Payment Date'),
 			'number_of_guides' => Myclass::t('Number Of Guides'),
 			'payment_amount' => Myclass::t('Payment Amount'),
@@ -78,7 +97,7 @@ class LeadersGuide extends CActiveRecord
 			'shipping_fee' => Myclass::t('Shipping Fee'),
 			'payment_type' => Myclass::t('Payment Type'),
 			'cheque_number' => Myclass::t('Cheque Number'),
-			'payment_complete' => Myclass::t('Payment Complete'),
+			'payment_complete' => Myclass::t('Mark as payment complete'),
 		);
 	}
 
@@ -99,6 +118,10 @@ class LeadersGuide extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+                
+                $criteria->condition = "affiliateInfo.admin_id = :admin_id";
+                $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+
 
 		$criteria->compare('guide_id',$this->guide_id);
 		$criteria->compare('affiliate_id',$this->affiliate_id);
@@ -113,6 +136,9 @@ class LeadersGuide extends CActiveRecord
 		$criteria->compare('payment_type',$this->payment_type,true);
 		$criteria->compare('cheque_number',$this->cheque_number,true);
 		$criteria->compare('payment_complete',$this->payment_complete,true);
+                
+                $criteria->with = array("affiliateInfo","instructorInfo");
+                $criteria->together = true;
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

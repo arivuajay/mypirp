@@ -1,16 +1,16 @@
 <?php
-/* @var $this BookordersController */
+/* @var $this LeadersguideController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->title = 'Book Orders';
+$this->title = 'Leaders Guide';
 $this->breadcrumbs = array(
-    'Book Orders',
+    'Leaders Guide',
 );
 ?>
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Book Order', array('/webpanel/bookorders/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Leaders Guide', array('/webpanel/leadersguide/create'), array('class' => 'btn btn-success pull-right')); ?>
     </div>
 </div>
 
@@ -19,10 +19,7 @@ $this->breadcrumbs = array(
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
-        $gridColumns = array(             
-            //'instructor_id',
-            //'client_type',
-            // 'book_instructor',
+        $gridColumns = array(
             array(
                 'name' => 'payment_date',
                 'value' => function($data) {
@@ -32,8 +29,8 @@ $this->breadcrumbs = array(
                         echo "-";
                 }
             ),
-            'number_of_books',
-            'book_fee',
+            'number_of_guides',
+            'guide_fee',
             'shipping_fee',
             'payment_amount',
             array(
@@ -49,9 +46,6 @@ $this->breadcrumbs = array(
                     }
                 }
             ),
-            // 'cheque_number',
-            //'payment_complete',
-            //'payment_notes',
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
@@ -61,11 +55,11 @@ $this->breadcrumbs = array(
         );
 
         $this->widget('booster.widgets.TbExtendedGridView', array(
-            //  'filter' => $model,
+            //'filter' => $model,
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
-            'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  Book Orders</h3></div><div class="panel-body">{items}{pager}</div></div>',
+            'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  Leaders Guides</h3></div><div class="panel-body">{items}{pager}</div></div>',
             'columns' => $gridColumns
                 )
         );

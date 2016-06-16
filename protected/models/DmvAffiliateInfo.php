@@ -87,6 +87,8 @@ class DmvAffiliateInfo extends CActiveRecord {
              'affSchedules' => array(self::HAS_MANY, 'DmvClasses', 'affiliate_id'),  
              'students' => array(self::HAS_MANY, 'Students', 'affiliate_id'), 
              'payment' => array(self::HAS_MANY, 'Payment', 'affiliate_id'),
+             'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'affiliate_id'),
+             'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'affiliate_id'),
         );
     }
 

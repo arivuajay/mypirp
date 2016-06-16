@@ -1,6 +1,6 @@
 <?php
 
-class BookordersController extends Controller {
+class LeadersguideController extends Controller {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -56,7 +56,7 @@ class BookordersController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new BookOrders;
+        $model = new LeadersGuide;
         $model->scenario = "create";
 
         $model->unsetAttributes();
@@ -66,15 +66,14 @@ class BookordersController extends Controller {
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
-        if (isset($_POST['BookOrders'])) {
-            $model->attributes = $_POST['BookOrders'];
-
-            $model->client_type = ($model->book_instructor == 1) ? "I" : "A";
-            $model->book_instructor = ($model->book_instructor == 1) ? "Y" : "N";
+        if (isset($_POST['LeadersGuide'])) {
+            $model->attributes = $_POST['LeadersGuide'];
+            $model->client_type = ($model->guide_instructor == 1) ? "I" : "A";
+            $model->guide_instructor = ($model->guide_instructor == 1) ? "Y" : "N";
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
 
             if ($model->save()) {
-                Yii::app()->user->setFlash('success', 'BookOrders Created Successfully!!!');
+                Yii::app()->user->setFlash('success', 'LeadersGuide Created Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
@@ -93,11 +92,11 @@ class BookordersController extends Controller {
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
-        if (isset($_POST['BookOrders'])) {
-            $model->attributes = $_POST['BookOrders'];
+        if (isset($_POST['LeadersGuide'])) {
+            $model->attributes = $_POST['LeadersGuide'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
-                Yii::app()->user->setFlash('success', 'BookOrders Updated Successfully!!!');
+                Yii::app()->user->setFlash('success', 'LeadersGuide Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
@@ -117,7 +116,7 @@ class BookordersController extends Controller {
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
-            Yii::app()->user->setFlash('success', 'BookOrders Deleted Successfully!!!');
+            Yii::app()->user->setFlash('success', 'LeadersGuide Deleted Successfully!!!');
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
         }
     }
@@ -126,10 +125,10 @@ class BookordersController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
-        $model = new BookOrders('search');
+        $model = new LeadersGuide('search');
         $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['BookOrders']))
-            $model->attributes = $_GET['BookOrders'];
+        if (isset($_GET['LeadersGuide']))
+            $model->attributes = $_GET['LeadersGuide'];
 
         $this->render('index', array(
             'model' => $model,
@@ -140,11 +139,11 @@ class BookordersController extends Controller {
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
-     * @return BookOrders the loaded model
+     * @return LeadersGuide the loaded model
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = BookOrders::model()->findByPk($id);
+        $model = LeadersGuide::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -152,10 +151,10 @@ class BookordersController extends Controller {
 
     /**
      * Performs the AJAX validation.
-     * @param BookOrders $model the model to be validated
+     * @param LeadersGuide $model the model to be validated
      */
     protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'book-orders-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'leaders-guide-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }

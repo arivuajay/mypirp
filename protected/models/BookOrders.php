@@ -44,7 +44,7 @@ class BookOrders extends CActiveRecord
 			array('client_type, book_instructor, payment_complete', 'length', 'max'=>1),
 			array('payment_type', 'length', 'max'=>2),
 			array('cheque_number', 'length', 'max'=>15),
-			array('payment_date, payment_notes,admin_id', 'safe'),
+			array('payment_date, payment_notes', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('book_id, affiliate_id, instructor_id, client_type, book_instructor, payment_date, number_of_books, payment_amount, book_fee, shipping_fee, payment_type, cheque_number, payment_complete, payment_notes', 'safe', 'on'=>'search'),

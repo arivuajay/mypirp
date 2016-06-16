@@ -68,6 +68,8 @@ class DmvAddInstructor extends CActiveRecord {
             'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'instructor_id'),
             'affSchedules' => array(self::HAS_MANY, 'DmvClasses', 'instructor_id'),  
             'payment' => array(self::HAS_MANY, 'Payment', 'instructor_id'),
+            'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'instructor_id'),
+            'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'instructor_id'),
         );
     }
 
