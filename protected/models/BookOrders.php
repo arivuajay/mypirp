@@ -37,16 +37,18 @@ class BookOrders extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('client_type, book_fee, payment_type, cheque_number', 'required'),
+                        array('affiliate_id', 'required' , 'on'=>"create"),
+			array('book_fee, payment_type,payment_date,payment_amount', 'required'),
 			array('affiliate_id, instructor_id, number_of_books', 'numerical', 'integerOnly'=>true),
 			array('payment_amount, book_fee, shipping_fee', 'numerical'),
 			array('client_type, book_instructor, payment_complete', 'length', 'max'=>1),
 			array('payment_type', 'length', 'max'=>2),
 			array('cheque_number', 'length', 'max'=>15),
-			array('payment_date, payment_notes', 'safe'),
+			array('payment_date, payment_notes,admin_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('book_id, affiliate_id, instructor_id, client_type, book_instructor, payment_date, number_of_books, payment_amount, book_fee, shipping_fee, payment_type, cheque_number, payment_complete, payment_notes', 'safe', 'on'=>'search'),
+                        array('cheque_number,instructor_id', 'Checknotempty'),
 		);
 	}
 
@@ -58,8 +60,25 @@ class BookOrders extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		);
+                    'affiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+                    'instructorInfo' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
+                );
 	}
+        
+        public function checknotempty($attribute_name, $params) {
+
+        if ($this->payment_type == "CQ" && $this->cheque_number == '') {
+            $this->addError('cheque_number', "Please enter cheque number.");
+            return false;
+        }
+        
+        if ($this->book_instructor == "1" && $this->instructor_id == '') {
+            $this->addError('instructor_id', "Please select instructor.");
+            return false;
+        }
+        
+        return true;
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -68,10 +87,10 @@ class BookOrders extends CActiveRecord
 	{
 		return array(
 			'book_id' => Myclass::t('Book'),
-			'affiliate_id' => Myclass::t('Affiliate'),
+			'affiliate_id' => Myclass::t('Delivery Agency School'),
 			'instructor_id' => Myclass::t('Instructor'),
 			'client_type' => Myclass::t('Client Type'),
-			'book_instructor' => Myclass::t('Book Instructor'),
+			'book_instructor' => Myclass::t('Appiled for instructor'),
 			'payment_date' => Myclass::t('Payment Date'),
 			'number_of_books' => Myclass::t('Number Of Books'),
 			'payment_amount' => Myclass::t('Payment Amount'),
@@ -79,7 +98,7 @@ class BookOrders extends CActiveRecord
 			'shipping_fee' => Myclass::t('Shipping Fee'),
 			'payment_type' => Myclass::t('Payment Type'),
 			'cheque_number' => Myclass::t('Cheque Number'),
-			'payment_complete' => Myclass::t('Payment Complete'),
+			'payment_complete' => Myclass::t('Mark as payment complete'),
 			'payment_notes' => Myclass::t('Payment Notes'),
 		);
 	}
@@ -101,6 +120,9 @@ class BookOrders extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+                
+                $criteria->condition = "affiliateInfo.admin_id = :admin_id";
+                $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
 
 		$criteria->compare('book_id',$this->book_id);
 		$criteria->compare('affiliate_id',$this->affiliate_id);
@@ -116,6 +138,9 @@ class BookOrders extends CActiveRecord
 		$criteria->compare('cheque_number',$this->cheque_number,true);
 		$criteria->compare('payment_complete',$this->payment_complete,true);
 		$criteria->compare('payment_notes',$this->payment_notes,true);
+                
+                $criteria->with = array("affiliateInfo","instructorInfo");
+                $criteria->together = true;
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

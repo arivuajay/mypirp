@@ -46,7 +46,23 @@ class Payment extends CActiveRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on' => 'search'),
+            array('cheque_number,moneyorder_number', 'Checknotempty'),
         );
+    }
+    
+     public function checknotempty($attribute_name, $params) {
+
+        if ($this->payment_type == "CQ" && $this->cheque_number == '') {
+            $this->addError('cheque_number', "Please enter cheque number.");
+            return false;
+        }
+        
+        if ($this->payment_type == "MO" && $this->moneyorder_number == '') {
+            $this->addError('moneyorder_number', "Please enter moneyorder number.");
+            return false;
+        }
+        
+        return true;
     }
 
     /**

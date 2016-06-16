@@ -207,7 +207,7 @@ class InstructorsController extends Controller {
         $afid = isset($_POST['id']) ? $_POST['id'] : '';   
         
         /* Using in schedules form and instrucor search */
-        $default_val = isset($_POST['form']) ? "Select One" : 'ALL'; 
+        $default_val = isset($_POST['form']) ? "Select Instructor" : 'ALL'; 
         $default_option_val = isset($_POST['form']) ? "" : '0'; 
         
         if ($afid != '') {   

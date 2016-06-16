@@ -107,8 +107,8 @@ $cardtypes = Myclass::card_types();
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'payment_complete', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <!--                        'checked'=>'checked'-->
-                        <?php echo $form->checkBox($model, 'payment_complete', array('class' => 'form-control',"value"=>"Y")); ?>
+                        <?php $chck = ($model->payment_complete=="Y")?"checked":"";                       
+                              echo $form->checkBox($model, 'payment_complete', array('class' => 'form-control','checked'=>$chck)); ?>
                         <?php echo $form->error($model, 'payment_complete'); ?>
                     </div>
                 </div>
@@ -135,12 +135,33 @@ $cardtypes = Myclass::card_types();
 </div>
 <?php
 $ajaxClassUrl = Yii::app()->createUrl('/webpanel/payments/getclasses');
-
+$payment_type = $model->payment_type;
 $js = <<< EOD
 $(document).ready(function(){
-        
+    var payment_type  = '{$payment_type}';
+    
     $('.year').datepicker({ dateFormat: 'yyyy' });
-    $('.date').datepicker({ format: 'yyyy-mm-dd' }); 
+    $('.date').datepicker({ format: 'yyyy-mm-dd' });     
+   
+    if(payment_type=="CQ")
+        $("#chequenumber").show();
+    else if(payment_type=="MO")
+        $("#moneyordernumber").show();
+        
+    $("#Payment_payment_type").on('change',function(){
+        var id=$(this).val();
+        
+        $("#chequenumber").hide();
+        $("#moneyordernumber").hide();
+        
+        if(id=="CQ")
+        {
+            $("#chequenumber").show();
+        }else if(id=="MO")
+        {
+            $("#moneyordernumber").show();
+        }
+    });    
         
     $("#Payment_affiliatesid").change(function(){
         var id=$(this).val();
