@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en-US" class="">
+<html lang="en">
     <head>
-        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title><?php echo CHtml::encode($this->title); ?></title>
         <?php
         $themeUrl = $this->themeUrl;
         $cs = Yii::app()->getClientScript();
 
-  //     $cs->registerCssFile($themeUrl . '/lib/bs3/css/bootstrap.css');
-        $cs->registerCssFile($themeUrl . '/css/font-awesome/css/font-awesome.css');         
-        $cs->registerCssFile($themeUrl . '/css/bootstrap-theme.css');
-        $cs->registerCssFile($themeUrl . '/css/AdminLTE.css');
-        $cs->registerCssFile('http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css');      
-        $cs->registerCssFile($themeUrl . '/css/custom.css');        
-        $cs->registerScript('initial','var basepath = "'.Yii::app()->baseUrl.'";');
-        ?>
+        $cs->registerCssFile($themeUrl . '/vendors/bootstrap/dist/css/bootstrap.min.css');
+        $cs->registerCssFile($themeUrl . '/vendors/font-awesome/css/font-awesome.min.css');
+        $cs->registerCssFile($themeUrl . '/build/css/custom.min.css');
+        ?>      
     </head>
-    <body class="skin-blue">
-        <header class="header">
-            <?php echo CHtml::link(Yii::app()->name, array('/webpanel/'), array('class' => 'logo')); ?>
-            <nav class="navbar navbar-static-top" role="navigation"></nav>
-        </header>
-        <?php echo $content; ?>
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container">     
+                <?php echo $content; ?>
+            </div>
+        </div> 
     </body>
 </html>

@@ -19,9 +19,7 @@ class SuAdminModule extends CWebModule
         
         Yii::app()->getComponent("booster");
 
-        $this->setComponents(array(
-            'errorHandler' => array(
-                'errorAction' => '/suadmin/default/error'),
+        $this->setComponents(array(            
             'user' => array(
                 'class' => 'CWebUser',
                 'loginUrl' => array('/suadmin/default/login'),

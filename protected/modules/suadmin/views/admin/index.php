@@ -21,7 +21,8 @@ $this->breadcrumbs = array(
             <?php
             $gridColumns = array(
                 'username',
-                'email',              
+                'email',   
+                'domain_url',
                 array(
                     'header' => 'status',
                     'name' => 'status',

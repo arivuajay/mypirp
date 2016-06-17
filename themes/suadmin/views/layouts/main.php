@@ -11,11 +11,9 @@
         <?php
         $themeUrl = $this->themeUrl;
         $cs = Yii::app()->getClientScript();
-//
+
         $cs->registerCssFile($themeUrl . '/vendors/bootstrap/dist/css/bootstrap.min.css');
         $cs->registerCssFile($themeUrl . '/vendors/font-awesome/css/font-awesome.min.css');
-        $cs->registerCssFile($themeUrl . '/vendors/iCheck/skins/flat/green.css');
-         $cs->registerCssFile($themeUrl . '/vendors/switchery/dist/switchery.min.css');
         $cs->registerCssFile($themeUrl . '/build/css/custom.min.css');
         $cs->registerCssFile($themeUrl . '/css/custom.css');
         $cs->registerScript('initial', 'var basepath = "' . Yii::app()->baseUrl . '";');
@@ -31,11 +29,6 @@
         </div>   
         <?php
         $cs_pos_end = CClientScript::POS_END;
-        // $cs->registerCoreScript('jquery');
-//        $cs->registerScriptFile($themeUrl . '/vendors/jquery/dist/jquery.min.js', $cs_pos_end);
-//        $cs->registerScriptFile($themeUrl . '/vendors/bootstrap/dist/js/bootstrap.min.js', $cs_pos_end);
-        $cs->registerScriptFile($themeUrl . '/vendors/iCheck/icheck.min.js', $cs_pos_end);
-        $cs->registerScriptFile($themeUrl . '/vendors/switchery/dist/switchery.min.js', $cs_pos_end);
         $cs->registerScriptFile($themeUrl . '/build/js/custom.js', $cs_pos_end);
         ?>
     </body>

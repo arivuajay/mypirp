@@ -27,7 +27,7 @@ class DefaultController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('logout', 'index', 'profile','changepassword'),
                 'users' => array('@'),
-                'expression'=> 'AdminIdentity::checkAdmin()',
+                'expression'=> 'SuAdminIdentity::checkAdmin()',
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -38,11 +38,12 @@ class DefaultController extends Controller {
 
     public function actionIndex() 
     {      
-        //$total_websites = Websites::model()->count();
-       // $total_courses  = Courses::model()->count();
-        $total_websites = "12313";
-        $total_courses  = "12313";
-        $this->render('index', array('total_websites' => $total_websites,'total_courses' => $total_courses));
+        $total_admins    = Admin::model()->count();
+        $total_affs      = DmvAffiliateInfo::model()->count();
+        $total_ins       = DmvAddInstructor::model()->count();
+        $total_schedules = DmvClasses::model()->count();
+        $total_students  = Students::model()->count();
+        $this->render('index', compact('total_admins','total_affs','total_ins','total_schedules','total_students'));
     }
     
 

@@ -68,7 +68,7 @@ return array(
         'db' => require(dirname(__FILE__) . '/database.php'),
         
         'errorHandler' => array(
-            'errorAction' => 'webadmin/default/error',
+            'errorAction' => DEFAULT_MODULE.'/default/error',
         ),
         'log' => array(
             'class' => 'CLogRouter',
@@ -85,7 +85,7 @@ return array(
     ),
     // application-level parameters that can be accessed
     //setting the basic language value
-    'defaultController' => 'webpanel/default/index',
+    'defaultController' => DEFAULT_MODULE.'/default/index',
     // using Yii::app()->params['paramName']
     'params' => require(dirname(__FILE__) . '/params.php'),
     'timeZone' => 'Asia/Calcutta',

@@ -21,7 +21,10 @@ class AdminIdentity extends CUserIdentity {
     public function authenticate() {
 
         $user = Admin::model()->find('username = :U', array(':U' => $this->username));
-
+        $domain_url = $user->domain_url;     
+        $exp_url = explode("http://",$domain_url);       
+        $durl = $exp_url[1];       
+          
         if ($user === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;     // Error Code : 1
         } else if ($user->password !== Myclass::refencryption($this->password)) {           
@@ -29,8 +32,9 @@ class AdminIdentity extends CUserIdentity {
         } else if ($user->status == 0) {             
             //Add new condition to finding the status of user.
             $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;
-        }else{
-           
+        }else if ($durl != $_SERVER['HTTP_HOST']) { 
+            $this->errorCode = self::ERROR_USERNAME_INVALID;
+        }else{   
             $this->errorCode = self::ERROR_NONE;
         } 
         

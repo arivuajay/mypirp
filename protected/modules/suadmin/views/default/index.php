@@ -10,29 +10,36 @@ $this->breadcrumbs = array(
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="tile-stats">
                 <div class="icon"><i class="fa fa-users"></i></div>
-                <div class="count">179</div>
-                <h3>Total Admin Users</h3>               
+                <div class="count"><?php echo $total_admins;?></div>
+                <h3>Total Admins </h3>               
             </div>
         </div>
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="tile-stats">
                 <div class="icon"><i class="fa fa-link"></i></div>
-                <div class="count">100</div>
+                <div class="count"><?php echo $total_affs;?></div>
                 <h3>Total Affliates</h3>               
             </div>
         </div>
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="tile-stats">
                 <div class="icon"><i class="fa fa-group"></i></div>
-                <div class="count">21079</div>
-                <h3>Total Students</h3>              
+                <div class="count"><?php echo $total_ins;?></div>
+                <h3>Total Instructors</h3>              
             </div>
         </div>
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="tile-stats">
                 <div class="icon"><i class="fa fa-list"></i></div>
-                <div class="count">2179</div>
+                <div class="count"><?php echo $total_schedules;?></div>
                 <h3>Total Shedules</h3>               
+            </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon"><i class="fa fa-group"></i></div>
+                <div class="count"><?php echo $total_students;?></div>
+                <h3>Total Students</h3>               
             </div>
         </div>
     </div>

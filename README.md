@@ -1,2 +1,0 @@
-# mypirp
-Mypirp Class Description
