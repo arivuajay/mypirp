@@ -1,5 +1,5 @@
 <header class="header">
-    <?php echo CHtml::link(Yii::app()->name, array('/webpanel/'), array('class' => 'logo')); ?>
+    <?php echo CHtml::link(Yii::app()->name, array('/affiliate/'), array('class' => 'logo')); ?>
     <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -23,10 +23,10 @@
                          <!-- Menu Body-->
                         <li class="user-body">
                                    <div class="col-xs-7 text-center">
-                                        <?php echo CHtml::link('Change password', array('/webpanel/default/changepassword'), array("class" => "")) ?>                                      
+                                        <?php echo CHtml::link('Change password', array('/affiliate/default/changepassword'), array("class" => "")) ?>                                      
                                     </div>
                                     <div class="col-xs-4 text-center">
-                                       <?php echo CHtml::link('Profile', array('/webpanel/default/profile'), array("class" => "")) ?>
+                                       <?php echo CHtml::link('Profile', array('/affiliate/default/profile'), array("class" => "")) ?>
                                     </div>
                                     
                                     
@@ -34,7 +34,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">                           
                             <div class="pull-right">
-                                <?php echo CHtml::link('Sign out', array('/webpanel/default/logout'), array('class' => 'btn btn-default btn-flat')) ?>
+                                <?php echo CHtml::link('Sign out', array('/affiliate/default/logout'), array('class' => 'btn btn-default btn-flat')) ?>
                             </div>
                         </li>
                     </ul>

@@ -115,9 +115,11 @@ class DmvAddInstructor extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-
-        $criteria->condition = "admin_id = :admin_id";
-        $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));      
+        
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));     
+        }
         
         if($this->Instructor>0){
             $this->instructor_id = $this->Instructor;
@@ -164,8 +166,11 @@ class DmvAddInstructor extends CActiveRecord {
 
     public static function all_instructors($affid = null) {
         $criteria = new CDbCriteria;
-        $criteria->condition = "admin_id = :admin_id";
-        $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+        
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+        }
         
         if($affid>0)
         {           

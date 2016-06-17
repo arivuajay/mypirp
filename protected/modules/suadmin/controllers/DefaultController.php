@@ -41,7 +41,13 @@ class DefaultController extends Controller {
         $total_admins    = Admin::model()->count();
         $total_affs      = DmvAffiliateInfo::model()->count();
         $total_ins       = DmvAddInstructor::model()->count();
-        $total_schedules = DmvClasses::model()->count();
+        // Schedules
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("show_admin = 'Y'");  
+        $criteria->addCondition("Affliate.affiliate_id != ''"); 
+        $criteria->with = array("Affliate");
+        $criteria->together = true;
+        $total_schedules = DmvClasses::model()->count($criteria);
         $total_students  = Students::model()->count();
         $this->render('index', compact('total_admins','total_affs','total_ins','total_schedules','total_students'));
     }

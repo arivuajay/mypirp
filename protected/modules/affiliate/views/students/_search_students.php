@@ -17,12 +17,19 @@
                 <div class="row">
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(
-                        'id' => 'schedules-search-form',
+                        'id' => 'managestudents-search-form',
                         'method' => 'get',
-                        'action' => array('/webpanel/schedules/index/'),
+                        'action' => array('/webpanel/students/managestudents'),
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'affiliateid', array('class' => 'control-label')); ?>                   
+                            <?php echo $form->dropDownList($model, 'affiliateid', $affiliates, array('class' => 'form-control', "empty" => "Choose affiliate")); ?>         
+                        </div>
+                    </div> 
+
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'agencycode', array('class' => ' control-label')); ?>
@@ -32,23 +39,11 @@
 
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group">
-                            <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
-                            <div class="input-group">
-                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>
-                            </div>   
+                            <?php echo $form->labelEx($model, 'agencyname', array('class' => ' control-label')); ?>
+                            <?php echo $form->textField($model, 'agencyname', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
 
-                    <div class="col-lg-3 col-md-3">
-                        <div class="form-group">
-                            <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
-                            <div class="input-group">
-                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>
-                            </div> 
-                        </div>
-                    </div> 
 
                     <div class="col-lg-2 col-md-2">
                         <div class="form-group">

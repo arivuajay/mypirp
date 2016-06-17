@@ -23,7 +23,9 @@ $cs_pos_end = CClientScript::POS_END;
     <div class="row">
         <?php
         $gridColumns = array(
-            'id',
+            array('header' => 'SN.',
+                'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            ),
             'doc_title',
             'file_name',
             'posted_date',

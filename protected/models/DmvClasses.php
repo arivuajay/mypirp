@@ -136,6 +136,9 @@ class DmvClasses extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
+        
+        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+        $this->affiliateid = Yii::app()->user->affiliate_id;
                 
         if($this->affiliateid!="")
         $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
@@ -148,6 +151,7 @@ class DmvClasses extends CActiveRecord {
         
         $criteria->addCondition("show_admin = 'Y'");
         
+        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
         $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id);
         
         if($this->start_date!="" && $this->end_date!="")

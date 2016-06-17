@@ -30,11 +30,8 @@ class InstructorsController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','getinstructors'),
                 'users' => array('@'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array(''),
-                'users' => array('admin'),
-            ),
+                'expression'=> 'AdminIdentity::checkAdmin()',
+            ),           
             array('deny', // deny all users
                 'users' => array('*'),
             ),

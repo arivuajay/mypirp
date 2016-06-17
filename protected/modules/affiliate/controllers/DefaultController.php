@@ -2,7 +2,7 @@
 
 class DefaultController extends Controller
 {
-    public $layout = '//layouts/column1';
+    public $layout = '//layouts/aff_column1';
 
     /**
      * @array action filters
@@ -36,8 +36,17 @@ class DefaultController extends Controller
     }
     public function actionIndex() 
     {      
+        // Schedules
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("show_admin = 'Y'");         
+        $criteria->addCondition("Affliate.affiliate_id = ".Yii::app()->user->affiliate_id);
+        $criteria->with = array("Affliate");
+        $criteria->together = true;
+        $total_schedules = DmvClasses::model()->count($criteria);
         
-        $this->render('index');
+        $total_students = 0;
+        
+        $this->render('index', compact('total_schedules','total_students'));
     }
     public function actionLogin() 
     {

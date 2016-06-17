@@ -27,6 +27,7 @@ class DefaultController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('logout', 'index', 'profile','changepassword'),
                 'users' => array('@'),
+                'expression'=> 'AdminIdentity::checkAdmin()',
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -37,16 +38,21 @@ class DefaultController extends Controller {
 
     public function actionIndex() 
     {      
-        $condition = "admin_id =".Yii::app()->user->admin_id;
-        $total_affiliates = DmvAffiliateInfo::model()->count($condition);
-        
-        $condition = "admin_id =".Yii::app()->user->admin_id;
-        $total_instructors = DmvAddInstructor::model()->count($condition);
-        
-        $condition = "admin_id =".Yii::app()->user->admin_id;
-        $total_messages = DmvPostMessage::model()->count($condition);
-        
-        $total_schedules = "100";
+        $chckadmn_condition = "admin_id =".Yii::app()->user->admin_id;
+        // Affiliates
+        $total_affiliates = DmvAffiliateInfo::model()->count($chckadmn_condition); 
+        // Instructors
+        $total_instructors = DmvAddInstructor::model()->count($chckadmn_condition);   
+        // Messages
+        $total_messages = DmvPostMessage::model()->count($chckadmn_condition);
+        // Schedules
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("show_admin = 'Y'");        
+        $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id); 
+        $criteria->with = array("Affliate");
+        $criteria->together = true;
+        $total_schedules = DmvClasses::model()->count($criteria);
+       
         
         $this->render('index', compact('total_affiliates','total_instructors','total_messages','total_schedules'));
     }

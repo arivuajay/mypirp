@@ -79,13 +79,14 @@ class AdminIdentity extends CUserIdentity {
     
     public static function checkAdmin() {
         $return = false;
-        if(isset(Yii::app()->user->id)){
+        if(isset(Yii::app()->user->role)){
             //$user = User::model()->find('id = :U', array(':U' => Yii::app()->user->id));
             //$return = $user->role == 1;
-            $return = (Yii::app()->user->id==1)?true:false;
+            $return = (Yii::app()->user->role=="admin")?true:false;
         }
         return $return;
     }
+    
     
      public static function checkPrivilages($rank) {
         $return = false;

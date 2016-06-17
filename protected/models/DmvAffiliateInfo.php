@@ -151,10 +151,17 @@ class DmvAffiliateInfo extends CActiveRecord {
 
         $criteria = new CDbCriteria;
         
-        $criteria->condition = "admin_id = :admin_id";
-        $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+        $this->affiliateid = Yii::app()->user->affiliate_id;
         
-        $criteria->compare('affiliate_id', $this->affiliate_id);
+        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
+        {    
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        }    
+        
+        //$criteria->compare('affiliate_id', $this->affiliate_id);
+        $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
         $criteria->compare('agency_code', $this->agency_code, true);
         $criteria->compare('agency_name', $this->agency_name, true);
         $criteria->compare('user_id', $this->user_id, true);
@@ -224,8 +231,11 @@ class DmvAffiliateInfo extends CActiveRecord {
     public static function all_affliates($status = null) {
         $criteria = new CDbCriteria;      
          
-        $criteria->condition = "admin_id = :admin_id";
-        $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
+        {  
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+        }    
         
         if($status!="")
         $criteria->addCondition("enabled='$status'");

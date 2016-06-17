@@ -20,7 +20,9 @@ $this->breadcrumbs = array(
     <div class="row">
         <?php
         $gridColumns = array(
-            'message_id',
+            array('header' => 'SN.',
+                'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            ),           
             'message_title',           
             'posted_date',
             array(

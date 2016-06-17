@@ -24,169 +24,170 @@
  * @property string $notes
  * @property string $course_completion_date
  */
-class Students extends CActiveRecord
-{
-    public $instructorid,$startdate,$enddate,$certificatenumber;
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'dmv_students';
-	}
+class Students extends CActiveRecord {
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('affiliate_id, clas_id,first_name,last_name,gender,dob,licence_number,address1', 'required', 'on'=>'create'),
-			array('affiliate_id, clas_id', 'numerical', 'integerOnly'=>true),
-			array('first_name, last_name, city, zip, phone, licence_number', 'length', 'max'=>20),
-			array('middle_name, stud_suffix, state', 'length', 'max'=>10),
-			array('address1, address2, email', 'length', 'max'=>50),
-			array('gender', 'length', 'max'=>1),
-			array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on'=>'search'),
-		);
-	}
+    public $instructorid, $startdate, $enddate, $certificatenumber;
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    
-                    'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'clas_id'),
-                    'dmvAffiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'dmv_students';
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'student_id' => Myclass::t('Student'),
-			'affiliate_id' => Myclass::t('Agency Code'),
-			'clas_id' => Myclass::t('Class Date'),
-			'first_name' => Myclass::t('First Name'),
-			'middle_name' => Myclass::t('Middle Name'),
-			'last_name' => Myclass::t('Last Name'),
-			'stud_suffix' => Myclass::t('Stud Suffix'),
-			'address1' => Myclass::t('Address1'),
-			'address2' => Myclass::t('Address2'),
-			'city' => Myclass::t('City'),
-			'state' => Myclass::t('State'),
-			'zip' => Myclass::t('Zip'),
-			'phone' => Myclass::t('Phone'),
-			'email' => Myclass::t('Email'),
-			'gender' => Myclass::t('Gender'),
-			'dob' => Myclass::t('Dob'),
-			'licence_number' => Myclass::t('Driver License Number'),
-			'notes' => Myclass::t('Notes'),
-			'course_completion_date' => Myclass::t('Course Completion Date'),
-                        'affiliateid' => "Delivery Agency School",
-                        'instructorid'=>'Instructor Name',
-                        'startdate' => "Start Date",
-                        'enddate' => "End Date"
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('affiliate_id, clas_id,first_name,last_name,gender,dob,licence_number,address1', 'required', 'on' => 'create'),
+            array('affiliate_id, clas_id', 'numerical', 'integerOnly' => true),
+            array('first_name, last_name, city, zip, phone, licence_number', 'length', 'max' => 20),
+            array('middle_name, stud_suffix, state', 'length', 'max' => 10),
+            array('address1, address2, email', 'length', 'max' => 50),
+            array('gender', 'length', 'max' => 1),
+            array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate', 'safe'),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'clas_id'),
+            'dmvAffiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+        );
+    }
 
-		$criteria=new CDbCriteria;
-               
-                if($this->affiliate_id!="" && $this->clas_id!="")
-                {    
-                    $criteria->condition = "affiliate_id = :affiliate_id and clas_id = :clas_id";
-                    $criteria->params=(array(':affiliate_id'=>$this->affiliate_id,':clas_id'=>$this->clas_id));
-                }    
-                
-                $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
-                $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
-                
-                if($this->licence_number!="")
-                $criteria->addCondition("licence_number=".$this->licence_number); 
-                
-                if($this->startdate!="" && $this->enddate!="")
-                {    
-                   $criteria->addCondition("dmvClasses.clas_date >= '".$this->startdate."' AND dmvClasses.clas_date <= '".$this->enddate."'");  
-                   
-                   if($this->affiliate_id>0)
-                    {    
-                        $criteria->addCondition('t.affiliate_id = '.$this->affiliate_id);
-                    }  
-                    
-                    if($this->instructorid>0)
-                    {    
-                        $criteria->addCondition('dmvClasses.instructor_id = '.$this->instructorid);
-                    }  
-                }  
-			
-		$criteria->compare('t.first_name',$this->first_name,true);
-		$criteria->compare('middle_name',$this->middle_name,true);
-		$criteria->compare('t.last_name',$this->last_name,true);
-		$criteria->compare('stud_suffix',$this->stud_suffix,true);
-		$criteria->compare('t.address1',$this->address1,true);
-		$criteria->compare('t.city',$this->city,true);
-		$criteria->compare('t.state',$this->state,true);
-		$criteria->compare('t.zip',$this->zip,true);
-		$criteria->compare('t.phone',$this->phone,true);
-		$criteria->compare('t.email',$this->email,true);
-		$criteria->compare('t.gender',$this->gender,true);		
-		$criteria->compare('course_completion_date',$this->course_completion_date,true);
-                
-                $criteria->with = array("dmvAffiliateInfo",'dmvClasses');
-                $criteria->together = true;
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'student_id' => Myclass::t('Student'),
+            'affiliate_id' => Myclass::t('Agency Code'),
+            'clas_id' => Myclass::t('Class Date'),
+            'first_name' => Myclass::t('First Name'),
+            'middle_name' => Myclass::t('Middle Name'),
+            'last_name' => Myclass::t('Last Name'),
+            'stud_suffix' => Myclass::t('Stud Suffix'),
+            'address1' => Myclass::t('Address1'),
+            'address2' => Myclass::t('Address2'),
+            'city' => Myclass::t('City'),
+            'state' => Myclass::t('State'),
+            'zip' => Myclass::t('Zip'),
+            'phone' => Myclass::t('Phone'),
+            'email' => Myclass::t('Email'),
+            'gender' => Myclass::t('Gender'),
+            'dob' => Myclass::t('Dob'),
+            'licence_number' => Myclass::t('Driver License Number'),
+            'notes' => Myclass::t('Notes'),
+            'course_completion_date' => Myclass::t('Course Completion Date'),
+            'affiliateid' => "Delivery Agency School",
+            'instructorid' => 'Instructor Name',
+            'startdate' => "Start Date",
+            'enddate' => "End Date"
+        );
+    }
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'pagination' => array(
-                            'pageSize' => PAGE_SIZE,
-                        )
-		));
-	}
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Students the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-        
-        public function dataProvider() {
-            return new CActiveDataProvider($this, array(
-                'pagination' => array(
-                    'pageSize' => PAGE_SIZE,
-                )
-            ));
+        $criteria = new CDbCriteria;
+
+        if ($this->affiliate_id != "" && $this->clas_id != "") {
+            $criteria->condition = "t.affiliate_id = :affiliate_id and t.clas_id = :clas_id";
+            $criteria->params = (array(':affiliate_id' => $this->affiliate_id, ':clas_id' => $this->clas_id));
+        }elseif(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+        {    
+            $criteria->condition = "t.affiliate_id = :affiliate_id";
+            $criteria->params = (array(':affiliate_id' => Yii::app()->user->affiliate_id));
+        }    
+
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
+            $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
         }
+
+        if ($this->licence_number != "")
+            $criteria->addCondition("licence_number=" . $this->licence_number);
+
+        if ($this->startdate != "" && $this->enddate != "") {
+            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->startdate . "' AND dmvClasses.clas_date <= '" . $this->enddate . "'");
+
+            if ($this->affiliate_id > 0) {
+                $criteria->addCondition('t.affiliate_id = ' . $this->affiliate_id);
+            }elseif(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+            {
+                 $criteria->addCondition('t.affiliate_id = ' . Yii::app()->user->affiliate_id);
+            }    
+
+            if ($this->instructorid > 0) {
+                $criteria->addCondition('dmvClasses.instructor_id = ' . $this->instructorid);
+            }
+        }
+        
+
+        $criteria->compare('t.first_name', $this->first_name, true);
+        $criteria->compare('middle_name', $this->middle_name, true);
+        $criteria->compare('t.last_name', $this->last_name, true);
+        $criteria->compare('stud_suffix', $this->stud_suffix, true);
+        $criteria->compare('t.address1', $this->address1, true);
+        $criteria->compare('t.city', $this->city, true);
+        $criteria->compare('t.state', $this->state, true);
+        $criteria->compare('t.zip', $this->zip, true);
+        $criteria->compare('t.phone', $this->phone, true);
+        $criteria->compare('t.email', $this->email, true);
+        $criteria->compare('t.gender', $this->gender, true);
+        $criteria->compare('course_completion_date', $this->course_completion_date, true);
+
+        $criteria->with = array("dmvAffiliateInfo", 'dmvClasses');
+        $criteria->together = true;
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Students the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
+
+    public function dataProvider() {
+        return new CActiveDataProvider($this, array(
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+
 }
