@@ -18,7 +18,7 @@
  */
 class Payment extends CActiveRecord {
 
-    public $affcode, $start_date, $end_date,$affiliatesid;
+    public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate;
 
     /**
      * @return string the associated database table name
@@ -42,7 +42,7 @@ class Payment extends CActiveRecord {
             array('cheque_number', 'length', 'max' => 15),
             array('payment_complete, print_certificate', 'length', 'max' => 1),
             array('moneyorder_number', 'length', 'max' => 20),
-            array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid', 'safe'),
+            array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid,print_certificate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on' => 'search'),
@@ -129,6 +129,36 @@ class Payment extends CActiveRecord {
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => 'payment_date ASC',
+            ),
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+    
+     public function print_certificate_search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
+
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
+        
+        $criteria->addCondition("payment_complete='Y' and print_certificate='Y'");
+        
+        if ($this->start_date != "" && $this->end_date != "") {
+            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->start_date . "' AND dmvClasses.clas_date <= '" . $this->end_date . "'");
+        }
+        
+        if ($this->affcode != "") {
+            $criteria->addCondition("Affliate.agency_code='" . $this->affcode . "'");
+        }
+
+        $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
+        $criteria->together = true;
+
+        return new CActiveDataProvider($this, array(
+            'sort' => array(
+                'defaultOrder' => 'Affliate.agency_code ASC',
             ),
             'criteria' => $criteria,
             'pagination' => array(

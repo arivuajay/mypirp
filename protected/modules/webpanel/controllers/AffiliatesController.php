@@ -67,6 +67,11 @@ class AffiliatesController extends Controller {
             $valid = $model->validate();
             $valid = $refmodel->validate() && $valid;
             if ($valid) {
+                $model->aff_created_date = date("Y-m-d",time());
+                $model->sponsor_code = "28";
+                $model->file_type    = "QTR";
+                $model->record_type  = "A";
+                $model->trans_type   = "X";
                 $model->admin_id = Yii::app()->user->admin_id;
                 if ($model->save()) {
                     $refmodel->affiliate_id = $model->affiliate_id;

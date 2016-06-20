@@ -28,7 +28,8 @@
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print students</span>', 'url' => array('/webpanel/students/printstudents')),               
                 array('label' => '<i class="fa fa fa-dollar"></i> <span>Payments</span>', 'url' => array('/webpanel/payments')), 
                 array('label' => '<i class="fa fa fa-list"></i> <span>Book Orders</span>', 'url' => array('/webpanel/bookorders')),
-                array('label' => '<i class="fa fa fa-list"></i> <span>Leaders Guide</span>', 'url' => array('/webpanel/leadersguide'))
+                array('label' => '<i class="fa fa fa-list"></i> <span>Leaders Guide</span>', 'url' => array('/webpanel/leadersguide')),
+                array('label' => '<i class="fa fa fa-print"></i> <span>Print Certificates</span>', 'url' => array('/webpanel/printcertificate')), 
                
                 
             ),

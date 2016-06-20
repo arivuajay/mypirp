@@ -175,7 +175,19 @@ class Students extends CActiveRecord {
             )
         ));
     }
-
+    
+    public function getConcatened()
+    {
+        return $this->first_name. " " . $this->last_name; 
+    }
+    
+    public static function get_student_list($classid=NULL)
+    {        
+        $get_stdlist = Students::model()->findAll("clas_id=" . $classid);    
+        $students   = CHtml::listData($get_stdlist, 'student_id', 'concatened');
+        
+        return $students;
+    }     
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
