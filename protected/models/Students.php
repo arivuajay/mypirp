@@ -26,7 +26,7 @@
  */
 class Students extends CActiveRecord {
 
-    public $instructorid, $startdate, $enddate, $certificatenumber;
+    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag;
 
     /**
      * @return string the associated database table name
@@ -48,7 +48,7 @@ class Students extends CActiveRecord {
             array('middle_name, stud_suffix, state', 'length', 'max' => 10),
             array('address1, address2, email', 'length', 'max' => 50),
             array('gender', 'length', 'max' => 1),
-            array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate', 'safe'),
+            array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate,label_flag', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on' => 'search'),
@@ -133,6 +133,10 @@ class Students extends CActiveRecord {
             $criteria->addCondition("licence_number=" . $this->licence_number);
 
         if ($this->startdate != "" && $this->enddate != "") {
+            
+            if($this->label_flag)
+            $criteria->addCondition("course_completion_date >= '" . $this->startdate . "' AND course_completion_date <= '" . $this->enddate . "'");
+            else    
             $criteria->addCondition("dmvClasses.clas_date >= '" . $this->startdate . "' AND dmvClasses.clas_date <= '" . $this->enddate . "'");
 
             if ($this->affiliate_id > 0) {

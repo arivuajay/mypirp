@@ -22,6 +22,7 @@
                 array('label' => '<i class="fa fa fa-users"></i> <span>Manage students</span>', 'url' => array('/affiliate/students/managestudents')),
                 array('label' => '<i class="fa fa fa-search"></i> <span>Search students</span>', 'url' => array('/affiliate/students/index')),               
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print students</span>', 'url' => array('/affiliate/students/printstudents')),
+                array('label' => '<i class="fa fa fa-print"></i> <span>Print Labels</span>', 'url' => array('/affiliate/students/printlabels')),
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));

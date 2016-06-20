@@ -28,7 +28,7 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses'),
+                'actions' => array('index', 'view', 'create', 'update', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'printlabels' , 'getclasses'),
                 'users' => array('@'),
                  'expression'=> 'AffiliateIdentity::checkAffiliate()',
             ),
@@ -64,6 +64,17 @@ class StudentsController extends Controller {
 
         $this->render('printstudents', compact('model'));
     }
+    
+    public function actionPrintlabels()
+    {
+        $model = new Students('search');
+        
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['Students']))
+            $model->attributes = $_GET['Students'];
+
+        $this->render('printlabels', compact('model'));
+    }        
 
     public function getcertificatenumber($student_id, $clas_id) {
         $certificate_number = "-";
