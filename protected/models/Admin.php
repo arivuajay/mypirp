@@ -72,6 +72,7 @@ class Admin extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'dmvAdminResources' => array(self::HAS_MANY, 'DmvAdminResources', 'admin_id'),  
+            'dmvAffiliateInfo' => array(self::HAS_MANY, 'DmvAffiliateInfo', 'admin_id'),
         );
     }
 

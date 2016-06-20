@@ -55,8 +55,7 @@ class DmvAffiliateInfo extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('agency_code,agency_name, user_id, password', 'required'),
-            array('agency_code, user_id', 'unique'),
+            array('agency_code,agency_name, user_id, password', 'required'),           
             array('sponsor_code', 'numerical', 'integerOnly' => true),
             array('agency_code', 'length', 'max' => 3),
             array('agency_name, user_id', 'length', 'max' => 150),
@@ -72,8 +71,26 @@ class DmvAffiliateInfo extends CActiveRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('affiliate_id, agency_code, agency_name, user_id, password, enabled, aff_created_date, sponsor_code, file_type, email_addr, record_type, trans_type, ssn, fedid, addr1, addr2, city, state, zip, country_code, last_name, first_name, initial, contact_suffix, con_title, phone, phone_ext, fax, owner_last_name, owner_first_name, owner_initial, owner_suffix, agency_approved_date, aff_notes', 'safe', 'on' => 'search'),
+            array('*', 'compositeUniqueKeysValidator'),
         );
     }
+    
+    public function compositeUniqueKeysValidator() {
+        $this->validateCompositeUniqueKeys();
+    }
+    
+    public function behaviors() {
+        return array(
+            'ECompositeUniqueKeyValidatable' => array(
+                'class' => 'ext.ECompositeUniqueKeyValidatable',
+                'uniqueKeys' => array(
+                    'attributes' => 'agency_code, user_id, admin_id',
+                    'errorAttributes' => 'composite_error',                  
+                    'errorMessage' => 'Agency code / User ID already exist!!'
+                )
+            ),
+        );
+    }       
 
     /**
      * @return array relational rules.
@@ -89,6 +106,7 @@ class DmvAffiliateInfo extends CActiveRecord {
              'payment' => array(self::HAS_MANY, 'Payment', 'affiliate_id'),
              'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'affiliate_id'),
              'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'affiliate_id'),
+             'adminInfo' => array(self::BELONGS_TO, 'Admin', 'admin_id'),
         );
     }
 
@@ -151,17 +169,21 @@ class DmvAffiliateInfo extends CActiveRecord {
 
         $criteria = new CDbCriteria;
         
-        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-        $this->affiliateid = Yii::app()->user->affiliate_id;
+          
         
         if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
         {    
             $criteria->condition = "admin_id = :admin_id";
             $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
-        }    
+        }
         
-        //$criteria->compare('affiliate_id', $this->affiliate_id);
-        $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
+        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+        {    
+            $this->affiliateid = Yii::app()->user->affiliate_id;
+            $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
+        }  
+        
+        //$criteria->compare('affiliate_id', $this->affiliate_id);     
         $criteria->compare('agency_code', $this->agency_code, true);
         $criteria->compare('agency_name', $this->agency_name, true);
         $criteria->compare('user_id', $this->user_id, true);
@@ -228,14 +250,11 @@ class DmvAffiliateInfo extends CActiveRecord {
        return $this->agency_name. " (".$this->agency_code.")"; 
     }        
     
-    public static function all_affliates($status = null) {
+     public static function all_affliates($status = null) {
         $criteria = new CDbCriteria;      
          
-        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
-        {  
-            $criteria->condition = "admin_id = :admin_id";
-            $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
-        }    
+        $criteria->condition = "admin_id = :admin_id";
+        $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
         
         if($status!="")
         $criteria->addCondition("enabled='$status'");

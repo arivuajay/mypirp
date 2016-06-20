@@ -25,7 +25,8 @@ $form = $this->beginWidget('CActiveForm', array(
 </div>
 <div class="clearfix">&nbsp;</div>
 <div class="col-lg-12 col-md-12">
-    <table class="table table-striped table-bordered">
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered bulkstudentsadd" >
         <thead>
             <tr>
                 <td align="center"><strong>No</strong></td>
@@ -81,7 +82,8 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
         }
         ?>       
-    </table>   
+    </table>  
+    </div>
 </div>
 <?php $this->endWidget(); ?>
 <script type="text/javascript">

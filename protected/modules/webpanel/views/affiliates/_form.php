@@ -26,6 +26,14 @@ $country = Myclass::getallcountries();
             ));
             ?>
             <div class="box-body">
+                
+                 <div class="form-group">
+                    <div class="col-sm-2">&nbsp;</div>
+                    <div class="col-sm-5">
+                        <?php echo $form->error($model, 'composite_error'); ?>
+                    </div>
+                </div>
+                
                 <?php if (!$model->isNewRecord) { ?>
                     <div class="form-group">
                         <?php echo $form->labelEx($model, 'sponser_email', array('class' => 'col-sm-2 control-label')); ?>

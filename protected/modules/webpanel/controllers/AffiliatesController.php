@@ -55,7 +55,8 @@ class AffiliatesController extends Controller {
     public function actionCreate() {
         $model = new DmvAffiliateInfo;
         $refmodel = new DmvAffiliateCommission;
-
+        
+        $model->unsetAttributes();  // clear any default values
         // Uncomment the following line if AJAX validation is needed
         //$this->performAjaxValidation($model);
 

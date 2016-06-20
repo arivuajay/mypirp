@@ -102,7 +102,7 @@ class StudentsController extends Controller {
                 $this->redirect(array('schedules/index'));
             } else {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
-                $this->redirect(array('students/addbulkstudents/aid/' . $aid . '/cid/' . $cid));
+                $this->redirect(array('students/addbulkstudents/cid/' . $cid));
             }
         }
 
@@ -192,7 +192,7 @@ class StudentsController extends Controller {
             $model->attributes = $_POST['Students'];
             if ($model->save()) {
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
-                $this->redirect(array('students/viewstudents/aid/' . $model->affiliate_id . '/cid/' . $model->clas_id));
+                $this->redirect(array('students/viewstudents/cid/' . $model->clas_id));
             }
         }
 

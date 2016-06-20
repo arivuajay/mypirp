@@ -12,15 +12,16 @@ class AffiliateIdentity extends CUserIdentity {
 
     const ERROR_USERNAME_NOT_ACTIVE = 3;
     const ERROR_ROLE_NOT_ACTIVE = 4;
+    const ERROR_DOMAIN_NOT_CORRECT = 5;
 
     /**
      * Authenticates a user.
      * @return boolean whether authentication succeeds.
      */
     public function authenticate() {
-
-        $affiliate = DmvAffiliateInfo::model()->find('user_id = :U', array(':U' => $this->username));
-
+        $host = $_SERVER['HTTP_HOST'];        
+        $affiliate = DmvAffiliateInfo::model()->with("adminInfo")->find("user_id = '".$this->username."' and adminInfo.domain_url LIKE '%".$host."%'");
+      
         if ($affiliate === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;     // Error Code : 1
         } else if ($affiliate->password !== $this->password) {
@@ -28,14 +29,15 @@ class AffiliateIdentity extends CUserIdentity {
         } else if ($affiliate->enabled == 'N') {
             //Add new condition to finding the status of user.
             $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;
-        } else {
+        }else { 
+          
             $this->errorCode = self::ERROR_NONE;
         }
 
         if ($this->errorCode == self::ERROR_NONE) {
 
             $this->setUserData($affiliate);
-        }
+        }        
 
         return !$this->errorCode;
     }

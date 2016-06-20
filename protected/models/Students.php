@@ -114,7 +114,12 @@ class Students extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-
+        
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
+            $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+        }
+       
         if ($this->affiliate_id != "" && $this->clas_id != "") {
             $criteria->condition = "t.affiliate_id = :affiliate_id and t.clas_id = :clas_id";
             $criteria->params = (array(':affiliate_id' => $this->affiliate_id, ':clas_id' => $this->clas_id));
@@ -122,12 +127,7 @@ class Students extends CActiveRecord {
         {    
             $criteria->condition = "t.affiliate_id = :affiliate_id";
             $criteria->params = (array(':affiliate_id' => Yii::app()->user->affiliate_id));
-        }    
-
-        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
-            $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
-            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
-        }
+        }   
 
         if ($this->licence_number != "")
             $criteria->addCondition("licence_number=" . $this->licence_number);
