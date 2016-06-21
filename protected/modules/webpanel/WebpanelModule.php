@@ -1,13 +1,13 @@
 <?php
 
-class WebpanelModule extends CWebModule
-{
-    
+class WebpanelModule extends CWebModule {
+
     public $homeUrl = array('/webpanel/default/index');
     public $layout = '//layouts/main';
+    public $resourceAccess = array();
 
     public function init() {
-      
+
         // this method is called when the module is being created
         // you may place code here to customize the module or the application
         // import the module-level models and components
@@ -16,7 +16,7 @@ class WebpanelModule extends CWebModule
         ));
         Yii::app()->theme = 'adminlte';
         $this->layoutPath = Yii::getPathOfAlias('webroot.themes.' . Yii::app()->theme->name . '.views.layouts');
-        
+
         Yii::app()->getComponent("booster");
 
         $this->setComponents(array(
@@ -29,13 +29,16 @@ class WebpanelModule extends CWebModule
             )
         ));
 
-        
+
         Yii::app()->user->setStateKeyPrefix('_admin');
         Yii::app()->user->loginUrl = Yii::app()->createUrl("/{$this->id}/default/login");
     }
 
     public function beforeControllerAction($controller, $action) {
         if (parent::beforeControllerAction($controller, $action)) {
+            if (!Yii::app()->user->isGuest)
+                $this->resourceAccess = CHtml::listData (DmvAdminResources::model()->findAll("admin_id = '" . Yii::app()->user->id . "'"),'adres_id','resource_key');
+
             // this method is called before any module controller action is performed
             // you may place customized code here
             return true;

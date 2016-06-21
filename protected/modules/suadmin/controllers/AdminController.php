@@ -56,30 +56,30 @@ class AdminController extends Controller {
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Admin'])) {
-            $model->attributes = $_POST['Admin'];           
-            
+            $model->attributes = $_POST['Admin'];
+
             $domainname = str_replace("http://","",$model->domain_url);
             $sitename = explode(".",$domainname);
             if($sitename[0] != 'www')
-            {  
+            {
                 $addwww = implode(".",$sitename);
                 $model->domain_url = 'http://www.'.$addwww;
-            } 
-            
+            }
+
             if ($model->validate())
-            {    
+            {
                 $model->password = Myclass::refencryption($model->password);
                 if ($model->save()) {
-                    $resource_id = $_POST['resource_id'];
-                    if (isset($resource_id)) {
+                    $resource_key = $_POST['resource_key'];
+                    if (isset($resource_key)) {
                         $criteria = new CDbCriteria;
                         $criteria->condition = "admin_id= :adminid";
                         $criteria->params = (array(':adminid' => $model->admin_id));
-                        DmvAdminResources::model()->deleteAll($criteria);                    
-                        foreach ($resource_id as $rid) {
+                        DmvAdminResources::model()->deleteAll($criteria);
+                        foreach ($resource_key as $rid) {
                             $adminres = new DmvAdminResources;
                             $adminres->admin_id = $model->admin_id;
-                            $adminres->resource_id = $rid;
+                            $adminres->resource_key = $rid;
                             $adminres->save();
                         }
                     }
@@ -87,7 +87,7 @@ class AdminController extends Controller {
                     Yii::app()->user->setFlash('success', 'Admin Created Successfully!!!');
                     $this->redirect(array('index'));
                 }
-            }    
+            }
         }
 
         $this->render('create', array(
@@ -111,29 +111,29 @@ class AdminController extends Controller {
 
         if (isset($_POST['Admin'])) {
            $model->attributes = $_POST['Admin'];
-            
+
             $domainname = str_replace("http://", "", $model->domain_url);
             $sitename = explode(".", $domainname);
             if ($sitename[0] != 'www') {
                 $addwww = implode(".", $sitename);
                 $model->domain_url = 'http://www.' . $addwww;
             }
-            
+
             if ($model->validate())
-            {    
-                $model->password = Myclass::refencryption($model->password);               
+            {
+                $model->password = Myclass::refencryption($model->password);
                 if ($model->save(false)) {
 
-                    $resource_id = $_POST['resource_id'];
-                    if (isset($resource_id)) {
+                    $resource_key = $_POST['resource_key'];
+                    if (isset($resource_key)) {
                         $criteria = new CDbCriteria;
                         $criteria->condition = "admin_id= :adminid";
                         $criteria->params = (array(':adminid' => $model->admin_id));
                         DmvAdminResources::model()->deleteAll($criteria);
-                        foreach ($resource_id as $rid) {
+                        foreach ($resource_key as $rid) {
                             $adminres = new DmvAdminResources;
                             $adminres->admin_id = $model->admin_id;
-                            $adminres->resource_id = $rid;
+                            $adminres->resource_key = $rid;
                             $adminres->save();
                         }
                     }
@@ -141,21 +141,21 @@ class AdminController extends Controller {
                     Yii::app()->user->setFlash('success', 'Admin Updated Successfully!!!');
                     $this->redirect(array('index'));
                 }
-            }   
+            }
         }
 
         $criteria = new CDbCriteria;
         $criteria->condition = "admin_id= :adminid";
         $criteria->params = (array(':adminid' => $id));
-        $adminres = DmvAdminResources::model()->findAll($criteria);       
-        $resArr = CHtml::listData($adminres, 'adres_id', 'resource_id');
-       
+        $adminres = DmvAdminResources::model()->findAll($criteria);
+        $resArr = CHtml::listData($adminres, 'adres_id', 'resource_key');
+
 
         $model->password = Myclass::refdecryption($model->password);
         $this->render('update', array(
             'model' => $model,
             'resources' => $all_resourses,
-            'existing_resource' => $resArr    
+            'existing_resource' => $resArr
         ));
     }
 

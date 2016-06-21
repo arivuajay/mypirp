@@ -8,7 +8,11 @@ $this->breadcrumbs = array(
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create an Affiliate', array('/webpanel/affiliates/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.affliates.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create an Affiliate', array('/webpanel/affiliates/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
@@ -38,13 +42,17 @@ $this->breadcrumbs = array(
                 'sortable' => false,
                 'filter' => CHtml::activeDropDownList($model, 'enabled', array("Y" => "Enabled", "N" => "Disabled"), array('class' => 'form-control', 'prompt' => 'All')),
                 'value' => function($data) {
-                 echo ($data->enabled == "Y") ? "<i class='fa fa-circle text-green'></i>" : "<i class='fa fa-circle text-red'></i>";
-            }),
+            echo ($data->enabled == "Y") ? "<i class='fa fa-circle text-green'></i>" : "<i class='fa fa-circle text-red'></i>";
+        }),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;{delete}',
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.affliates.edit')" ),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.affliates.delete')" )
+                ),
             )
         );
         $this->widget('booster.widgets.TbExtendedGridView', array(

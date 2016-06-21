@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'dmv_admin_resources':
  * @property integer $adres_id
  * @property integer $admin_id
- * @property integer $resource_id
+ * @property integer $resource_key
  * @property string $created_at
  * @property string $modified_at
  *
@@ -30,11 +30,12 @@ class DmvAdminResources extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            //array('admin_id, resource_id, created_at, modified_at', 'required'),
-            array('admin_id, resource_id', 'numerical', 'integerOnly' => true),
+            //array('admin_id, resource_key, created_at, modified_at', 'required'),
+            array('admin_id', 'numerical', 'integerOnly' => true),
+            array('resource_key', 'length', 'max'=>255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('adres_id, admin_id, resource_id, created_at, modified_at', 'safe', 'on' => 'search'),
+            array('adres_id, admin_id, resource_key, created_at, modified_at', 'safe', 'on' => 'search'),
         );
     }
 
@@ -55,7 +56,6 @@ class DmvAdminResources extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'resource' => array(self::BELONGS_TO, 'DmvResources', 'resource_id'),
             'admin' => array(self::BELONGS_TO, 'DmvAdmin', 'admin_id'),
         );
     }
@@ -67,7 +67,7 @@ class DmvAdminResources extends CActiveRecord {
         return array(
             'adres_id' => Myclass::t('Adres'),
             'admin_id' => Myclass::t('Admin'),
-            'resource_id' => Myclass::t('Resource'),
+            'resource_key' => Myclass::t('Resource'),
             'created_at' => Myclass::t('Created At'),
             'modified_at' => Myclass::t('Modified At'),
         );
@@ -92,7 +92,7 @@ class DmvAdminResources extends CActiveRecord {
 
         $criteria->compare('adres_id', $this->adres_id);
         $criteria->compare('admin_id', $this->admin_id);
-        $criteria->compare('resource_id', $this->resource_id);
+        $criteria->compare('resource_key', $this->resource_key, true);
         $criteria->compare('created_at', $this->created_at, true);
         $criteria->compare('modified_at', $this->modified_at, true);
 

@@ -8,11 +8,11 @@
 class AdminIdentity extends CUserIdentity {
 
     private $_id;
-    
+
     public $email;
 
-   const ERROR_USERNAME_NOT_ACTIVE = 3;    
-   const ERROR_ROLE_NOT_ACTIVE = 4;    
+   const ERROR_USERNAME_NOT_ACTIVE = 3;
+   const ERROR_ROLE_NOT_ACTIVE = 4;
 
     /**
      * Authenticates a user.
@@ -21,34 +21,34 @@ class AdminIdentity extends CUserIdentity {
     public function authenticate() {
 
         $user = Admin::model()->find('username = :U', array(':U' => $this->username));
-        $domain_url = $user->domain_url;     
-        $exp_url = explode("http://",$domain_url);       
-        $durl = $exp_url[1];       
-          
+        $domain_url = $user->domain_url;
+        $exp_url = explode("http://",$domain_url);
+        $durl = $exp_url[1];
+
         if ($user === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;     // Error Code : 1
-        } else if ($user->password !== Myclass::refencryption($this->password)) {           
+        } else if ($user->password !== Myclass::refencryption($this->password)) {
             $this->errorCode = self::ERROR_PASSWORD_INVALID;   // Error Code : 1
-        } else if ($user->status == 0) {             
+        } else if ($user->status == 0) {
             //Add new condition to finding the status of user.
             $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;
-        }else if ($durl != $_SERVER['HTTP_HOST']) { 
+        }else if ($durl != $_SERVER['HTTP_HOST']) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
-        }else{   
+        }else{
             $this->errorCode = self::ERROR_NONE;
-        } 
-        
+        }
+
         if ($this->errorCode == self::ERROR_NONE)
-        { 
-            
+        {
+
             $this->setUserData($user);
         }
 
         return !$this->errorCode;
     }
-    
+
     protected function setUserData($user) {
-     
+
         $this->_id = $user->admin_id;
          $this->setState('admin_id', $user->admin_id);
         $this->setState('username', $user->username);
@@ -58,15 +58,15 @@ class AdminIdentity extends CUserIdentity {
         //$this->setState('rolename', $user->roleMdl->Description);
         return;
     }
-    
+
      public function checkadminemail() {
-         
+
          $user = Admin::model()->find('email = :U', array(':U' => $this->email));
 
         if ($user === null):
-            $this->errorCode = self::ERROR_EMAIL_INVALID;     // Error Code : 1        
+            $this->errorCode = self::ERROR_EMAIL_INVALID;     // Error Code : 1
         endif;
-        
+
         return !$this->errorCode;
      }
 
@@ -76,7 +76,7 @@ class AdminIdentity extends CUserIdentity {
     public function getId() {
         return $this->_id;
     }
-    
+
     public static function checkAdmin() {
         $return = false;
         if(isset(Yii::app()->user->role)){
@@ -86,14 +86,23 @@ class AdminIdentity extends CUserIdentity {
         }
         return $return;
     }
-    
-    
+
+
      public static function checkPrivilages($rank) {
         $return = false;
         if(isset(Yii::app()->user->id)){
             $user = User::model()->find('id = :U', array(':U' => Yii::app()->user->id));
             $return = $user->roleMdl->Rank <= $rank;
         }
+        return $return;
+    }
+
+     public static function checkAccess($resource) {
+        $return = false;
+        if(self::checkAdmin() && in_array($resource, Yii::app()->getModule('webpanel')->resourceAccess)){
+            $return = true;
+        }
+
         return $return;
     }
 }

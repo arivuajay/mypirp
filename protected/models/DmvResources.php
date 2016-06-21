@@ -50,7 +50,6 @@ class DmvResources extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'dmvAdminResources' => array(self::HAS_MANY, 'DmvAdminResources', 'resource_id'),
                         'Childs' => array(self::HAS_MANY, 'DmvResources', 'parent_id'),
 		);
 	}
@@ -115,7 +114,7 @@ class DmvResources extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-        
+
         public function dataProvider() {
             return new CActiveDataProvider($this, array(
                 'pagination' => array(
