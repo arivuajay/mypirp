@@ -45,12 +45,16 @@ class PrintcertificateController extends Controller {
     public function actionPrintstudentcertificate($id) {
         $model = new PrintCertificate('search');
         $class_id=$id;
-        $this->render('printstudentcertificate', compact('model','class_id'));
+        
+        $classinfo = DmvClasses::model()->findByPk($id);
+        $class_info = $classinfo->clas_date. " ".$classinfo->start_time. " To ".$classinfo->end_time;
+        
+        $this->render('printstudentcertificate', compact('model','class_id','class_info'));
     }
     
     public function actionCertificatedisplay($id) {
-        $class_id=$id;
-        echo $this->renderPartial('_certificatedisplay', $class_id, false, true);
+        $data['student_id']= $id; 
+        echo $this->renderPartial('_certificatedisplay', $data, false, true);
         exit;
     }
     

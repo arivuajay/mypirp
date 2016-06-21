@@ -34,3 +34,29 @@ height: 570px;
 {
     width:125px;
 }
+
+.certificate-cont{
+    background: none repeat scroll 0 0 #ffffff !important;
+    color: #000000 !important;
+    font-family: "Times New Roman",Times,serif !important;
+    font-size: 12pt !important;
+    margin-top: 10px;    
+}
+
+.certificate-cont .cert-table{
+    border: #000000 solid 1px;
+    border-bottom: #000000 solid 2px;
+    line-height: 28px;
+}
+
+.certificate-cont h3{ 
+ font-family: "Times New Roman",Times,serif !important;
+ font-size: 18px;
+ font-weight: bold;
+  color: #000000 !important;
+}
+
+.certificate-cont td{
+   color: #000000; 
+   line-height: 22px;
+}
