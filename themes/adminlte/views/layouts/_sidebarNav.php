@@ -30,8 +30,13 @@
                 array('label' => '<i class="fa fa fa-list"></i> <span>Book Orders</span>', 'url' => array('/webpanel/bookorders')),
                 array('label' => '<i class="fa fa fa-list"></i> <span>Leaders Guide</span>', 'url' => array('/webpanel/leadersguide')),
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print Certificates</span>', 'url' => array('/webpanel/printcertificate')),
-
-
+                array('label' => '<i class="fa fa-bar-chart-o"></i> <span>Reports</span><i class="fa pull-right fa-angle-left"></i>', 'url' => '#',
+                    'itemOptions' => array('class' => 'treeview'),
+                    'submenuOptions' => array('class' => 'treeview-menu'),
+                    'items' => array(
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Book Order Reports</span>', 'url' => array('/webpanel/reports/bookorderreport')),                       
+                    ),
+                ),
             ),
             'htmlOptions' => array('class' => 'sidebar-menu')
         ));
