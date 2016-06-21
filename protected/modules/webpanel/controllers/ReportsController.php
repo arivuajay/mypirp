@@ -28,7 +28,7 @@ class ReportsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('bookorderreport'),
+                'actions' => array('bookorderreport','paymentreport'),
                 'users' => array('@'),
                  'expression'=> 'AdminIdentity::checkAdmin()',
             ),
@@ -41,7 +41,22 @@ class ReportsController extends Controller {
     public function actionBookorderreport() {
         $model = new BookOrders;
         $affiliates = DmvAffiliateInfo::all_affliates("Y");
-         
+        
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['BookOrders']))
+            $model->attributes = $_GET['BookOrders'];
+                
         $this->render('bookorderreport', compact('model', 'affiliates'));
+    }
+    
+    public function actionPaymentreport() {
+        $model = new Payment;
+        $affiliates = DmvAffiliateInfo::all_affliates("Y");
+        
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['Payment']))
+            $model->attributes = $_GET['Payment'];
+         
+        $this->render('paymentreport', compact('model', 'affiliates'));
     }
 }

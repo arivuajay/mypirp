@@ -19,6 +19,7 @@
 class Payment extends CActiveRecord {
 
     public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate;
+    public $startdate, $enddate;
 
     /**
      * @return string the associated database table name
@@ -43,6 +44,7 @@ class Payment extends CActiveRecord {
             array('payment_complete, print_certificate', 'length', 'max' => 1),
             array('moneyorder_number', 'length', 'max' => 20),
             array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid,print_certificate', 'safe'),
+            array('startdate,enddate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on' => 'search'),
@@ -121,6 +123,15 @@ class Payment extends CActiveRecord {
         
         if ($this->affcode != "") {
             $criteria->addCondition("Affliate.agency_code='" . $this->affcode . "'");
+        }
+        
+        /* For payment report */
+        if ($this->startdate != "" && $this->enddate != "") {
+            $criteria->addCondition("payment_date >= '" . $this->startdate . "' AND payment_date <= '" . $this->enddate . "'");
+        }
+        
+        if($this->affiliatesid!=""){
+            $criteria->addCondition("Affliate.affiliate_id='" . $this->affiliatesid . "'");
         }
 
         $criteria->with = array("dmvClasses", "dmvClasses.Affliate");

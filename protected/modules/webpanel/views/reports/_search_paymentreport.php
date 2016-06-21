@@ -18,7 +18,7 @@
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(
                         'method' => 'get',
-                        'action' => array('/webpanel/reports/bookorderreport'),
+                        'action' => array('/webpanel/reports/paymentreport'),
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>                 
@@ -46,8 +46,8 @@
                     
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group">
-                            <?php echo $form->labelEx($model, 'affiliate_id', array('class' => 'control-label')); ?>                   
-                            <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control', "empty" => "ALL")); ?>         
+                            <?php echo $form->labelEx($model, 'affiliatesid', array('class' => 'control-label')); ?>                   
+                            <?php echo $form->dropDownList($model, 'affiliatesid', $affiliates, array('class' => 'form-control', "empty" => "ALL")); ?>         
                         </div>
                     </div> 
 

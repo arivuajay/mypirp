@@ -35,6 +35,7 @@
                     'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Book Order Reports</span>', 'url' => array('/webpanel/reports/bookorderreport')),                       
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Payment Reports</span>', 'url' => array('/webpanel/reports/paymentreport')),                       
                     ),
                 ),
             ),

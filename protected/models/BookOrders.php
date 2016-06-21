@@ -45,7 +45,7 @@ class BookOrders extends CActiveRecord
 			array('client_type, book_instructor, payment_complete', 'length', 'max'=>1),
 			array('payment_type', 'length', 'max'=>2),
 			array('cheque_number', 'length', 'max'=>15),
-			array('payment_date, payment_notes, startdate  , enddate', 'safe'),
+			array('payment_date, payment_notes, startdate, enddate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('book_id, affiliate_id, instructor_id, client_type, book_instructor, payment_date, number_of_books, payment_amount, book_fee, shipping_fee, payment_type, cheque_number, payment_complete, payment_notes', 'safe', 'on'=>'search'),
@@ -124,29 +124,25 @@ class BookOrders extends CActiveRecord
                 
                 $criteria->condition = "affiliateInfo.admin_id = :admin_id";
                 $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
-
-//		$criteria->compare('book_id',$this->book_id);
-//		$criteria->compare('affiliate_id',$this->affiliate_id);
-//		$criteria->compare('instructor_id',$this->instructor_id);
-//		$criteria->compare('client_type',$this->client_type,true);
-//		$criteria->compare('book_instructor',$this->book_instructor,true);
-//		$criteria->compare('payment_date',$this->payment_date,true);
-//		$criteria->compare('number_of_books',$this->number_of_books);
-//		$criteria->compare('payment_amount',$this->payment_amount);
-//		$criteria->compare('book_fee',$this->book_fee);
-//		$criteria->compare('shipping_fee',$this->shipping_fee);
-//		$criteria->compare('payment_type',$this->payment_type,true);
-//		$criteria->compare('cheque_number',$this->cheque_number,true);
-//		$criteria->compare('payment_complete',$this->payment_complete,true);
-//		$criteria->compare('payment_notes',$this->payment_notes,true);
+               
+                if ($this->startdate != "" && $this->enddate != "") {
+                    $criteria->addCondition("payment_complete = 'Y'");
+                    
+                    $criteria->addCondition("payment_date >= '" . $this->startdate . "' AND payment_date <= '" . $this->enddate . "'");
+                   
+                    if ($this->affiliate_id > 0) {
+                        $criteria->addCondition('t.affiliate_id = ' . $this->affiliate_id);
+                    }
+                }
                 
                 $criteria->with = array("affiliateInfo","instructorInfo");
                 $criteria->together = true;
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                      //  'totalcounts' => $model->search()->getTotalItemCount(),
                         'pagination' => array(
-                            'pageSize' => PAGE_SIZE,
+                            'pageSize' => 5,
                         )
 		));
 	}
