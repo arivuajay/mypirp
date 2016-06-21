@@ -13,7 +13,11 @@ $cs_pos_end = CClientScript::POS_END;
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.students.create')) {
+        echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
@@ -49,6 +53,10 @@ $cs_pos_end = CClientScript::POS_END;
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.delete')"),
+                )
             )
         );
 

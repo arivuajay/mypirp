@@ -15,7 +15,11 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
@@ -47,14 +51,17 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;{delete}&nbsp;&nbsp;{add_students}',
                 'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.schedules.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.schedules.delete')"),
                     'add_students' => array(
                         'label' => "<i class='fa fa-list-ol'></i>",
                         'url' => 'Yii::app()->createAbsoluteUrl("/webpanel/students/addbulkstudents/aid/".$data->affiliate_id."/cid/".$data->clas_id)',
-                        'options' => array('class' => 'newWindow','title' => 'Add Bulk Students'),
+                        'options' => array('class' => 'newWindow', 'title' => 'Add Bulk Students'),
+                        'visible' => "AdminIdentity::checkAccess('webpanel.students.addbulkstudents')"
                     ),
                 ),
             )
-        );     
+        );
         $this->widget('booster.widgets.TbExtendedGridView', array(
             //'filter' => $model,
             'type' => 'striped bordered datatable',
@@ -71,10 +78,10 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 <?php
 $js = <<< EOD
 $(document).ready(function(){
-        
+
 $('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+$('.date').datepicker({ format: 'yyyy-mm-dd' });
+
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_instructor', $js);

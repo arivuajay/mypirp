@@ -47,18 +47,20 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'value' => function($data) {
                     echo "<a href='".Yii::app()->createAbsoluteUrl("webpanel/printcertificate/printstudentcertificate/id/".$data->class_id)."'>Print certificates</a>";
                  }
-            ),    
+            ),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
                 'buttons' => array(
-                    'update' => array(                      
-                        'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/update/id/".$data->class_id)',                       
+                    'update' => array(
+                        'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/update/id/".$data->class_id)',
+                        'visible' => "AdminIdentity::checkAccess('webpanel.printcertificate.edit')"
                     ),
-                    'delete' => array(                      
-                        'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/delete/id/".$data->class_id)',                       
+                    'delete' => array(
+                        'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/delete/id/".$data->class_id)',
+                        'visible' => "AdminIdentity::checkAccess('webpanel.printcertificate.delete')"
                     ),
                 ),
             )
@@ -80,10 +82,10 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 <?php
 $js = <<< EOD
 $(document).ready(function(){
-        
+
 $('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+$('.date').datepicker({ format: 'yyyy-mm-dd' });
+
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_pc', $js);

@@ -46,7 +46,11 @@ $cs_pos_end = CClientScript::POS_END;
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
-                'visible' => $this->checkVisible($print_certificate) //custom function 
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.delete')"),
+                ),
+                'visible' => $this->checkVisible($print_certificate) //custom function
             )
         );
 

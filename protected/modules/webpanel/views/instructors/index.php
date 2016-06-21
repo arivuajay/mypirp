@@ -16,12 +16,16 @@ $cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $c
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create an Instructor', array('/webpanel/instructors/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.instructors.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create an Instructor', array('/webpanel/instructors/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
 <div class="col-lg-12 col-md-12">&nbsp;</div>
-<?php  $this->renderPartial('_search', compact('model', 'affiliates','instructors'));?>
+<?php $this->renderPartial('_search', compact('model', 'affiliates', 'instructors')); ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
@@ -44,6 +48,10 @@ $cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $c
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;{delete}',
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.instructors.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.instructors.delete')")
+                ),
             )
         );
 
@@ -60,25 +68,25 @@ $cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $c
     </div>
 </div>
 
-<?php 
-$ajaxInstructorsUrl  = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
+<?php
+$ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
 ?>
 <script type="text/javascript">
-    $(document).ready(function(){    
-        //$.fn.dataTableExt.sErrMode = 'throw';   
-        $("#DmvAddInstructor_Affiliate").change(function(){
-        var id=$(this).val();
-        var dataString = 'id='+ id;
-        
+    $(document).ready(function () {
+        //$.fn.dataTableExt.sErrMode = 'throw';
+        $("#DmvAddInstructor_Affiliate").change(function () {
+            var id = $(this).val();
+            var dataString = 'id=' + id;
+
             $.ajax({
                 type: "POST",
-                url: '<?php echo $ajaxInstructorsUrl;?>',
+                url: '<?php echo $ajaxInstructorsUrl; ?>',
                 data: dataString,
                 cache: false,
-                success: function(html){             
+                success: function (html) {
                     $("#DmvAddInstructor_Instructor").html(html);
                 }
-             });
+            });
         });
-      });
+    });
 </script>

@@ -10,7 +10,11 @@ $this->breadcrumbs = array(
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Leaders Guide', array('/webpanel/leadersguide/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.leadersguide.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Leaders Guide', array('/webpanel/leadersguide/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
@@ -51,6 +55,10 @@ $this->breadcrumbs = array(
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;{delete}',
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.leadersguide.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.leadersguide.delete')"),
+                )
             )
         );
 

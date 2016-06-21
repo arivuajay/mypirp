@@ -10,7 +10,11 @@ $this->breadcrumbs = array(
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Message', array('/webpanel/messages/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.messages.create')) {
+        echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Message', array('/webpanel/messages/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
@@ -22,14 +26,18 @@ $this->breadcrumbs = array(
         $gridColumns = array(
             array('header' => 'SN.',
                 'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
-            ),           
-            'message_title',           
+            ),
+            'message_title',
             'posted_date',
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.messages.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.messages.delete')")
+                ),
             )
         );
 

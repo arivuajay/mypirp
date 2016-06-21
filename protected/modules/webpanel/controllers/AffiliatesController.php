@@ -29,8 +29,7 @@ class AffiliatesController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','exceldownload'),
-                'users' => array('@'),
-                'expression'=> 'AdminIdentity::checkAdmin()',
+                'expression'=> "AdminIdentity::checkAccess('webpanel.affliates.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -55,7 +54,7 @@ class AffiliatesController extends Controller {
     public function actionCreate() {
         $model = new DmvAffiliateInfo;
         $refmodel = new DmvAffiliateCommission;
-        
+
         $model->unsetAttributes();  // clear any default values
         // Uncomment the following line if AJAX validation is needed
         //$this->performAjaxValidation($model);
@@ -116,7 +115,7 @@ class AffiliatesController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        
+
 //        $querydel1	= "Delete from dmv_aff_instructor where affiliate_id='$affiliate_id'";
 //	$querydel2	= "Delete from dmv_book_orders where affiliate_id='$affiliate_id'";
 //	$querydel3	= "Delete from dmv_classes  where affiliate_id='$affiliate_id'";

@@ -13,7 +13,11 @@ $cs_pos_end = CClientScript::POS_END;
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Document', array('/webpanel/postdocument/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.postdocument.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Document', array('/webpanel/postdocument/create'), array('class' => 'btn btn-success pull-right'));
+        }
+        ?>
     </div>
 </div>
 
@@ -35,6 +39,8 @@ $cs_pos_end = CClientScript::POS_END;
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{download}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',
                 'buttons' => array(
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.edit')"),
+                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.delete')"),
                     'download' => array(
                         'label' => "<i class='fa fa-download'></i>",
                         'url' => '(file_exists(YiiBase::getPathOfAlias("webroot")."/messagedoc/".Yii::app()->user->admin_id."/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".Yii::app()->user->admin_id."/".$data->file_name) : ""',

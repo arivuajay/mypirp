@@ -47,7 +47,7 @@ $cs_pos_end = CClientScript::POS_END;
                     'name' => 'studentsCount',
                     'filter' => false,
                     'value' => function($data) {
-                        echo ($data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";
+                        echo (AdminIdentity::checkAccess('webpanel.students.edit') && AdminIdentity::checkAccess('webpanel.students.delete') && $data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";
                     }
                 ),
             );
