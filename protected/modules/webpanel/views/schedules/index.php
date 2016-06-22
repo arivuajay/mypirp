@@ -79,8 +79,43 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 $js = <<< EOD
 $(document).ready(function(){
 
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' });
+    $("#DmvClasses_startdate").change(function () {
+        if ($(this).val() != '') {
+            $("#startdate_error").hide();
+        }
+    });
+        
+    $("#DmvClasses_enddate").change(function () {
+        if ($(this).val() != '') {
+            $("#enddate_error").hide();
+        }
+    });
+
+    $("#export_csv").click(function () {
+        var startdate = $("#DmvClasses_startdate").val();
+        var enddate = $("#DmvClasses_enddate").val();
+
+        $("#startdate_error").hide();
+        $("#enddate_error").hide();
+
+        if (startdate == "")
+        {
+            $("#startdate_error").show();
+            return false;
+        }
+
+        if (enddate == "")
+        {
+            $("#enddate_error").show();
+            return false;
+        }
+
+        return true;
+
+    });
+
+    $('.year').datepicker({ dateFormat: 'yyyy' });
+    $('.date').datepicker({ format: 'yyyy-mm-dd' });
 
 });
 EOD;

@@ -11,7 +11,9 @@ $cs = Yii::app()->getClientScript();
 $cs_pos_end = CClientScript::POS_END;
 
 $cs->registerScriptFile($themeUrl . '/js/datatables/jquery.dataTables.js', $cs_pos_end);
-$cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $cs_pos_end);
+//$cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $cs_pos_end);
+$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
+$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 
 <div class="col-lg-12 col-md-12">
@@ -88,5 +90,44 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
                 }
             });
         });
+
+
+        $("#DmvAddInstructor_start_date").change(function () {
+            if ($(this).val() != '') {
+                $("#startdate_error").hide();
+            }
+        });
+        $("#DmvAddInstructor_end_date").change(function () {
+            if ($(this).val() != '') {
+                $("#enddate_error").hide();
+            }
+        });
+
+        $("#export_csv").click(function () {
+            var startdate = $("#DmvAddInstructor_start_date").val();
+            var enddate = $("#DmvAddInstructor_end_date").val();
+
+            $("#startdate_error").hide();
+            $("#enddate_error").hide();
+
+            if (startdate == "")
+            {
+                $("#startdate_error").show();
+                return false;
+            }
+
+            if (enddate == "")
+            {
+                $("#enddate_error").show();
+                return false;
+            }
+
+            return true;
+
+        });
+
+        $('.year').datepicker({dateFormat: 'yyyy'});
+        $('.date').datepicker({format: 'yyyy-mm-dd'});
+
     });
 </script>

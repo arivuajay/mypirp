@@ -28,7 +28,7 @@ class SchedulesController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','exceldownload'),
                 'users' => array('@'),
                 'expression'=> 'AdminIdentity::checkAdmin()',
             ),
@@ -206,6 +206,28 @@ class SchedulesController extends Controller {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+    
+    public function actionExceldownload(){   
+        
+        $from_date ='';
+        $to_date ='';
+        $admin_id = Yii::app()->user->getId();
+        if (isset($_GET['DmvClasses'])){            
+            $from_date = $_GET['DmvClasses']['startdate'];
+            $to_date = $_GET['DmvClasses']['enddate'];        
+        }
+            $ret_result = Yii::app()->db->createCommand("SELECT dmc.clas_id as 'Class ID',dmc.clas_date as 'Class Date',dmc.start_time as 'Start Time',dmc.end_time as 'End Time',
+               dmc.loc_city as 'City',dmc.loc_state as 'State',dmc.zip as 'Zip',dmi.ins_first_name as 'Instructor First Name',dmi.instructor_last_name as 'Instructor Last Name',dma.agency_code as 'Agency Code'
+               FROM dmv_classes as dmc,dmv_add_instructor as dmi,dmv_affiliate_info as dma  WHERE  dma.admin_id = '".$admin_id."' AND dmc.affiliate_id = dma.affiliate_id AND dmc.instructor_id = dmi.instructor_id AND dmc.show_admin='Y' AND dmc.clas_date >= '".$from_date."' AND dmc.clas_date <= '".$to_date."'");
+            $file_name = 'schedules_' . date('Y-m-d').'.csv';
+                  
+            Yii::import('ext.ECSVExport');           
+            $csv = new ECSVExport($ret_result);
+            $content = $csv->toCSV();                   
+            Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
+            exit();
+//            $this->redirect(array('index'));
     }
 
 }

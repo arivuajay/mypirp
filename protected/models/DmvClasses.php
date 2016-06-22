@@ -25,7 +25,7 @@
  */
 class DmvClasses extends CActiveRecord {
     
-    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid;
+    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid,$startdate,$enddate;
     /**
      * @return string the associated database table name
      */

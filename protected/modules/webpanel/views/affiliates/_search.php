@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-2 col-md-2">
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <?php echo CHtml::submitButton('Export to CSV', array('id' => 'export_csv','class' => 'btn btn-primary form-control')); ?>

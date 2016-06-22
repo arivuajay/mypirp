@@ -28,7 +28,7 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses','exceldownload'),
                 'users' => array('@'),
                  'expression'=> 'AdminIdentity::checkAdmin()',
             ),
@@ -304,6 +304,32 @@ class StudentsController extends Controller {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+    
+    public function actionExceldownload(){   
+        
+        $from_date ='';
+        $to_date ='';
+        $admin_id = Yii::app()->user->getId();
+        if (isset($_GET['Students'])){            
+            $from_date = $_GET['Students']['start_date'];
+            $to_date = $_GET['Students']['end_date'];        
+        }
+        
+            $ret_result = Yii::app()->db->createCommand("SELECT dms.student_id AS 'Student ID',dms.affiliate_id AS 'Affiliate ID',dms.clas_id AS 'Class ID',dms.first_name AS 'First Name',
+                    dms.middle_name AS 'Middle Name',dms.last_name AS 'Last Name',dms.stud_suffix AS 'Student Suffix',dms.address1 AS 'Address1',dms.address2 AS 'Address2',
+                    dms.city AS 'city',dms.state AS 'state',dms.zip AS 'zip',dms.phone AS 'phone',dms.email AS 'email',dms.gender AS 'gender',dms.dob AS 'dob',dms.licence_number AS 'licence_number',
+                    dms.notes AS 'Notes',dms.course_completion_date AS 'Course Completion Date',dmc.certificate_number AS 'Certificate Number'
+                    FROM dmv_students AS dms LEFT JOIN dmv_print_certificate AS dmc ON dms.student_id = dmc.student_id,dmv_affiliate_info AS dma WHERE dma.affiliate_id = dms.affiliate_id AND dma.admin_id='".$admin_id."' AND dms.course_completion_date >= '".$from_date."' AND dms.course_completion_date <= '".$to_date."'");
+            
+            $file_name = 'students_' . date('Y-m-d').'.csv';
+                  
+            Yii::import('ext.ECSVExport');           
+            $csv = new ECSVExport($ret_result);
+            $content = $csv->toCSV();                   
+            Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
+            exit();
+//            $this->redirect(array('index'));
     }
 
 }

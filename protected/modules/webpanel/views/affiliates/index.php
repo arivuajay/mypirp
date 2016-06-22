@@ -78,6 +78,17 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 $js = <<< EOD
 $(document).ready(function(){
         
+$("#DmvAffiliateInfo_start_date").change(function() {
+    if($(this).val() != ''){
+        $("#startdate_error").hide();
+    } 
+}); 
+$("#DmvAffiliateInfo_end_date").change(function() {
+    if($(this).val() != ''){
+        $("#enddate_error").hide();
+    } 
+});
+
 $("#export_csv").click(function() {
     var startdate = $("#DmvAffiliateInfo_start_date").val();
     var enddate = $("#DmvAffiliateInfo_end_date").val();

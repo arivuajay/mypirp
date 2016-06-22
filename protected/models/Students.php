@@ -26,7 +26,7 @@
  */
 class Students extends CActiveRecord {
 
-    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag;
+    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag,$start_date, $end_date;
 
     /**
      * @return string the associated database table name

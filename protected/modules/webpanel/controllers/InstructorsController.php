@@ -28,7 +28,7 @@ class InstructorsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','getinstructors'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','getinstructors','exceldownload'),
                 'users' => array('@'),
                 'expression'=> 'AdminIdentity::checkAdmin()',
             ),           
@@ -57,7 +57,7 @@ class InstructorsController extends Controller {
 
             $model->attributes = $_POST['DmvAddInstructor'];
             $model->admin_id = Yii::app()->user->admin_id;
-        
+            $model->created_date = date("Y-m-d",time());
             if ($model->save()) {
                 $instructor_id = $model->instructor_id;
 
@@ -241,6 +241,29 @@ class InstructorsController extends Controller {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+    
+    public function actionExceldownload(){   
+        
+        $from_date ='';
+        $to_date ='';
+        $admin_id = Yii::app()->user->getId();
+        if (isset($_GET['DmvAddInstructor'])){            
+            $from_date = $_GET['DmvAddInstructor']['start_date'];
+            $to_date = $_GET['DmvAddInstructor']['end_date'];        
+        }
+            $ret_result = Yii::app()->db->createCommand("SELECT instructor_id as 'Instructor ID',instructor_ss as 'Instructor ss',instructor_last_name as 'Last Name',ins_first_name as 'First Name',
+                    instructor_initial as 'Initial',instructor_suffix as 'Instructor Suffix',instructor_code as 'Instructor Code',instructor_client_id as 'Client id',instructor_dob as 'Instructor DOB',
+                    enabled as 'Enabled',gender as 'Gender',addr1 as 'Address1',addr2 as 'Address2',city as 'City',state as 'State',zip as 'Zip',phone as 'Phone',created_date as 'Created Date'
+                    FROM dmv_add_instructor WHERE  admin_id = '".$admin_id."' AND created_date >= '".$from_date."' AND created_date <= '".$to_date."'");
+            $file_name = 'instructors_' . date('Y-m-d').'.csv';
+                  
+            Yii::import('ext.ECSVExport');           
+            $csv = new ECSVExport($ret_result);
+            $content = $csv->toCSV();                   
+            Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
+            exit();
+//            $this->redirect(array('index'));
     }
 
 }
