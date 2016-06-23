@@ -29,8 +29,7 @@ class ReportsController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('bookorderreport','paymentreport'),
-                'users' => array('@'),
-                 'expression'=> 'AdminIdentity::checkAdmin()',
+                'expression'=> "AdminIdentity::checkAccess('webpanel.reports.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),

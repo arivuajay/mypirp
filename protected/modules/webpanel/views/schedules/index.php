@@ -51,7 +51,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{update}&nbsp;&nbsp;{delete}&nbsp;&nbsp;{add_students}',
                 'buttons' => array(
-                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.schedules.edit')"),
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.schedules.update')"),
                     'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.schedules.delete')"),
                     'add_students' => array(
                         'label' => "<i class='fa fa-list-ol'></i>",

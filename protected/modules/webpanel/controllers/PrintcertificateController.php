@@ -29,8 +29,7 @@ class PrintcertificateController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'update', 'view', 'delete', 'printstudentcertificate', 'certificatedisplay', 'pendingcertificates',),
-                'users' => array('@'),
-                'expression' => 'AdminIdentity::checkAdmin()',
+                'expression'=> "AdminIdentity::checkAccess('webpanel.printcertificate.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),

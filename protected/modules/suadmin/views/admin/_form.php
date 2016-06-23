@@ -93,7 +93,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <div class="form-group">
         <?php echo $form->labelEx($model, 'status', array('class' => 'col-sm-2 control-label')); ?>
         <div class="col-sm-5">
-            <?php echo $form->radioButtonList($model, 'status', array('1' => 'Oui', '0' => 'Non'), array('separator' => ' ')); ?>
+            <?php echo $form->radioButtonList($model, 'status', array('1' => 'Yes', '0' => 'No'), array('separator' => ' ')); ?>
             <?php echo $form->error($model, 'status'); ?>
         </div>
     </div>

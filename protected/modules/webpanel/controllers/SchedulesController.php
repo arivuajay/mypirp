@@ -29,8 +29,7 @@ class SchedulesController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','exceldownload'),
-                'users' => array('@'),
-                'expression'=> 'AdminIdentity::checkAdmin()',
+                'expression'=> "AdminIdentity::checkAccess('webpanel.schedules.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -154,7 +153,7 @@ class SchedulesController extends Controller {
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
      */
-    public function actionDelete($id) {
+    public function actionDelete($id) {        
         
         Payment::model()->deleteAll("class_id='$id'");
         PrintCertificate::model()->deleteAll("class_id='$id'");

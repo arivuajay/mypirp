@@ -13,7 +13,12 @@ $cs_pos_end = CClientScript::POS_END;
 <?php if ($model->affiliateid != "" || $model->agencycode != "" || $model->agencyname != "") { ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.students.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); 
+        }
+        ?>
+        
     </div>
 </div>
 <?php }?>
@@ -46,8 +51,8 @@ $cs_pos_end = CClientScript::POS_END;
                     'header' => 'Action',
                     'name' => 'studentsCount',
                     'filter' => false,
-                    'value' => function($data) {
-                        echo (AdminIdentity::checkAccess('webpanel.students.edit') && AdminIdentity::checkAccess('webpanel.students.delete') && $data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";
+                    'value' => function($data) {                           
+                            echo ( $data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";                          
                     }
                 ),
             );

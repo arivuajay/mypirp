@@ -39,7 +39,7 @@ $cs_pos_end = CClientScript::POS_END;
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
                 'template' => '{download}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',
                 'buttons' => array(
-                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.edit')"),
+                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.update')"),
                     'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.delete')"),
                     'download' => array(
                         'label' => "<i class='fa fa-download'></i>",

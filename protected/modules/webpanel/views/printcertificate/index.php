@@ -56,7 +56,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'buttons' => array(
                     'update' => array(
                         'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/update/id/".$data->class_id)',
-                        'visible' => "AdminIdentity::checkAccess('webpanel.printcertificate.edit')"
+                        'visible' => "AdminIdentity::checkAccess('webpanel.printcertificate.update')"
                     ),
                     'delete' => array(
                         'url' => 'Yii::app()->createAbsoluteUrl("webpanel/printcertificate/delete/id/".$data->class_id)',

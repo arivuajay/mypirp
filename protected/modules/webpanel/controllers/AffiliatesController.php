@@ -101,7 +101,7 @@ class AffiliatesController extends Controller {
             $model->attributes = $_POST['DmvAffiliateInfo'];
 
             if ($model->save()) {
-                Yii::app()->user->setFlash('success', 'DmvAffiliateInfo Updated Successfully!!!');
+                Yii::app()->user->setFlash('success', 'Affiliate Info Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
@@ -115,13 +115,13 @@ class AffiliatesController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-
-//        $querydel1	= "Delete from dmv_aff_instructor where affiliate_id='$affiliate_id'";
-//	$querydel2	= "Delete from dmv_book_orders where affiliate_id='$affiliate_id'";
-//	$querydel3	= "Delete from dmv_classes  where affiliate_id='$affiliate_id'";
-//	$querydel4	= "Delete from dmv_leaders_guide where affiliate_id='$affiliate_id'";
-//	$querydel5	= "Delete from dmv_students  where affiliate_id='$affiliate_id'";
-	DmvAffiliateCommission::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+	
+        DmvAffInstructor::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+        BookOrders::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+        DmvClasses::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+        LeadersGuide::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+        Students::model()->deleteAllByAttributes(array("affiliate_id" => $id));
+        DmvAffiliateCommission::model()->deleteAllByAttributes(array("affiliate_id" => $id));
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

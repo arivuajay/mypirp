@@ -125,11 +125,9 @@ class AdminController extends Controller {
                 if ($model->save(false)) {
 
                     $resource_key = $_POST['resource_key'];
-                    if (isset($resource_key)) {
-                        $criteria = new CDbCriteria;
-                        $criteria->condition = "admin_id= :adminid";
-                        $criteria->params = (array(':adminid' => $model->admin_id));
-                        DmvAdminResources::model()->deleteAll($criteria);
+                   
+                    DmvAdminResources::model()->deleteAll("admin_id=".$model->admin_id);
+                    if (isset($resource_key)) {                       
                         foreach ($resource_key as $rid) {
                             $adminres = new DmvAdminResources;
                             $adminres->admin_id = $model->admin_id;
@@ -137,9 +135,9 @@ class AdminController extends Controller {
                             $adminres->save();
                         }
                     }
-
+                    $redirecturl = Yii::app()->request->urlReferrer;
                     Yii::app()->user->setFlash('success', 'Admin Updated Successfully!!!');
-                    $this->redirect(array('index'));
+                    $this->redirect($redirecturl);
                 }
             }
         }

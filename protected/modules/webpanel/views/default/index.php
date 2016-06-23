@@ -10,6 +10,7 @@ $this->breadcrumbs = array(
 
     <!-- Small boxes (Stat box) -->
     <div class="row">
+        <?php if (AdminIdentity::checkAccess('webpanel.affliates.index')) {?>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-aqua">
@@ -29,6 +30,8 @@ $this->breadcrumbs = array(
                 </a>
             </div>
         </div><!-- ./col -->
+        <?php }?>
+        <?php if (AdminIdentity::checkAccess('webpanel.instructors.index')) {?>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-green">
@@ -48,6 +51,8 @@ $this->breadcrumbs = array(
                 </a>
             </div>
         </div><!-- ./col -->
+        <?php }?>
+        <?php if (AdminIdentity::checkAccess('webpanel.schedules.index')) {?>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-red">
@@ -67,6 +72,8 @@ $this->breadcrumbs = array(
                 </a>
             </div>
         </div><!-- ./col -->
+        <?php }?>
+        <?php if (AdminIdentity::checkAccess('webpanel.messages.index')) {?>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-yellow">
@@ -86,7 +93,7 @@ $this->breadcrumbs = array(
                 </a>
             </div>
         </div><!-- ./col -->
-
+        <?php }?>
     </div><!-- /.row -->
 
 

@@ -30,7 +30,7 @@ class PaymentsController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'getclasses'),
                 'users' => array('@'),
-                'expression'=> 'AdminIdentity::checkAdmin()',
+                'expression'=> "AdminIdentity::checkAccess('webpanel.payments.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),

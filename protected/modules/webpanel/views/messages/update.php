@@ -2,10 +2,10 @@
 /* @var $this MessagesController */
 /* @var $model DmvPostMessage */
 
-$this->title='Update Message: '. $model->message_id;
+$this->title='Update Message';
 $this->breadcrumbs=array(
-	'Dmv Post Messages'=>array('index'),
-	'Update Dmv Post Messages',
+	'Messages'=>array('index'),
+	'Update Message',
 );
 ?>
 
