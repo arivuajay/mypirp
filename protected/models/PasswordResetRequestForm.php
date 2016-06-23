@@ -37,10 +37,12 @@ class PasswordResetRequestForm extends CFormModel {
      */
     public function authenticate() 
     {  
-        $userinfo = Admin::model()->find('email = :U', array(':U' => $this->email));
+        $host = $_SERVER['HTTP_HOST']; 
+        $userinfo = Admin::model()->find("email = '".$this->email."' and status=1 and domain_url LIKE '%".$host."%'");
 
+        
         if ($userinfo === null):
-            $this->addError('email', Myclass::t('APP15'));  // Error Code : 1               
+            $this->addError('email', 'Incorrect Email. Please contact admin.');  // Error Code : 1               
         else:
             $randpass   = Myclass::getRandomString(5);           
             $userinfo->password = Myclass::refencryption($randpass);           
