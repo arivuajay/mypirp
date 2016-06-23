@@ -26,7 +26,8 @@ class PrintCertificate extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('student_id,notes', 'required'),
+            array('student_id', 'required'),
+            array('notes', 'required', "on"=>"update"),
             array('class_id, student_id', 'numerical', 'integerOnly' => true),
             array('issue_date, notes', 'safe'),
             // The following rule is used by search().

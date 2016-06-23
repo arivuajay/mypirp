@@ -25,7 +25,7 @@
  */
 class DmvClasses extends CActiveRecord {
     
-    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid,$startdate,$enddate;
+    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid,$startdate,$enddate,$clasdate,$pnewclassid;
     /**
      * @return string the associated database table name
      */
@@ -47,7 +47,8 @@ class DmvClasses extends CActiveRecord {
             array('loc_addr', 'length', 'max' => 30),
             array('loc_city', 'length', 'max' => 20),
             array('show_admin', 'length', 'max' => 1),
-            array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname', 'safe'),
+            array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname,clasdate', 'safe'),
+            array('pnewclassid', 'safe'),
             //array('affiliate_id, instructor_id, start_time, end_time,clas_date','unique',),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
@@ -116,7 +117,9 @@ class DmvClasses extends CActiveRecord {
             'instructor_id' => Myclass::t('Instructor'),
             'show_admin' => Myclass::t('Show Admin'),
             'pending' => Myclass::t('Pending'),
-            'affiliateid' => "Affiliate"
+            'affiliateid' => "Affiliate",
+            'clasdate' => "Class Date",
+            "pnewclassid" => "Print Certificates For New Class"
         );
     }
 

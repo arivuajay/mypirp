@@ -30,6 +30,7 @@
                 array('label' => '<i class="fa fa fa-list"></i> <span>Book Orders</span>', 'url' => array('/webpanel/bookorders'), 'visible' => AdminIdentity::checkAccess('webpanel.bookorders.index')),
                 array('label' => '<i class="fa fa fa-list"></i> <span>Leaders Guide</span>', 'url' => array('/webpanel/leadersguide'), 'visible' => AdminIdentity::checkAccess('webpanel.leadersguide.index')),
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print Certificates</span>', 'url' => array('/webpanel/printcertificate'), 'visible' => AdminIdentity::checkAccess('webpanel.printcertificate.index')),
+                array('label' => '<i class="fa fa fa-print"></i> <span>Print Pending Certificates</span>', 'url' => array('/webpanel/printcertificate/pendingcertificates'), 'visible' => AdminIdentity::checkAccess('webpanel.printcertificate.pendingcertificates')),
                 array('label' => '<i class="fa fa-bar-chart-o"></i> <span>Reports</span><i class="fa pull-right fa-angle-left"></i>', 'url' => '#',
                     'itemOptions' => array('class' => 'treeview'),
                     'submenuOptions' => array('class' => 'treeview-menu'),
