@@ -92,9 +92,11 @@ class AdminIdentity extends CUserIdentity {
 
     public static function checkAccess($resource, $checks = true) {
 
-        $exclude_list = array('webpanel.affliates.exceldownload', 'webpanel.instructors.getinstructors', 'webpanel.instructors.exceldownload',
-            'webpanel.payments.getclasses', 'webpanel.schedules.exceldownload', 'webpanel.students.viewstudents', 'webpanel.students.exceldownload',
-            'webpanel.students.getclasses', 'webpanel.printcertificate.printstudentcertificate', 'webpanel.printcertificate.certificatedisplay');
+        $exclude_list = array('webpanel.affliates.exceldownload','webpanel.instructors.getinstructors','webpanel.instructors.exceldownload',
+                              'webpanel.payments.getclasses','webpanel.schedules.exceldownload','webpanel.students.viewstudents','webpanel.students.exceldownload',
+                              'webpanel.students.getclasses','webpanel.printcertificate.printstudentcertificate','webpanel.printcertificate.certificatedisplay',
+                              'webpanel.reports.exceldownload_monthly','webpanel.reports.exceldownload_quarterlyannual' );
+
 
         if (in_array($resource, $exclude_list))
             return true;

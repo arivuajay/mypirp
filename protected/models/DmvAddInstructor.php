@@ -25,7 +25,7 @@
  */
 class DmvAddInstructor extends CActiveRecord {
 
-    public $Affiliate, $Instructor,$start_date, $end_date;
+    public $Affiliate, $Instructor,$start_date, $end_date, $quarterlyannual;
 
     /**
      * @return string the associated database table name
