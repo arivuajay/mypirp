@@ -109,6 +109,11 @@ class AffiliatesController extends Controller {
                 $this->redirect(array('index'));
             }
         }
+        
+        if($model->agency_approved_date == "0000-00-00")
+        {
+            $model->agency_approved_date = "";
+        }    
 
         $this->render('update', compact('model', 'refmodel'));
     }

@@ -24,5 +24,6 @@
         <?php endif ?>
 
         <?php echo $content; ?>
-</div>    
+</div>  
+
 <?php $this->endContent(); ?>

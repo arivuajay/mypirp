@@ -30,7 +30,8 @@
                     'activateItems' => true,
                     'items' => array(
                         array('label' => '<i class="fa fa-home"></i> <span>Home</span>', 'url' => array('/suadmin/default'), 'active' => ($_controller == 'default' &&  $_action == "index")),
-                        array('label' => '<i class="fa fa-users"></i> <span>Admin Users</span>', 'url' => array('/suadmin/admin'), 'active' => $_controller == 'admin'),                        
+                        array('label' => '<i class="fa fa-users"></i> <span>Admin Users</span>', 'url' => array('/suadmin/admin'), 'active' => $_controller == 'admin'),
+                        array('label' => '<i class="fa fa-bullhorn"></i> <span>Log Activities</span>', 'url' => array('/suadmin/logactivities'), 'active' => $_controller == 'logactivities'),                        
                         array('label' => '<i class="fa fa-desktop"></i> <span>Edit Profile</span>', 'url' => array('/suadmin/default/profile'), 'active' => ($_controller == 'default' &&  $_action == "profile")),
                         array('label' => '<i class="fa fa-sign-out"></i> <span>Logout</span>', 'url' => array('/suadmin/default/logout')),
                     ),

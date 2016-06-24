@@ -17,6 +17,7 @@
  */
 class AuditTrail extends CActiveRecord {
 
+    public $start_date,$end_date,$admin_id;
     /**
      * @return string the associated database table name
      */
@@ -36,6 +37,7 @@ class AuditTrail extends CActiveRecord {
             array('admin_id', 'numerical', 'integerOnly' => true),
             array('aud_class, aud_ip_address', 'length', 'max' => 100),
             array('aud_action, aud_message', 'length', 'max' => 255),
+            array('start_date , end_date', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('aud_id, admin_id, aud_class, aud_action, aud_message, aud_ip_address, aud_created_date', 'safe', 'on' => 'search'),
@@ -59,7 +61,7 @@ class AuditTrail extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'aud_id' => 'Aud',
-            'admin_id' => 'User',
+            'admin_id' => 'Admin User',
             'aud_class' => 'Class',
             'aud_action' => 'Action',
             'aud_message' => 'Message',
@@ -84,16 +86,18 @@ class AuditTrail extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-
-        $criteria->compare('aud_id', $this->aud_id);
-        $criteria->compare('admin_id', $this->admin_id);
-        $criteria->compare('aud_class', $this->aud_class, true);
-        $criteria->compare('aud_action', $this->aud_action, true);
-        $criteria->compare('aud_message', $this->aud_message, true);
-        $criteria->compare('aud_ip_address', $this->aud_ip_address, true);
-        $criteria->compare('aud_created_date', $this->aud_created_date, true);
-
+        
+        if($this->admin_id!="")
+        $criteria->addCondition("t.admin_id=".$this->admin_id);
+        
+        if($this->start_date!="" && $this->end_date!="")
+        $criteria->addBetweenCondition('DATE(aud_created_date)',$this->start_date,$this->end_date);
+        
+        $criteria->with = array('Admin');        
         return new CActiveDataProvider($this, array(
+             'sort' => array(
+                'defaultOrder' => 'aud_created_date DESC',
+            ),
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,

@@ -14,7 +14,7 @@
 
         $cs->registerCssFile($themeUrl . '/vendors/bootstrap/dist/css/bootstrap.min.css');
         $cs->registerCssFile($themeUrl . '/vendors/font-awesome/css/font-awesome.min.css');
-        $cs->registerCssFile($themeUrl . '/build/css/custom.min.css');
+        $cs->registerCssFile($themeUrl . '/build/css/custom-full.css');
         $cs->registerCssFile($themeUrl . '/css/custom.css');
         $cs->registerScript('initial', 'var basepath = "' . Yii::app()->baseUrl . '";');
         ?>      
@@ -25,6 +25,10 @@
                 <?php $this->renderPartial('//layouts/_sidebarNav'); ?>  
                 <?php $this->renderPartial('//layouts/_headerBar'); ?>       
                 <?php echo $content; ?>
+                <footer>
+                    <div class="pull-right">Mypirpclass - Super Admin Management </div>
+                    <div class="clearfix"></div>
+                </footer>
             </div>
         </div>   
         <?php
@@ -32,4 +36,6 @@
         $cs->registerScriptFile($themeUrl . '/build/js/custom.js', $cs_pos_end);
         ?>
     </body>
+    
+    
 </html>
