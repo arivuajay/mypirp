@@ -13,7 +13,7 @@ $cs_pos_end = CClientScript::POS_END;
 
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); ?>
+        <?php echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Student', array('/affiliate/students/create'), array('class' => 'btn btn-success pull-right')); ?>
     </div>
 </div>
 

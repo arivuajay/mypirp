@@ -19,10 +19,8 @@ class AdminIdentity extends CUserIdentity {
      */
     public function authenticate() {
 
-        $user = Admin::model()->find('username = :U', array(':U' => $this->username));
-        $domain_url = $user->domain_url;
-        $exp_url = explode("http://", $domain_url);
-        $durl = $exp_url[1];
+        $host = 'http://'.$_SERVER['HTTP_HOST'];         
+        $user = Admin::model()->find("username = '".$this->username."' and domain_url = '".$host."'");
 
         if ($user === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;     // Error Code : 1
@@ -31,9 +29,7 @@ class AdminIdentity extends CUserIdentity {
         } else if ($user->status == 0) {
             //Add new condition to finding the status of user.
             $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;
-        } else if ($durl != $_SERVER['HTTP_HOST']) {
-            $this->errorCode = self::ERROR_USERNAME_INVALID;
-        } else {
+        }  else {
             $this->errorCode = self::ERROR_NONE;
         }
 
@@ -95,10 +91,10 @@ class AdminIdentity extends CUserIdentity {
     }
 
     public static function checkAccess($resource, $checks = true) {
-        
-        $exclude_list = array('webpanel.affliates.exceldownload','webpanel.instructors.getinstructors','webpanel.instructors.exceldownload',
-                              'webpanel.payments.getclasses','webpanel.schedules.exceldownload','webpanel.students.viewstudents','webpanel.students.exceldownload',
-                              'webpanel.students.getclasses','webpanel.printcertificate.printstudentcertificate','webpanel.printcertificate.certificatedisplay' );
+
+        $exclude_list = array('webpanel.affliates.exceldownload', 'webpanel.instructors.getinstructors', 'webpanel.instructors.exceldownload',
+            'webpanel.payments.getclasses', 'webpanel.schedules.exceldownload', 'webpanel.students.viewstudents', 'webpanel.students.exceldownload',
+            'webpanel.students.getclasses', 'webpanel.printcertificate.printstudentcertificate', 'webpanel.printcertificate.certificatedisplay');
 
         if (in_array($resource, $exclude_list))
             return true;

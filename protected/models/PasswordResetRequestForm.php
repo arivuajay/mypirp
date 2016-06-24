@@ -37,8 +37,8 @@ class PasswordResetRequestForm extends CFormModel {
      */
     public function authenticate() 
     {  
-        $host = $_SERVER['HTTP_HOST']; 
-        $userinfo = Admin::model()->find("email = '".$this->email."' and status=1 and domain_url LIKE '%".$host."%'");
+        $host = 'http://'.$_SERVER['HTTP_HOST'];    
+        $userinfo = Admin::model()->find("email = '".$this->email."' and status=1 and domain_url = '".$host."'");
 
         
         if ($userinfo === null):
