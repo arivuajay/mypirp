@@ -63,6 +63,7 @@ class PrintcertificateController extends Controller {
                     $pc_model->save();
                 }
                 
+                Myclass::addAuditTrail("Certificates generated successfully. Class id - {$classid}", "printcertificate");
                 Yii::app()->user->setFlash('success', 'Certificates generated successfully!!');
                 $this->redirect(array('printcertificate/printstudentcertificate/id/'.$classid));
                 
@@ -148,6 +149,7 @@ class PrintcertificateController extends Controller {
                 $pmodel->attributes = $_POST['PrintCertificate'];
                 $pmodel->class_id = $class_id;
                 if ($pmodel->save()) {
+                    Myclass::addAuditTrail("Notes Updated Successfully. Student id - {$student_id}", "printcertificate");
                     Yii::app()->user->setFlash('success', 'Notes Updated Successfully!!!');
                     $this->redirect(array('index'));
                 }
@@ -167,6 +169,7 @@ class PrintcertificateController extends Controller {
         Payment::model()->deleteAll("class_id='$id'");
         PrintCertificate::model()->deleteAll("class_id='$id'");
         Students::model()->deleteAll("clas_id='$id'");
+        Myclass::addAuditTrail("Class deleted successfully.And its related payment,students,certificates also deleted . class_id id - {$id}", "printcertificate");
         $this->loadModel($id)->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

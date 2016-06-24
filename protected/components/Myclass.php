@@ -34,6 +34,14 @@ class Myclass extends CController {
         }
         return $final_rand;
     }
+    
+     public static function addAuditTrail($message, $class = 'comment-o') {
+        $obj = new AuditTrail();
+        $obj->aud_message = $message;
+        $obj->aud_class = $class;
+        $obj->save();
+        return;
+    }
 
     public static function slugify($text) {
         // replace non letter or digits by -

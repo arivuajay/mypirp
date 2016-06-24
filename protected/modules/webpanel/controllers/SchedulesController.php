@@ -68,7 +68,7 @@ class SchedulesController extends Controller {
 
             $model->show_admin = "Y";
             if ($model->save()) {
-
+                $otherdates = array();
                 for ($j = 3; $j <= 10; $j++) {
                     /* Save other schedules in different dates with same records */
                     if (isset($_POST['txt_Date' . $j]) && $_POST['txt_Date' . $j] != '') {
@@ -94,11 +94,16 @@ class SchedulesController extends Controller {
                                 $smodel->instructor_id = $model->instructor_id;
                                 $smodel->show_admin = "Y";
                                 $smodel->save();
+                                $otherdates[] = date("F d,Y",strtotime($dt));
                             }
                         }
                     }
                 }
-
+                
+                $otherschedules = (!empty($otherdates))? " and other scheduled dates ".implode(",",$otherdates):"";
+                $audit_desc  = date("F d,Y",strtotime($model->clas_date)) ." ".$model->start_time." to ".$model->end_time." Class id - {$model->clas_id} ".$otherschedules;
+                
+                Myclass::addAuditTrail("Schedules {$audit_desc} created successfully.", "schedules");
                 Yii::app()->user->setFlash('success', 'Classes Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -131,7 +136,9 @@ class SchedulesController extends Controller {
         if (isset($_POST['DmvClasses'])) {
             $model->attributes = $_POST['DmvClasses'];
             $model->show_admin = "Y";
-            if ($model->save()) {
+            if ($model->save()) {                
+                $audit_desc  = date("F d,Y",strtotime($model->clas_date)) ." ".$model->start_time." to ".$model->end_time;
+                Myclass::addAuditTrail("Schedule {$audit_desc} updated successfully. Class id - {$model->clas_id}", "schedules");
                 Yii::app()->user->setFlash('success', 'Class Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -158,7 +165,12 @@ class SchedulesController extends Controller {
         Payment::model()->deleteAll("class_id='$id'");
         PrintCertificate::model()->deleteAll("class_id='$id'");
         Students::model()->deleteAll("clas_id='$id'");
-        $this->loadModel($id)->delete();
+        
+        $model = $this->loadModel($id);        
+        $audit_desc  = date("F d,Y",strtotime($model->clas_date)) ." ".$model->start_time." to ".$model->end_time;
+        Myclass::addAuditTrail("Schedule {$audit_desc} and the related payments , students , certificates deleted successfully. Class id - {$id}", "schedules");
+                
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {

@@ -70,6 +70,7 @@ class BookordersController extends Controller {
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
 
             if ($model->save()) {
+                Myclass::addAuditTrail("Book order created  successfully. Book id - {$model->book_id} ", "bookorders");
                 Yii::app()->user->setFlash('success', 'BookOrders Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -93,6 +94,7 @@ class BookordersController extends Controller {
             $model->attributes = $_POST['BookOrders'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
+                Myclass::addAuditTrail("Book order updated  successfully. Book id - {$model->book_id} ", "bookorders");
                 Yii::app()->user->setFlash('success', 'BookOrders Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -109,8 +111,10 @@ class BookordersController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        $this->loadModel($id)->delete();
-
+        
+        $model = $this->loadModel($id);
+        Myclass::addAuditTrail("Book order deleted successfully. Book id - {$model->book_id} ", "bookorders");
+        $model->delete();
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
             Yii::app()->user->setFlash('success', 'BookOrders Deleted Successfully!!!');

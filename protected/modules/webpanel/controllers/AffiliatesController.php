@@ -73,6 +73,8 @@ class AffiliatesController extends Controller {
                 $model->trans_type   = "X";
                 $model->admin_id = Yii::app()->user->admin_id;
                 if ($model->save()) {
+                    Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate created successfully. Aff id - {$model->affiliate_id}", "affiliates");
+                    
                     $refmodel->affiliate_id = $model->affiliate_id;
                     $refmodel->save();
                     Yii::app()->user->setFlash('success', 'New Account has been created successfully.!!!');
@@ -101,6 +103,8 @@ class AffiliatesController extends Controller {
             $model->attributes = $_POST['DmvAffiliateInfo'];
 
             if ($model->save()) {
+                Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate updated successfully. Aff id - {$model->affiliate_id}", "affiliates");
+                
                 Yii::app()->user->setFlash('success', 'Affiliate Info Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -122,7 +126,10 @@ class AffiliatesController extends Controller {
         LeadersGuide::model()->deleteAllByAttributes(array("affiliate_id" => $id));
         Students::model()->deleteAllByAttributes(array("affiliate_id" => $id));
         DmvAffiliateCommission::model()->deleteAllByAttributes(array("affiliate_id" => $id));
-        $this->loadModel($id)->delete();
+        
+        $model = $this->loadModel($id);
+        Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate deleted successfully. Aff id - {$model->affiliate_id}", "affiliates");        
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {

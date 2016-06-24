@@ -77,7 +77,9 @@ class InstructorsController extends Controller {
                         }
                     }
                 }
-
+                 
+                Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor created successfully. Ins Id - {$model->instructor_id}", "instructors");
+                
                 Yii::app()->user->setFlash('success', 'Instructor Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -129,7 +131,8 @@ class InstructorsController extends Controller {
                         }
                     }
                 }
-
+                
+                Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor updated successfully. Ins Id - {$model->instructor_id}", "instructors");
                 Yii::app()->user->setFlash('success', 'Instructor Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -159,7 +162,10 @@ class InstructorsController extends Controller {
     public function actionDelete($id) {
         
         $this->delete_aff_ins($id);
-        $this->loadModel($id)->delete();
+        
+        $model = $this->loadModel($id);
+        Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor deleted successfully. Ins Id - {$model->instructor_id}", "instructors");        
+        $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {

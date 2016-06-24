@@ -69,6 +69,7 @@ class LeadersguideController extends Controller {
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
 
             if ($model->save()) {
+                Myclass::addAuditTrail("Leaders guide created successfully. Guide id - {$model->guide_id}", "leadersguide");
                 Yii::app()->user->setFlash('success', 'LeadersGuide Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -92,6 +93,7 @@ class LeadersguideController extends Controller {
             $model->attributes = $_POST['LeadersGuide'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
+                Myclass::addAuditTrail("Leaders guide updated successfully. Guide id - {$model->guide_id}", "leadersguide");
                 Yii::app()->user->setFlash('success', 'LeadersGuide Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -108,8 +110,10 @@ class LeadersguideController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        $this->loadModel($id)->delete();
-
+        $model = $this->loadModel($id);
+        Myclass::addAuditTrail("Leaders guide deleted successfully. Guide id - {$model->guide_id}", "leadersguide");
+        $model->delete();
+        
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
             Yii::app()->user->setFlash('success', 'LeadersGuide Deleted Successfully!!!');

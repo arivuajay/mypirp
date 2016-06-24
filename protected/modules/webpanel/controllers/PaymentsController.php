@@ -68,6 +68,7 @@ class PaymentsController extends Controller {
             $model->attributes = $_POST['Payment'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
+                Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
                 Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -123,6 +124,7 @@ class PaymentsController extends Controller {
             $model->attributes = $_POST['Payment'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
+                Myclass::addAuditTrail("Payment updated successfully. Class id - {$model->class_id} ", "payments");
                 Yii::app()->user->setFlash('success', 'Payment Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -141,7 +143,7 @@ class PaymentsController extends Controller {
     public function actionDelete($id) {
         $pmodel = $this->loadModel($id);
         $class_id = $pmodel->class_id;
-        
+        Myclass::addAuditTrail("Payment deleted successfully and its related class , students , certificates also deleted. Class id - {$class_id} ", "payments");
         PrintCertificate::model()->deleteAll("class_id=".$class_id);
         Students::model()->deleteAll("clas_id=".$class_id);
         DmvClasses::model()->deleteAll("clas_id=".$class_id);

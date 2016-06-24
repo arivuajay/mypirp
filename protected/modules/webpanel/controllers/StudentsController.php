@@ -104,6 +104,9 @@ class StudentsController extends Controller {
             }
 
             if ($flag > 0) {
+                
+                Myclass::addAuditTrail(" {$flag} student(s) added successfully. Class id - {$cid}", "students");
+                
                 Yii::app()->user->setFlash('success', $flag . ' student(s) added successfully!!!');
                 $this->redirect(array('schedules/index'));
             } else {
@@ -171,6 +174,7 @@ class StudentsController extends Controller {
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
             if ($model->save()) {
+                Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos created successfully. Student id - {$model->student_id}", "students");
                 Yii::app()->user->setFlash('success', 'Students Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -211,6 +215,7 @@ class StudentsController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->scenario = "create";
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -218,6 +223,9 @@ class StudentsController extends Controller {
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
             if ($model->save()) {
+                
+                Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos updated successfully. Student id - {$model->student_id}", "students");
+                
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
                 $this->redirect(array('students/viewstudents/aid/' . $model->affiliate_id . '/cid/' . $model->clas_id));
             }
@@ -243,8 +251,11 @@ class StudentsController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        $this->loadModel($id)->delete();
-
+        
+        $model = $this->loadModel($id);        
+        Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos deleted successfully. Student id - {$id}", "students");
+        $model->delete();
+         
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
             Yii::app()->user->setFlash('success', 'Students Deleted Successfully!!!');

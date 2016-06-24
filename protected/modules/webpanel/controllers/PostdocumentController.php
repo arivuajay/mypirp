@@ -81,6 +81,8 @@ class PostdocumentController extends Controller {
                 $model->admin_id = Yii::app()->user->admin_id;
 
                 if ($model->save()) {
+                    Myclass::addAuditTrail("{$model->doc_title} document created successfully. Doc id - {$model->id}", "postdocument");
+                    
                     Yii::app()->user->setFlash('success', 'Document Created Successfully!!!');
                     $this->redirect(array('index'));
                 }
@@ -131,6 +133,8 @@ class PostdocumentController extends Controller {
 
                 $model->admin_id = Yii::app()->user->admin_id;
                 if ($model->save()) {
+                    Myclass::addAuditTrail("{$model->doc_title} document updated successfully. Doc id - {$model->id}", "postdocument");
+                    
                     Yii::app()->user->setFlash('success', 'Document Updated Successfully!!!');
                     $this->redirect(array('index'));
                 }
@@ -151,6 +155,8 @@ class PostdocumentController extends Controller {
         
         $dmodel = $this->loadModel($id);
         
+        Myclass::addAuditTrail("{$dmodel->doc_title} document deleted successfully. Doc id - {$dmodel->id}", "postdocument");   
+         
         $file_name  = $dmodel->file_name;
         if($file_name!="")
         {    

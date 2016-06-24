@@ -56,18 +56,17 @@ class MessagesController extends Controller {
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
-
+        
+        $model->unsetAttributes();  // 
         if (isset($_POST['DmvPostMessage'])) {
             $model->attributes = $_POST['DmvPostMessage'];
             $model->admin_id = Yii::app()->user->admin_id;
             if ($model->save()) {
+                Myclass::addAuditTrail("{$model->message_title} message created successfully. Message id - {$model->message_id}", "messages");
+                
                 Yii::app()->user->setFlash('success', 'Message Created Successfully!!!');
                 $this->redirect(array('index'));
             }
-        }
-
-        if ($model->posted_date == "0000-00-00") {
-            $model->posted_date = "";
         }
 
         $this->render('create', array(
@@ -90,6 +89,8 @@ class MessagesController extends Controller {
             $model->attributes = $_POST['DmvPostMessage'];
             $model->admin_id = Yii::app()->user->admin_id;
             if ($model->save()) {
+                Myclass::addAuditTrail("{$model->message_title} message updated successfully. Message id - {$model->message_id}", "messages");
+               
                 Yii::app()->user->setFlash('success', 'Message Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -106,7 +107,11 @@ class MessagesController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        $this->loadModel($id)->delete();
+        
+        $model = $this->loadModel($id);
+        Myclass::addAuditTrail("{$model->message_title} message deleted successfully. Message id - {$model->message_id}", "messages");        
+        $model->delete();
+
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
