@@ -67,7 +67,7 @@ class DmvAffiliateInfo extends CActiveRecord {
             array('zip, country_code, contact_suffix, con_title, owner_last_name, owner_first_name, owner_initial, owner_suffix', 'length', 'max' => 10),
             array('initial', 'length', 'max' => 5),
             array('phone, phone_ext, fax', 'length', 'max' => 15),
-            array('aff_created_date, agency_approved_date, aff_notes,start_date,end_date', 'safe'),
+            array('aff_created_date, agency_approved_date, aff_notes,start_date,end_date,admin_id', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('affiliate_id, agency_code, agency_name, user_id, password, enabled, aff_created_date, sponsor_code, file_type, email_addr, record_type, trans_type, ssn, fedid, addr1, addr2, city, state, zip, country_code, last_name, first_name, initial, contact_suffix, con_title, phone, phone_ext, fax, owner_last_name, owner_first_name, owner_initial, owner_suffix, agency_approved_date, aff_notes', 'safe', 'on' => 'search'),

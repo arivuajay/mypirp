@@ -25,7 +25,7 @@ class DefaultController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('logout', 'index', 'profile','changepassword'),
+                'actions' => array('logout', 'index', 'profile','changepassword','createaffiliate'),
                 'users' => array('@'),
                 'expression'=> 'SuAdminIdentity::checkAdmin()',
             ),
@@ -35,6 +35,38 @@ class DefaultController extends Controller {
         );
     }
     
+    public function actionCreateaffiliate(){
+        $model = new DmvAffiliateInfo;
+        $refmodel = new DmvAffiliateCommission;
+        
+        $admininfos = Admin::model()->findAll(array("order" => "username"));
+        $adminvals = CHtml::listData($admininfos, 'admin_id', 'username');
+
+        $model->unsetAttributes();  // clear any default values
+
+        if (isset($_POST['DmvAffiliateInfo'])) {
+            $model->attributes = $_POST['DmvAffiliateInfo'];
+            $refmodel->attributes = $_POST['DmvAffiliateCommission'];
+
+            $valid = $model->validate();
+            $valid = $refmodel->validate() && $valid;
+            if ($valid) {
+                $model->aff_created_date = date("Y-m-d",time());
+                $model->sponsor_code = "28";
+                $model->file_type    = "QTR";
+                $model->record_type  = "A";
+                $model->trans_type   = "X";               
+                if ($model->save()) {                    
+                    $refmodel->affiliate_id = $model->affiliate_id;
+                    $refmodel->save();
+                    Yii::app()->user->setFlash('success', 'Affiliate account created successfully.!!!');
+                    $this->redirect(array('createaffiliate'));
+                }
+            }
+        }
+
+        $this->render('createaffiliate', compact('model', 'refmodel','adminvals'));
+    }
 
     public function actionIndex() 
     {      
