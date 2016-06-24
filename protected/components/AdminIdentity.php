@@ -95,7 +95,7 @@ class AdminIdentity extends CUserIdentity {
         $exclude_list = array('webpanel.affliates.exceldownload','webpanel.instructors.getinstructors','webpanel.instructors.exceldownload',
                               'webpanel.payments.getclasses','webpanel.schedules.exceldownload','webpanel.students.viewstudents','webpanel.students.exceldownload',
                               'webpanel.students.getclasses','webpanel.printcertificate.printstudentcertificate','webpanel.printcertificate.certificatedisplay',
-                              'webpanel.reports.exceldownload_monthly','webpanel.reports.exceldownload_quarterlyannual' );
+                              'webpanel.reports.exceldownload_monthly','webpanel.reports.exceldownload_quarterlyannual','webpanel.reports.exceldownload_studentcompletionreport' );
 
 
         if (in_array($resource, $exclude_list))

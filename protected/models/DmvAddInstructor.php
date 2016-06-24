@@ -51,7 +51,7 @@ class DmvAddInstructor extends CActiveRecord {
             array('addr1, addr2', 'length', 'max' => 50),
             array('city', 'length', 'max' => 30),
             array('zip, phone', 'length', 'max' => 15),
-            array('instructor_dob, created_date,Affiliate,Instructor', 'safe'),
+            array('instructor_dob, created_date,Affiliate,Instructor,quarterlyannual', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('instructor_id, instructor_ss, instructor_last_name, ins_first_name, instructor_initial, instructor_suffix, instructor_code, instructor_client_id, instructor_dob, enabled, gender, addr1, addr2, city, state, zip, phone, created_date', 'safe', 'on' => 'search'),
@@ -96,6 +96,8 @@ class DmvAddInstructor extends CActiveRecord {
             'zip' => Myclass::t('Zip'),
             'phone' => Myclass::t('Phone #'),
             'created_date' => Myclass::t('Created Date'),
+            'quarterlyannual' => Myclass::t('Quarterly/Annual Report'),
+            
         );
     }
 

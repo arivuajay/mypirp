@@ -39,6 +39,7 @@
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Payment Reports</span>', 'url' => array('/webpanel/reports/paymentreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.paymentreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Quarterly/Annual Report</span>', 'url' => array('/webpanel/reports/quarterlyannualreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.quarterlyannualreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Monthly Report</span>', 'url' => array('/webpanel/reports/monthlyreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.monthlyreport')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Student Completion Report</span>', 'url' => array('/webpanel/reports/studentcompletionreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.studentcompletionreport')),
                     ),
                     'visible' => AdminIdentity::checkAccess('webpanel.reports.index')
                 ),
