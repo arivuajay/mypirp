@@ -26,7 +26,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             <?php
             $gridColumns = array(
                 array(
-                    'header' => 'Admin Name',
+                    'header' => 'Client Name',
                     'name' => 'Admin.username',
                     'value' => $data->Admin->username,
                 ),

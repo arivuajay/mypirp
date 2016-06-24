@@ -30,7 +30,7 @@
                     'activateItems' => true,
                     'items' => array(
                         array('label' => '<i class="fa fa-home"></i> <span>Home</span>', 'url' => array('/suadmin/default'), 'active' => ($_controller == 'default' &&  $_action == "index")),
-                        array('label' => '<i class="fa fa-users"></i> <span>Admin Users</span>', 'url' => array('/suadmin/admin'), 'active' => ($_controller == 'admin' && $_action== 'index')),
+                        array('label' => '<i class="fa fa-users"></i> <span>Client Users</span>', 'url' => array('/suadmin/admin'), 'active' => ($_controller == 'admin' && $_action== 'index')),
                         array('label' => '<i class="fa fa-bullhorn"></i> <span>Log Activities</span>', 'url' => array('/suadmin/logactivities'), 'active' => $_controller == 'logactivities'),                        
                         array('label' => '<i class="fa fa-user"></i> <span>Create Affiliate</span>', 'url' => array('/suadmin/default/createaffiliate'), 'active' => ( $_controller == 'default' && $_action== 'createaffiliate')),                        
                         array('label' => '<i class="fa fa-desktop"></i> <span>Edit Profile</span>', 'url' => array('/suadmin/default/profile'), 'active' => ($_controller == 'default' &&  $_action == "profile")),

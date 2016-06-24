@@ -2,7 +2,7 @@
 /* @var $this AdminController */
 /* @var $model Admin */
 
-$this->title = 'Create Admin';
+$this->title = 'Create Client';
 $this->breadcrumbs = array(
     'Administration' => array('index'),
     $this->title,

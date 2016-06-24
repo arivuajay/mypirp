@@ -85,7 +85,7 @@ class DefaultController extends Controller {
                     $this->redirect($decodeurl);  
                 }  
                 $adminusername = Yii::app()->user->username;
-                Myclass::addAuditTrail("Admin {$adminusername} loggedin successfully.", "default");
+                Myclass::addAuditTrail("Client {$adminusername} loggedin successfully.", "default");
                 $this->redirect(array('/webpanel/default/index'));              
             endif;
         }
@@ -96,7 +96,7 @@ class DefaultController extends Controller {
     public function actionLogout() 
     {       
         $adminusername = Yii::app()->user->username;
-        Myclass::addAuditTrail("Admin {$adminusername} logout successfully.", "default");
+        Myclass::addAuditTrail("Client {$adminusername} logout successfully.", "default");
         Yii::app()->user->logout();
         $this->redirect(array('/webpanel/default/login'));
     }

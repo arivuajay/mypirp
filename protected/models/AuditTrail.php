@@ -61,7 +61,7 @@ class AuditTrail extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'aud_id' => 'Aud',
-            'admin_id' => 'Admin User',
+            'admin_id' => 'Client User',
             'aud_class' => 'Class',
             'aud_action' => 'Action',
             'aud_message' => 'Message',

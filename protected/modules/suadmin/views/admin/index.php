@@ -2,9 +2,9 @@
 /* @var $this AdminController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->title = 'Admin Management';
+$this->title = 'Client Management';
 $this->breadcrumbs = array(
-    'Admin users',
+    'Client users',
 );
 ?>
 
