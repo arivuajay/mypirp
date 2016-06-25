@@ -26,7 +26,7 @@ $themeUrl = $this->themeUrl;
                     $form = $this->beginWidget('CActiveForm', array(
                         'id' => 'newsmanagement-search-form',
                         'method' => 'get',
-                        'action' => array('/webpanel/reports/exceldownload_quarterlyannual/'),
+                        'action' => array('/webpanel/reports/quarterlyannualreport/'),
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>

@@ -29,7 +29,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     $form = $this->beginWidget('CActiveForm', array(
                         'id' => 'newsmanagement-search-form',
                         'method' => 'get',
-                        'action' => array('/webpanel/reports/exceldownload_studentcompletionreport/'),
+                        'action' => array('/webpanel/reports/studentcompletionreport/'),
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>
