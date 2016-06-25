@@ -15,7 +15,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 ?>
 <?php $this->renderPartial('_search_referralreport', compact('model', 'refcodes')); ?>
 <?php
-//if ($model->startdate != "" || $model->enddate != "") {
+if ($model->startdate != "" || $model->enddate != "") {
 $startdate = date("m/d/Y", strtotime($model->startdate));
 $enddate = date("m/d/Y", strtotime($model->enddate));
 
@@ -124,7 +124,7 @@ $totalcount = $model->search()->getTotalItemCount();
         </div>
     </div>  
 </div>       
-<?php //} ?>
+<?php } ?>
 <?php
 $js = <<< EOD
 $(document).ready(function(){

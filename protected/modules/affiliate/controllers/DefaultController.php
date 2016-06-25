@@ -44,7 +44,7 @@ class DefaultController extends Controller
         $criteria->together = true;
         $total_schedules = DmvClasses::model()->count($criteria);
         
-        $total_students = 0;
+        $total_students = Students::model()->count("affiliate_id = ".Yii::app()->user->affiliate_id);
         
         $this->render('index', compact('total_schedules','total_students'));
     }

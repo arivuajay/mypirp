@@ -70,8 +70,30 @@ class StudentsController extends Controller {
         $model = new Students('search');
         
         $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Students']))
+         if (isset($_GET['Students'])) {
             $model->attributes = $_GET['Students'];
+
+            $startdate = $model->startdate;
+            $enddate = $model->enddate;
+
+            $criteria = new CDbCriteria;
+            $criteria->addCondition('first_name != ""');
+            $criteria->addCondition('affiliate_id = ' . Yii::app()->user->affiliate_id);
+
+            if ($startdate != "" && $enddate != "")
+                $criteria->addCondition("course_completion_date >= '" . $startdate . "' AND course_completion_date <= '" . $enddate . "'");
+
+            $std_infos = Students::model()->findAll($criteria);
+
+            if (!empty($std_infos)) {
+                $html2pdf = Yii::app()->ePdf->HTML2PDF();
+                $html2pdf->WriteHTML($this->renderPartial('printlabel_view', array("std_infos" => $std_infos), true));
+                $html2pdf->Output(time() . ".pdf", EYiiPdf::OUTPUT_TO_DOWNLOAD);
+            } else {
+                Yii::app()->user->setFlash('danger', 'No records found!!!');
+                $this->redirect(array('printlabels'));
+            }
+        }
 
         $this->render('printlabels', compact('model'));
     }        

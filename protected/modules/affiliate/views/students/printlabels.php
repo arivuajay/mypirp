@@ -72,66 +72,10 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         </div>
     </div>
 </div>
-
-<?php
-if ($model->startdate != "" && $model->enddate != "") {
-
-    $date_disp = "From " . date("d/m/Y", strtotime($model->startdate)) . " until " . date("d/m/Y", strtotime($model->enddate));
-    ?>
-    <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>
-
-    <div class="col-lg-12 col-md-12">&nbsp;</div>
-
-    <div id="Getprintval">
-        <div class="col-lg-12 col-md-12">
-            <div class="row">
-                <?php
-                $gridColumns = array(                  
-                    'first_name',
-                    'last_name',                    
-                    'address1',                   
-                    'address2',  
-                    'city',
-                    'state',
-                    'zip'
-                    
-                );
-
-                $this->widget('booster.widgets.TbExtendedGridView', array(
-                    //  'filter' => $model,
-                    'type' => 'striped bordered datatable',
-                    'enableSorting' => false,
-                    'dataProvider' => $model->search(),
-                    'responsiveTable' => true,
-                    'template' => '<div class="panel panel-primary">'
-                    . '<div class="panel-heading">'
-                    . '<div class="pull-right">{summary}</div>'
-                    . '<h3 class="panel-title"> Print Labels </h3>'
-                    . '</div>'
-                    . '<div class="panel-body">'
-                    . '<p><h4>' . $date_disp . ' </h4></p>'
-                    . '{items}{pager}</div>'
-                    . '</div>',
-                    'columns' => $gridColumns
-                        )
-                );
-                ?>
-            </div>
-        </div>
-    </div>
-<?php }
-?>
 <?php
 $js = <<< EOD
 $(document).ready(function(){
  
-$("#printdiv").click(function() {   
-    var innerContents = document.getElementById("Getprintval").innerHTML;
-    var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
-    popupWinindow.document.open();
-    popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
-});     
-
 $("#print_res").click(function() {
     var startdate = $("#Students_startdate").val();
     var enddate = $("#Students_enddate").val();
