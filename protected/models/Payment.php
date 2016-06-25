@@ -18,7 +18,7 @@
  */
 class Payment extends CActiveRecord {
 
-    public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate;
+    public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate,$refcode;
     public $startdate, $enddate;
 
     /**
@@ -43,7 +43,7 @@ class Payment extends CActiveRecord {
             array('cheque_number', 'length', 'max' => 15),
             array('payment_complete, print_certificate', 'length', 'max' => 1),
             array('moneyorder_number', 'length', 'max' => 20),
-            array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid,print_certificate', 'safe'),
+            array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid,print_certificate,refcode', 'safe'),
             array('startdate,enddate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
@@ -75,8 +75,22 @@ class Payment extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'class_id'),
+           // 'studentsCount' => array(self::STAT, 'Students', 'clas_id'),
         );
     }
+    
+    public static function totalstudents($class_id)
+    {
+        $condition = "clas_id=".$class_id;
+        $totalstudents = Students::model()->count($condition);
+        return $totalstudents;
+    }  
+    
+    public static function totaldue($totstuds,$refamt)
+    { 
+        $totaldue = $totstuds*$refamt;
+        return $totaldue;
+    }  
 
     /**
      * @return array customized attribute labels (name=>label)
@@ -177,6 +191,37 @@ class Payment extends CActiveRecord {
             )
         ));
     }
+    
+    public function referal_report_search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
+
+        $criteria = new CDbCriteria;
+        $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
+    
+         $criteria->addCondition("payment_amount > 0");
+         
+        if ($this->startdate != "" && $this->enddate != "") {
+            $criteria->addCondition("payment_date >= '" . $this->startdate . "' AND payment_date <= '" . $this->enddate . "'");
+        }  
+        
+        if ($this->refcode != "" ) {
+             $criteria->addCondition("affiliateCommission.referral_code = '" . $this->refcode . "'");
+        }
+
+        $criteria->with = array("dmvClasses", "dmvClasses.Affliate", "dmvClasses.Affliate.affiliateCommission");
+        $criteria->together = true;
+
+        return new CActiveDataProvider($this, array(
+            'sort' => array(
+                'defaultOrder' => 'payment_date ASC',
+            ),
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => PAGE_SIZE,
+            )
+        ));
+    }
+    
 
     /**
      * Returns the static model of the specified AR class.

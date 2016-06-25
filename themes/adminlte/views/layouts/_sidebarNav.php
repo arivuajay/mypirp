@@ -35,13 +35,15 @@
                     'itemOptions' => array('class' => 'treeview'),
                     'submenuOptions' => array('class' => 'treeview-menu'),
                     'items' => array(
-                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Book Order Reports</span>', 'url' => array('/webpanel/reports/bookorderreport'),'visible' => AdminIdentity::checkAccess('webpanel.reports.bookorderreport')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Certificates Report</span>', 'url' => array('/webpanel/reports/certificatereport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.certificatereport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Payment Reports</span>', 'url' => array('/webpanel/reports/paymentreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.paymentreport')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Book Order Reports</span>', 'url' => array('/webpanel/reports/bookorderreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.bookorderreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Quarterly/Annual Report</span>', 'url' => array('/webpanel/reports/quarterlyannualreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.quarterlyannualreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Monthly Report</span>', 'url' => array('/webpanel/reports/monthlyreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.monthlyreport')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Referral Report</span>', 'url' => array('/webpanel/reports/referralreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.referralreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Student Completion Report</span>', 'url' => array('/webpanel/reports/studentcompletionreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.studentcompletionreport')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Print Labels</span>', 'url' => array('/webpanel/reports/printlabels'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.printlabels')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Duplicates</span>', 'url' => array('/webpanel/reports/duplicates'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.duplicates')),
-                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Print Labels</span>', 'url' => array('/webpanel/reports/printlabels'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.printlabels')),
                     ),
                     'visible' => AdminIdentity::checkAccess('webpanel.reports.index')
                 ),
