@@ -18,10 +18,11 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 if ($model->startdate != "" || $model->enddate != "") {
     $startdate = date("m/d/Y", strtotime($model->startdate));
     $enddate = date("m/d/Y", strtotime($model->enddate));
+    $admin_id = Yii::app()->user->getId();
     $criteria = new CDbCriteria();
 //       $criteria->condition = 'issue_date >= :startdate AND issue_date <= :enddate';
-        $criteria->condition = 'issue_date BETWEEN :startdate AND  :enddate';
-       $criteria->params = array (':startdate'=>$model->startdate,':enddate'=>$model->enddate);
+        $criteria->condition = 't2.admin_id = :admin_id AND t.issue_date BETWEEN :startdate AND  :enddate';
+       $criteria->params = array (':admin_id'=>$admin_id,':startdate'=>$model->startdate,':enddate'=>$model->enddate);
        $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affiliate_instructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
             $criteria->together = true;
             $criteria->join = ' INNER JOIN dmv_students  t1 ON t1.student_id=t.student_id';

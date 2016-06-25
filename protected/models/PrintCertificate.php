@@ -103,7 +103,7 @@ class PrintCertificate extends CActiveRecord {
             $criteria->join .= '  INNER JOIN dmv_affiliate_info  t2 ON t1.affiliate_id = t2.affiliate_id';
             $criteria->join .= '  INNER JOIN dmv_aff_instructor  t3 ON t1.affiliate_id = t3.affiliate_id';
             $criteria->join .= '  INNER JOIN dmv_add_instructor  t4 ON t3.instructor_id = t4.instructor_id';
-            $criteria->addCondition("t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
+            $criteria->addCondition("t2.admin_id ='".Yii::app()->user->admin_id."' AND t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
             
 
             $criteria->group='dmvStudents.student_id';
