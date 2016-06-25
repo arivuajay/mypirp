@@ -34,7 +34,7 @@
                 array('label' => '<i class="fa fa-bar-chart-o"></i> <span>Reports</span><i class="fa pull-right fa-angle-left"></i>', 'url' => '#',
                     'itemOptions' => array('class' => 'treeview'),
                     'submenuOptions' => array('class' => 'treeview-menu'),
-                    'items' => array(
+                    'items' => array(                        
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Certificates Report</span>', 'url' => array('/webpanel/reports/certificatereport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.certificatereport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Payment Reports</span>', 'url' => array('/webpanel/reports/paymentreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.paymentreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Book Order Reports</span>', 'url' => array('/webpanel/reports/bookorderreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.bookorderreport')),

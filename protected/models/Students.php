@@ -64,6 +64,7 @@ class Students extends CActiveRecord {
         return array(
             'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'clas_id'),
             'dmvAffiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+            'StudentCertificate' => array(self::HAS_MANY, 'PrintCertificate', 'student_id'),
         );
     }
 

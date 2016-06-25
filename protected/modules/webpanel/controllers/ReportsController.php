@@ -28,7 +28,8 @@ class ReportsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('bookorderreport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport'),
+
+                'actions' => array('bookorderreport','certificatereport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport'),
                 'expression' => "AdminIdentity::checkAccess('webpanel.reports.{$this->action->id}')",
             ),
             array('deny', // deny all users
@@ -36,7 +37,16 @@ class ReportsController extends Controller {
             ),
         );
     }
-
+    public function actionCertificatereport() {
+        $model = new PrintCertificate;
+        
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['PrintCertificate'])){
+            $model->attributes = $_GET['PrintCertificate'];
+        }    
+        
+        $this->render('certificatereport', compact('model'));
+    }
     public function actionBookorderreport() {
         $model = new BookOrders;
         $affiliates = DmvAffiliateInfo::all_affliates("Y");

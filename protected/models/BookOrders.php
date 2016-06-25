@@ -142,7 +142,7 @@ class BookOrders extends CActiveRecord
 			'criteria'=>$criteria,
                       //  'totalcounts' => $model->search()->getTotalItemCount(),
                         'pagination' => array(
-                            'pageSize' => 5,
+                            'pageSize' => PAGE_SIZE,
                         )
 		));
 	}

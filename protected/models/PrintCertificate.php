@@ -11,7 +11,7 @@
  * @property string $notes
  */
 class PrintCertificate extends CActiveRecord {
-
+    public $startdate,$enddate;
     /**
      * @return string the associated database table name
      */
@@ -29,7 +29,7 @@ class PrintCertificate extends CActiveRecord {
             array('student_id', 'required'),
             array('notes', 'required', "on"=>"update"),
             array('class_id, student_id', 'numerical', 'integerOnly' => true),
-            array('issue_date, notes', 'safe'),
+            array('issue_date, notes,startdate,enddate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('certificate_number, class_id, student_id, issue_date, notes', 'safe', 'on' => 'search'),
@@ -43,6 +43,7 @@ class PrintCertificate extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'dmvStudents' => array(self::BELONGS_TO, 'Students', 'student_id'),
         );
     }
 
@@ -80,7 +81,7 @@ class PrintCertificate extends CActiveRecord {
             $this->class_id = $class_id;
             $criteria->addCondition("class_id='" . $this->class_id . "'");
         }
-
+        
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => 'certificate_number ASC',
@@ -91,7 +92,30 @@ class PrintCertificate extends CActiveRecord {
             )
         ));
     }
-
+    public function printCertificatesReport($startdate,$enddate){
+            $this->startdate = $startdate;
+            $this->enddate = $enddate;
+            $criteria = new CDbCriteria;
+            
+            $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affInstructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
+            $criteria->together = true;
+            
+            $criteria->addCondition("issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
+            
+//            $criteria->join = 'inner join dmv_students  t1 on t1.student_id=t.student_id';
+//            $criteria->join = 'inner join dmv_affiliate_info  t2 on t1.affiliate_id =t2.affiliate_id';
+//            $criteria->join = 'inner join dmv_aff_instructor  t3 on t1.affiliate_id =t3.affiliate_id';
+//            $criteria->join = 'inner join dmv_add_instructor  t4 on t3.instructor_id =t4.instructor_id';
+            $criteria->group='dmvStudents.student_id';
+//            $criteria->addCondition("issue_date >= '" . $this->startdate . "' AND issue_date <= '" . $this->enddate . "'");
+            return new CActiveDataProvider($this, array(
+                    
+                    'criteria' => $criteria,
+                    'pagination' => array(
+                        'pageSize' => PAGE_SIZE,
+                    )
+                ));
+    }
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
