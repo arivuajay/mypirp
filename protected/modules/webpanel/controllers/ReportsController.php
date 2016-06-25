@@ -28,7 +28,7 @@ class ReportsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('bookorderreport','paymentreport','quarterlyannualreport','monthlyreport','studentcompletionreport','duplicates'),
+                'actions' => array('bookorderreport','paymentreport','quarterlyannualreport','monthlyreport','studentcompletionreport','duplicates','printlabels'),
                 'expression'=> "AdminIdentity::checkAccess('webpanel.reports.{$this->action->id}')",
             ),
             array('deny', // deny all users
@@ -58,6 +58,7 @@ class ReportsController extends Controller {
          
         $this->render('paymentreport', compact('model', 'affiliates'));
     }
+    
     public function actionQuarterlyannualreport() {
         $model = new DmvAddInstructor();
         $quarterlyannual ='';   
@@ -92,6 +93,7 @@ class ReportsController extends Controller {
             }
         $this->render('quarterlyannualreport',compact('model'));
     }
+    
     public function actionMonthlyreport() {
         $model = new DmvAddInstructor();
         $from_date ='';
@@ -120,6 +122,7 @@ class ReportsController extends Controller {
             }
         $this->render('monthlyreport',compact('model'));
     }
+    
     public function actionStudentcompletionreport() {
         $model = new Students();
         $from_date ='';
@@ -144,6 +147,7 @@ class ReportsController extends Controller {
         }
         $this->render('studentcompletionreport',compact('model'));
     }
+    
     public function actionDuplicates() {
         $admin_id = Yii::app()->user->getId();           
         $ret_result = Yii::app()->db->createCommand("SELECT DMS.first_name as 'First Name', DMS.last_name as 'Last Name', DMS.zip as 'Zip', count(DMS.student_id) as 'No of Duplicates' 
@@ -157,6 +161,46 @@ class ReportsController extends Controller {
        Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
        exit();
     }
+    
+    
+    public function actionPrintlabels()
+    {
+        $model = new Students();
+        $affiliates = DmvAffiliateInfo::all_affliates("Y");
+        
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['Students']))
+        {    
+            $model->attributes = $_GET['Students'];
+             
+            $startdate    = $model->startdate; 
+            $enddate      = $model->enddate; 
+            $affiliate_id = $model->affiliate_id; 
+            
+            $criteria = new CDbCriteria;
+            $criteria->addCondition('first_name != ""');
+            
+            if ($startdate != "" && $enddate != "")
+            $criteria->addCondition("course_completion_date >= '" . $startdate . "' AND course_completion_date <= '" . $enddate . "'");
+                       
+            if($affiliate_id)
+            $criteria->addCondition('affiliate_id = ' . $affiliate_id);
+            
+            $std_infos = Students::model()->findAll($criteria);
+            
+            if(!empty($std_infos))
+            {               
+                $html2pdf = Yii::app()->ePdf->HTML2PDF();
+                $html2pdf->WriteHTML($this->renderPartial('printlabel_view', array("std_infos"=>$std_infos), true));
+                $html2pdf->Output(time().".pdf",EYiiPdf::OUTPUT_TO_DOWNLOAD);                
+            }else{
+                Yii::app()->user->setFlash('danger', 'No records found!!!');
+                $this->redirect(array('printlabels'));
+            }    
+        }    
+        
+        $this->render('printlabel',compact('model','affiliates'));
+    }    
         
 }
 

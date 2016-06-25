@@ -15,7 +15,7 @@ return array(
         'application.components.*',
     ),
     'modules' => array(
-       'webpanel', 'suadmin','affiliate',
+        'webpanel', 'suadmin', 'affiliate',
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -34,6 +34,23 @@ return array(
                     'js' => array('jquery-1.10.1.min.js', 'jquery-migrate-1.2.1.min.js'),
                 ),
             )
+        ),
+        'ePdf' => array(
+            'class' => 'ext.yii-pdf.EYiiPdf',
+            'params' => array(
+                'HTML2PDF' => array(
+                    'librarySourcePath' => 'application.extensions.html2pdf.*',
+                    'classFile' => 'html2pdf.class.php', // For adding to Yii::$classMap
+                    'defaultParams' => array(// More info: http://wiki.spipu.net/doku.php?id=html2pdf:en:v4:accueil
+                        'orientation' => 'P', // landscape or portrait orientation
+                        'format' => 'A4', // format A4, A5, ...
+                        'language' => 'en', // language: fr, en, it ...
+                        'unicode' => true, // TRUE means clustering the input text IS unicode (default = true)
+                        'encoding' => 'UTF-8', // charset encoding; Default is UTF-8
+                        'marges' => array(5, 5, 5, 8), // margins by default, in order (left, top, right, bottom)
+                    )
+                )
+            ),
         ),
         'booster' => array(
             'class' => 'application.extensions.yiibooster.components.Booster',
@@ -54,9 +71,9 @@ return array(
             'allowAutoLogin' => true,
             'loginUrl' => array('/affiliate/default/login'),
         ),
-        'user'=>array(
+        'user' => array(
             // enable cookie-based authentication
-            'allowAutoLogin'=>true,
+            'allowAutoLogin' => true,
         ),
         // uncomment the following to enable URLs in path-format
         'urlManager' => array(
@@ -66,9 +83,8 @@ return array(
         ),
         // database settings are configured in database.php
         'db' => require(dirname(__FILE__) . '/database.php'),
-        
         'errorHandler' => array(
-            'errorAction' => DEFAULT_MODULE.'/default/error',
+            'errorAction' => DEFAULT_MODULE . '/default/error',
         ),
         'log' => array(
             'class' => 'CLogRouter',
@@ -78,14 +94,14 @@ return array(
                     'levels' => 'error, warning',
                 ),
                 array(
-                    'class'=>'CProfileLogRoute',
+                    'class' => 'CProfileLogRoute',
                 ),
             ),
         ),
     ),
     // application-level parameters that can be accessed
     //setting the basic language value
-    'defaultController' => DEFAULT_MODULE.'/default/index',
+    'defaultController' => DEFAULT_MODULE . '/default/index',
     // using Yii::app()->params['paramName']
     'params' => require(dirname(__FILE__) . '/params.php'),
     'timeZone' => 'Asia/Calcutta',
