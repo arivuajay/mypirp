@@ -49,8 +49,8 @@ $themeUrl = $this->themeUrl;
                         <div class="col-lg-8 col-md-12">
                            <p>
                                <strong>Hint*</strong><br>
-                               <span >Quarterly Report - &nbsp;Last 3 month from the current date</span><br>
-                               <span>Annual Report &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;Last 12 month from the current date</span>
+                               <span >Quarterly Report - &nbsp;Last 3 month from today date</span><br>
+                               <span>Annual Report &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- &nbsp;Last 12 month from today date</span>
                            </p>
                         </div>
                     </div>

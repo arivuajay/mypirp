@@ -92,25 +92,32 @@ class PrintCertificate extends CActiveRecord {
             )
         ));
     }
+    
     public function printCertificatesReport($startdate,$enddate){
             $this->startdate = $startdate;
             $this->enddate = $enddate;
             $criteria = new CDbCriteria;
-            
-            $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affInstructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
+            $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affiliate_instructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
             $criteria->together = true;
+            $criteria->join = ' INNER JOIN dmv_students  t1 ON t1.student_id=t.student_id';
+            $criteria->join .= '  INNER JOIN dmv_affiliate_info  t2 ON t1.affiliate_id = t2.affiliate_id';
+            $criteria->join .= '  INNER JOIN dmv_aff_instructor  t3 ON t1.affiliate_id = t3.affiliate_id';
+            $criteria->join .= '  INNER JOIN dmv_add_instructor  t4 ON t3.instructor_id = t4.instructor_id';
+            $criteria->addCondition("t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
             
-            $criteria->addCondition("issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
-            
-//            $criteria->join = 'inner join dmv_students  t1 on t1.student_id=t.student_id';
-//            $criteria->join = 'inner join dmv_affiliate_info  t2 on t1.affiliate_id =t2.affiliate_id';
-//            $criteria->join = 'inner join dmv_aff_instructor  t3 on t1.affiliate_id =t3.affiliate_id';
-//            $criteria->join = 'inner join dmv_add_instructor  t4 on t3.instructor_id =t4.instructor_id';
+
             $criteria->group='dmvStudents.student_id';
 //            $criteria->addCondition("issue_date >= '" . $this->startdate . "' AND issue_date <= '" . $this->enddate . "'");
             return new CActiveDataProvider($this, array(
-                    
-                    'criteria' => $criteria,
+                    'criteria'=>$criteria,
+//                    'criteria' => array(
+//                                        'condition'=>"t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'",
+//                                        'join'=>'INNER JOIN `dmv_students` AS `t1` ON `t1`.`student_id` = `t`.`student_id`',
+//                                        'join'=>'INNER JOIN `dmv_affiliate_info` AS `t2` ON `t1`.`affiliate_id` = `t2`.`affiliate_id`',
+//                                        'join'=>'INNER JOIN `dmv_aff_instructor` AS `t3` ON `t1`.`affiliate_id` = `t3`.`affiliate_id`',
+//                                        'join'=>'INNER JOIN `dmv_add_instructor` AS `t4` ON `t3`.`instructor_id` = `t4`.`instructor_id`',
+//                                        'group'=>'`t1`.`student_id`',
+//                                    ),
                     'pagination' => array(
                         'pageSize' => PAGE_SIZE,
                     )
@@ -132,6 +139,11 @@ class PrintCertificate extends CActiveRecord {
                 'pageSize' => PAGE_SIZE,
             )
         ));
+    }
+    public function getInstructorName($id){
+        $classes = DmvClasses::model()->findByPk($id);
+        return $classes->Instructor->ins_first_name.' '.$classes->Instructor->instructor_last_name;
+        
     }
 
 }
