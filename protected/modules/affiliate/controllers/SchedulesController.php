@@ -57,6 +57,17 @@ class SchedulesController extends Controller
 			'model'=>$model,
 		));
 	}
+        
+        public function checkprintcertificate($clas_id)
+        {
+            $print_certificate = Payment::model()->find("class_id=".$clas_id)->print_certificate;
+            if($print_certificate=='Y') {
+                $rval = "Completed";
+            }else{
+                $rval = "Submitted";
+            }
+            return $rval;
+        }        
 
 
 	/**

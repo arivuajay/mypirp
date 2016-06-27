@@ -7,6 +7,6 @@ return array(
     'charset' => 'utf8',
     'initSQLs'=> array('SET NAMES utf8'), 
     'tablePrefix' => '',
-    'enableProfiling'=>false,
+    'enableProfiling'=>true,
 );
 

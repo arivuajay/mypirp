@@ -22,11 +22,12 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         <?php
         $gridColumns = array(
             array(
-                'header' => 'Agency code',
-                'name' => 'Affliate.agency_code',
-                'value' => $data->Affliate->agency_code,
+                'header' => 'Date',
+                'name' => 'clas_date',
+                'value' => function($data) {
+                    echo date('m/d/Y', strtotime($data->clas_date));
+                },
             ),
-            'clas_date',
             'start_time',
             'end_time',
             'loc_city',
@@ -35,7 +36,19 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             array(
                 'header' => 'Instructor',
                 'name' => 'Instructor.ins_first_name',
-                'value' => $data->Instructor->ins_first_name,
+                'value' => function($data) {
+                 echo   $data->Instructor->ins_first_name." ".$data->Instructor->instructor_last_name;
+                }       
+            ),
+            array(
+                'header' => 'Submit Class',
+                'value' => function($data) {
+                    if ($data->show_admin == "N") {
+                        
+                    } else {
+                        echo $this->checkprintcertificate($data->clas_id);
+                    }
+                },
             ),
             array(
                 'header' => 'Actions',
@@ -46,11 +59,11 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     'add_students' => array(
                         'label' => "<i class='fa fa-list-ol'></i>",
                         'url' => 'Yii::app()->createAbsoluteUrl("/affiliate/students/addbulkstudents/cid/".$data->clas_id)',
-                        'options' => array('class' => 'newWindow','title' => 'Add Bulk Students'),
+                        'options' => array('class' => 'newWindow', 'title' => 'Add Bulk Students'),
                     ),
                 ),
             )
-        );     
+        );
         $this->widget('booster.widgets.TbExtendedGridView', array(
             //'filter' => $model,
             'type' => 'striped bordered datatable',

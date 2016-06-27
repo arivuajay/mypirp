@@ -141,8 +141,16 @@ class DmvClasses extends CActiveRecord {
 
         $criteria = new CDbCriteria;
         
+        $default_order = 'clas_id DESC';
+        
         if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-        $this->affiliateid = Yii::app()->user->affiliate_id;
+        {    
+            $criteria->select = 't.clas_date,t.start_time,t.end_time,t.loc_city,t.loc_state,t.zip';
+            $this->affiliateid = Yii::app()->user->affiliate_id;
+            $default_order = 'DATE_FORMAT(t.clas_date, "%m/%d/%Y")';
+        }else{
+            $criteria->addCondition("show_admin = 'Y'");
+        }    
                 
         if($this->affiliateid!="")
         $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
@@ -152,8 +160,6 @@ class DmvClasses extends CActiveRecord {
         
         if($this->agencyname!="")
         $criteria->compare('Affliate.agency_name', $this->agencyname, true);
-        
-        $criteria->addCondition("show_admin = 'Y'");
         
         if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
         $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id);
@@ -169,7 +175,7 @@ class DmvClasses extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'sort' => array(
-                'defaultOrder' => 'clas_id DESC',
+                'defaultOrder' => $default_order,
             ),
             'criteria' => $criteria,
             'pagination' => array(
