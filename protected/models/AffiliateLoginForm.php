@@ -54,9 +54,7 @@ class AffiliateLoginForm extends CFormModel {
             $this->_identity = new AffiliateIdentity($this->username, $this->password);
             if (!$this->_identity->authenticate()){
                 if ($this->_identity->errorCode==1){    
-                    $this->addError('username', 'Incorrect user name.');
-                }else if($this->_identity->errorCode==2){
-                    $this->addError('password', 'Incorrect password.');
+                    $this->addError('password', 'Incorrect user name or password.');
                 }else if($this->_identity->errorCode==3){
                     $this->addError('password', 'Your account is inactive. Please contact admin!!.');
                 }

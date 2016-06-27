@@ -20,12 +20,10 @@ class AffiliateIdentity extends CUserIdentity {
      */
     public function authenticate() {
         $host = 'http://'.$_SERVER['HTTP_HOST'];    
-        $affiliate = DmvAffiliateInfo::model()->with("adminInfo")->find("user_id = '".$this->username."' and adminInfo.domain_url = '".$host."'");
+        $affiliate = DmvAffiliateInfo::model()->with("adminInfo")->find("t.user_id = '".$this->username."' and t.password = '".$this->password."' and adminInfo.domain_url = '".$host."'");
      
         if ($affiliate === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;     // Error Code : 1
-        } else if ($affiliate->password !== $this->password) {
-            $this->errorCode = self::ERROR_PASSWORD_INVALID;   // Error Code : 1
         } else if ($affiliate->enabled == 'N') {
             //Add new condition to finding the status of user.
             $this->errorCode = self::ERROR_USERNAME_NOT_ACTIVE;

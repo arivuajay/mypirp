@@ -52,8 +52,8 @@ class DmvCountry extends CActiveRecord
 	{
 		return array(
 			'id' => Myclass::t('ID'),
-			'country_code' => Myclass::t('Country Code'),
-			'country_desc' => Myclass::t('Country Desc'),
+			'country_code' => Myclass::t('County Code'),
+			'country_desc' => Myclass::t('County Desc'),
 		);
 	}
 

@@ -114,7 +114,7 @@ class DmvClasses extends CActiveRecord {
             'loc_city' => Myclass::t('City'),
             'loc_state' => Myclass::t('State'),
             'zip' => Myclass::t('Zip'),
-            'country' => Myclass::t('Country'),
+            'country' => Myclass::t('County'),
             'instructor_id' => Myclass::t('Instructor'),
             'show_admin' => Myclass::t('Show Admin'),
             'pending' => Myclass::t('Pending'),

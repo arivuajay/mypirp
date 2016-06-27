@@ -145,7 +145,7 @@ $country = Myclass::getallcountries();
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'country', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php echo $form->dropDownList($model, 'country', $country, array('class' => 'form-control', 'empty' => Myclass::t('Select Country'))); ?>                          
+                        <?php echo $form->dropDownList($model, 'country', $country, array('class' => 'form-control', 'empty' => Myclass::t('Select County'))); ?>                          
                         <?php echo $form->error($model, 'country'); ?>
                     </div>
                 </div>

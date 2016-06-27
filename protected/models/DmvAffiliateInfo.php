@@ -135,7 +135,7 @@ class DmvAffiliateInfo extends CActiveRecord {
             'city' => Myclass::t('City'),
             'state' => Myclass::t('State'),
             'zip' => Myclass::t('Zip'),
-            'country_code' => Myclass::t('Country'),
+            'country_code' => Myclass::t('County'),
             'last_name' => Myclass::t('Contact Last Name'),
             'first_name' => Myclass::t('Contact First Name'),
             'initial' => Myclass::t('Contact Middle Initial'),
@@ -271,6 +271,17 @@ class DmvAffiliateInfo extends CActiveRecord {
        
         return $val;
     }
+    
+    public static function getAffiliateInfo()
+    {
+        $affinfo = array();
+       if(isset(Yii::app()->user->affiliate_id))
+       {
+          $pk = Yii::app()->user->affiliate_id;
+          $affinfo =  DmvAffiliateInfo::model()->findByPk($pk);         
+       }  
+        return $affinfo;
+    }        
 
     public function dataProvider() {
         return new CActiveDataProvider($this, array(
