@@ -28,7 +28,7 @@ class SchedulesController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','exceldownload'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','exceldownload','deleteselectedall'),
                 'expression'=> "AdminIdentity::checkAccess('webpanel.schedules.{$this->action->id}')",
             ),
             array('deny', // deny all users
@@ -183,6 +183,14 @@ class SchedulesController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
+        if(isset($_REQUEST['success'])){
+                
+                if($_REQUEST['success']=='deleted'){
+                    Yii::app()->user->setFlash('success', 'Class(es) Deleted Successfully!!!');
+                }
+                
+                $this->redirect(array('/webpanel/schedules/index'));
+            }
         $model = new DmvClasses('search');
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['DmvClasses']))
@@ -239,6 +247,27 @@ class SchedulesController extends Controller {
             Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
             exit();
 //            $this->redirect(array('index'));
+    }
+    
+    public function actionDeleteselectedall(){
+//        $baseurl = Yii::app()->request->getBaseUrl(true);
+        $idList = Yii::app()->request->getParam('idList');
+        $ids ='';
+        if($idList){
+            foreach($idList as $id){
+                Payment::model()->deleteAll("class_id='$id'");
+                PrintCertificate::model()->deleteAll("class_id='$id'");
+                Students::model()->deleteAll("clas_id='$id'");
+
+                $model = $this->loadModel($id);        
+                $audit_desc  = date("F d,Y",strtotime($model->clas_date)) ." ".$model->start_time." to ".$model->end_time;
+                Myclass::addAuditTrail("Schedule {$audit_desc} and the related payments , students , certificates deleted successfully. Class id - {$id}", "schedules");
+
+                $model->delete();
+                
+            }
+        }
+        echo 'deleted';
     }
 
 }

@@ -13,22 +13,39 @@ $cs_pos_end = CClientScript::POS_END;
 $cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
 $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
+    
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
-        if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
-            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right'));
+        if (AdminIdentity::checkAccess('webpanel.schedules.delete')) {
+            echo '&nbsp;&nbsp;';
+            echo CHtml::link('<i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;Delete Selected', '', array('class' => 'marginleft btn btn-danger pull-right','id'=>'class-deleted'));
+            
+//            echo '<button id="class-deleted" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete Selected</button>';
         }
         ?>
+        <?php
+        if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right','id'=>'add-schedule'));
+        }
+        ?>
+        
     </div>
 </div>
-
+<?php $loading_image = Yii::app()->getBaseUrl(true) . '/themes/adminlte/img/ajax-loader.gif'; ?>
+<div id="loading-image" style="text-align: center; display: none;"><img src='<?php echo $loading_image; ?>' width="64" height="64" /><br> Please Wait...</div>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
         $gridColumns = array(
+            array(
+                'class' => 'CCheckBoxColumn',
+                'selectableRows' => 1,
+                'value' => '$data["clas_id"]',
+                'checkBoxHtmlOptions' => array("name" => "idList[]"),
+            ),
             array(
                 'header' => 'Agency code',
                 'name' => 'Affliate.agency_code',
@@ -75,10 +92,40 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         ?>
     </div>
 </div>
+
 <?php
+$validate_url = Yii::app()->createUrl('/webpanel/schedules/deleteselectedall');
+$success_url = Yii::app()->createUrl('/webpanel/schedules/index/success/');
 $js = <<< EOD
 $(document).ready(function(){
+    
+    $('#class-deleted').on('click', function(){
+        var idList    = $("input[type=checkbox]:checked").serialize();
 
+        if(idList)
+        {
+            $('#loading-image').show();
+        
+            $('#class-deleted').hide();
+            $('#add-schedule').hide();
+            $.ajax({
+                method: "POST",
+                url: "$validate_url",
+                async: false,
+                data: idList,
+                success: function(res){
+                        var red_url="$success_url"+'/'+res;
+                    window.location= red_url;
+                        return false;
+                    },
+
+              });
+              return false;
+        }else{
+            alert('Please select any one checkbox.');
+        }
+    });
+        
     $("#DmvClasses_startdate").change(function () {
         if ($(this).val() != '') {
             $("#startdate_error").hide();
