@@ -39,7 +39,7 @@ class StudentsController extends Controller {
     }
 
     public function checkVisible($print_certificate) {
-        if ($print_certificate != "" && $print_certificate != "Y")
+        if ($print_certificate == "Y")
             return false;
         else
             return true;

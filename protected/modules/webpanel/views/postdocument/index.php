@@ -37,7 +37,7 @@ $cs_pos_end = CClientScript::POS_END;
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{download}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'template' => '{download}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',               
                 'buttons' => array(
                     'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.update')"),
                     'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.delete')"),
@@ -54,7 +54,7 @@ $cs_pos_end = CClientScript::POS_END;
             //  'filter' => $model,
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
-            'responsiveTable' => true,
+            'responsiveTable' => true,                   
             'template' => '<div class="panel panel-primary">'
             . '<div class="panel-heading">'
             . '<div class="pull-right">{summary}</div>'

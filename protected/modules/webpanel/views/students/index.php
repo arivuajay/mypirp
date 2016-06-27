@@ -55,10 +55,10 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'template' => '{update}',
                 'buttons' => array(
                     'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.update')"),
-                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.delete')"),
+                 //   'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.students.delete')"),
                 )
             )
         );
