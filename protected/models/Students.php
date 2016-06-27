@@ -42,7 +42,7 @@ class Students extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('affiliate_id, clas_id,first_name,last_name,gender,dob,licence_number,address1', 'required', 'on' => 'create'),
+            array('affiliate_id, clas_id,first_name,last_name,gender,dob,licence_number,address1,city', 'required', 'on' => 'create'),
             array('affiliate_id, clas_id', 'numerical', 'integerOnly' => true),
             array('first_name, last_name, city, zip, phone, licence_number', 'length', 'max' => 20),
             array('middle_name, stud_suffix, state', 'length', 'max' => 10),

@@ -20,7 +20,7 @@ $cs_pos_end = CClientScript::POS_END;
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
 
-<?php //if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "") { ?>
+<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "") { ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
@@ -48,7 +48,7 @@ $cs_pos_end = CClientScript::POS_END;
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}',
+                'template' => '{view}',
             )
         );
 
@@ -64,4 +64,30 @@ $cs_pos_end = CClientScript::POS_END;
         ?>
     </div>
 </div>
-<?php //}?>
+<?php }?>
+<?php
+$js = <<< EOD
+$(document).ready(function(){
+
+$("#search_stud").click(function() {
+    var first_name = $("#Students_first_name").val();
+    var last_name = $("#Students_last_name").val();
+    var licence_number = $("#Students_licence_number").val();
+        
+    $("#disp_error").hide();   
+   
+   if(first_name=="" && last_name=="" && licence_number=="")
+    {
+        $("#disp_error").show();
+        return false;
+    }
+          
+    return true;
+        
+}); 
+   
+    
+});
+EOD;
+Yii::app()->clientScript->registerScript('_form_instructor', $js);
+?>

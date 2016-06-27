@@ -24,8 +24,10 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 </div>
 <div class="clearfix">&nbsp;</div>
+<p style="color:red;display:none;"><strong>Hint: For your kind information. please fill the info's like first name, last name, gender, dob, licence number, address1 fields for each student.</strong></p>
 <div class="col-lg-12 col-md-12">
-    <table class="table table-striped table-bordered">
+    <div class="table-responsive">       
+    <table class="table table-striped table-bordered bulkstudentsadd" >
         <thead>
             <tr>
                 <td align="center"><strong>No</strong></td>
@@ -81,7 +83,8 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php
         }
         ?>       
-    </table>   
+    </table>  
+    </div>
 </div>
 <?php $this->endWidget(); ?>
 <script type="text/javascript">

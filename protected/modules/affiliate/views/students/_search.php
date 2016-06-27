@@ -47,10 +47,13 @@
                     <div class="col-lg-2 col-md-2">
                         <div class="form-group">
                             <label>&nbsp;</label>
-                            <?php echo CHtml::submitButton('Filter', array('class' => 'btn btn-primary form-control')); ?>
+                            <?php echo CHtml::submitButton('Filter', array('id'=>'search_stud','class' => 'btn btn-primary form-control')); ?>
                         </div>
+                    </div>                    
+                    <div class="clearfix"></div>  
+                    <div class="col-lg-3 col-md-3">
+                        <p id="disp_error" class="errorMessage" style="display: none;">Please enter atleast one value for searching.</p>
                     </div>
-                    <div class="clearfix"></div>                  
                     <?php $this->endWidget(); ?>
                 </div>
             </section>

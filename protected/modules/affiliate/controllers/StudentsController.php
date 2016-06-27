@@ -217,6 +217,7 @@ class StudentsController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+         $model->scenario = "create";
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);

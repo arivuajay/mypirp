@@ -24,7 +24,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 </div>
 <div class="clearfix">&nbsp;</div>
-<p style="color:red"><strong>Hint: For your kind information. please fill the info's like first name, last name, gender, dob, licence number, address1 fields for each student.</strong></p>
+<p style="color:red;display:none"><strong>Hint: For your kind information. please fill the info's like first name, last name, gender, dob, licence number, address1 fields for each student.</strong></p>
 <div class="col-lg-12 col-md-12">
     <div class="table-responsive">       
     <table class="table table-striped table-bordered bulkstudentsadd" >
