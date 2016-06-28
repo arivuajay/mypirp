@@ -44,7 +44,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'header' => 'Submit Class',
                 'value' => function($data) {
                     if ($data->show_admin == "N") {
-                        
+                        echo CHtml::link('Submit Class',array('/affiliate/schedules/index/cid/'.$data->clas_id)); 
                     } else {
                         echo $this->checkprintcertificate($data->clas_id);
                     }

@@ -47,7 +47,19 @@ class SchedulesController extends Controller
 	 */
 	public function actionIndex()
 	{
-            
+            if(isset($_GET['cid'])){
+                $cmodel = DmvClasses::model()->findByAttributes(array('clas_id'=>$_GET['cid']));
+                $cmodel->show_admin= 'Y';
+                $cmodel->pending= '1';
+                $cmodel->save();
+                if($cmodel->save()){
+                    Yii::app()->user->setFlash('success', 'Submit Class Successfully!!!');
+                }else{
+                    Yii::app()->user->setFlash('error', 'Not Submit Class');
+                }
+                
+                $this->redirect(array('/affiliate/schedules/index'));
+            }
             $model=new DmvClasses('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DmvClasses']))

@@ -145,9 +145,9 @@ class DmvClasses extends CActiveRecord {
         
         if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
         {    
-            $criteria->select = 't.clas_date,t.start_time,t.end_time,t.loc_city,t.loc_state,t.zip';
+            $criteria->select = 't.show_admin,t.clas_date,t.start_time,t.end_time,t.loc_city,t.loc_state,t.zip';
             $this->affiliateid = Yii::app()->user->affiliate_id;
-            $default_order = 'DATE_FORMAT(t.clas_date, "%m/%d/%Y")';
+            $default_order = 't.clas_date DESC';
         }else{
             $criteria->addCondition("show_admin = 'Y'");
         }    
