@@ -1,5 +1,10 @@
 <?php
 $this->title = $name;
+if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
+   $homeurl = CHtml::link('home page', array('/webpanel'));
+} else {
+   $homeurl = CHtml::link('home page', array('/affiliate'));
+}
 ?>
 <!-- Main content -->
 <section class="content">
@@ -10,9 +15,9 @@ $this->title = $name;
             <h3><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
             <p>
                 We could not find the page you were looking for.
-               
+
             </p>
-            <p>please go back to the <a href='<?php echo Yii::app()->createAbsoluteUrl('/') ?>'>home page</a>.</p>
+            <p>please go back to the <?php echo $homeurl; ?></p>
 
         </div><!-- /.error-content -->
     </div><!-- /.error-page -->

@@ -11,11 +11,29 @@ $cs = Yii::app()->getClientScript();
 $cs_pos_end = CClientScript::POS_END;
 ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
+  <?php
+    $form = $this->beginWidget('CActiveForm', array(
+        'id' => 'print-certificate-form',
+        'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),               
+    ));
+    ?>
+<?php
+echo CHtml::submitButton("Print Selected", array('class' => 'marginleft btn btn-primary pull-right','id'=>'student-seleted'));
+?>
+<div class="col-lg-12 col-md-12">&nbsp;</div>
 <h4><?php echo $class_info; ?></h4>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
         $gridColumns = array(
+             array(
+                'class' => 'CCheckBoxColumn',
+                'selectableRows' => 2,
+                'value' => '$data["student_id"]',
+                'checkBoxHtmlOptions' => array("name" => "idList[]"),
+                'htmlOptions' => array('style' => 'width: 10px;text-align:center'),
+                'headerHtmlOptions'=>array('style' => 'width: 10px;text-align:center'),
+            ),
             array(
                 'header' => 'Certificate Number',
                 'name' => 'certificate_number',
@@ -51,16 +69,36 @@ $cs_pos_end = CClientScript::POS_END;
         ?>
     </div>
 </div>
-
+<?php $this->endWidget(); ?>
 <div id="Getprintval" style="display:none;"></div>
 <?php
 $js = <<< EOD
 $(document).ready(function(){
+        
+    $("input:checkbox").attr('class', 'case');
+
+     $('#yw0_c0_all').on('ifChecked', function(event){
+             $('.case').iCheck('check');
+     });
+     $('#yw0_c0_all').on('ifUnchecked', function(event){
+             $('.case').iCheck('uncheck');
+     });  
+        
+    $('#student-seleted').on('click', function(){
+      var idList    = $("input[type=checkbox]:checked").serialize();
+
+      if(idList=="")
+      {
+        alert('Please select any one checkbox.');
+        return false;
+      }
+      return true;
+    });     
          
-    $(".printcert").click(function() {   
+    $(".printcert").live("click",function() {   
         var pcertificate_url = $(this).attr('href');
         var flag = 0;
-        
+      
         $.ajax({
                 type: "POST",
                 url: pcertificate_url,                

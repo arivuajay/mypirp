@@ -91,11 +91,18 @@ class StudentsController extends Controller {
     public function actionAddbulkstudents($aid, $cid) {
         $model = new Students;
         $flag = 0;
-        if (isset($_POST['Students'])) {
+        
+        if (isset($_POST['Students'])) {      
+        
             for ($i = 1; $i <= 20; $i++) {
+               
                 if (isset($_POST['Students'][$i]['first_name']) && trim($_POST['Students'][$i]['first_name']) != '') {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
+                   
+                    if(isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all']=="Yes" && isset($_POST['Students'][1]['course_completion_date'])&& $_POST['Students'][1]['course_completion_date']!="")
+                    $model->course_completion_date = $_POST['Students'][1]['course_completion_date'];
+                            
                     $model->affiliate_id = $aid;
                     $model->clas_id = $cid;
                     $model->save();

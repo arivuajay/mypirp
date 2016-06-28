@@ -29,7 +29,7 @@ class PrintcertificateController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'update', 'view', 'delete', 'printstudentcertificate', 'certificatedisplay', 'pendingcertificates',),
-                'expression'=> "AdminIdentity::checkAccess('webpanel.printcertificate.{$this->action->id}')",
+                'expression' => "AdminIdentity::checkAccess('webpanel.printcertificate.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -62,11 +62,10 @@ class PrintcertificateController extends Controller {
                     $pc_model->issue_date = date("Y-m-d", time());
                     $pc_model->save();
                 }
-                
+
                 Myclass::addAuditTrail("Certificates generated successfully. Class id - {$classid}", "printcertificate");
                 Yii::app()->user->setFlash('success', 'Certificates generated successfully!!');
-                $this->redirect(array('printcertificate/printstudentcertificate/id/'.$classid));
-                
+                $this->redirect(array('printcertificate/printstudentcertificate/id/' . $classid));
             } else {
 
                 $redirecturl = Yii::app()->request->urlReferrer;
@@ -116,6 +115,18 @@ class PrintcertificateController extends Controller {
     public function actionPrintstudentcertificate($id) {
         $model = new PrintCertificate('search');
         $class_id = $id;
+            
+        if (isset($_POST['idList'])) {
+            
+            $std_ids = implode(",",$_POST['idList']);
+
+            $html2pdf = Yii::app()->ePdf->HTML2PDF();
+            $html2pdf->setDefaultFont('times');
+            $html2pdf->WriteHTML($this->renderPartial('certificate_view', array("std_ids" => $std_ids), true));
+            $html2pdf->Output(time() . ".pdf", EYiiPdf::OUTPUT_TO_DOWNLOAD);
+            $html2pdf->Output();             
+        }
+
 
         $classinfo = DmvClasses::model()->findByPk($id);
         $class_info = $classinfo->clas_date . " " . $classinfo->start_time . " To " . $classinfo->end_time;

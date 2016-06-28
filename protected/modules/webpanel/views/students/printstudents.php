@@ -89,7 +89,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 <?php
 if ($model->startdate != "" && $model->enddate != "") {
 
-
+    $totalstudents= "Total Students - ".$model->search()->getTotalItemCount();
     $aff_info = ($model->affiliate_id > 0) ? "<strong>" . $model->dmvAffiliateInfo->agency_name . " " . $model->dmvAffiliateInfo->agency_code . "</strong>" : "";
     $date_disp = "From " . date("d/m/Y", strtotime($model->startdate)) . " until " . date("d/m/Y", strtotime($model->enddate));
     ?>
@@ -148,6 +148,7 @@ if ($model->startdate != "" && $model->enddate != "") {
                     . '</div>'
                     . '<div class="panel-body">'
                     . '<p><h4>' . $aff_info . ' ' . $date_disp . ' </h4></p>'
+                    . '<p><h4>'. $totalstudents .'</h4></p>'
                     . '{items}{pager}</div>'
                     . '</div>',
                     'columns' => $gridColumns
@@ -165,7 +166,7 @@ $(document).ready(function(){
  
 $("#printdiv").click(function() {   
     var innerContents = document.getElementById("Getprintval").innerHTML;
-    var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+    var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
     popupWinindow.document.open();
     popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
 });     

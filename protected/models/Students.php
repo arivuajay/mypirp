@@ -26,7 +26,7 @@
  */
 class Students extends CActiveRecord {
 
-    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag,$start_date, $end_date;
+    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag,$start_date, $end_date, $completion_date_all;
 
     /**
      * @return string the associated database table name
@@ -48,7 +48,7 @@ class Students extends CActiveRecord {
             array('middle_name, stud_suffix, state', 'length', 'max' => 10),
             array('address1, address2, email', 'length', 'max' => 50),
             array('gender', 'length', 'max' => 1),
-            array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate,label_flag', 'safe'),
+            array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate,label_flag,completion_date_all', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on' => 'search'),

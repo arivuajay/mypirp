@@ -60,7 +60,9 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             array(
                 'header' => 'Instructor',
                 'name' => 'Instructor.ins_first_name',
-                'value' => $data->Instructor->ins_first_name,
+                'value' => function($data) {
+                 echo   $data->Instructor->ins_first_name." ".$data->Instructor->instructor_last_name;
+                }   
             ),
             array(
                 'header' => 'Actions',
