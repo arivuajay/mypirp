@@ -75,7 +75,7 @@ $(document).ready(function(){
             if(flag==1)
             {    
                 var innerContents = document.getElementById("Getprintval").innerHTML;
-                var popupWinindow = window.open('', '_blank', 'width=950,height=650,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+                var popupWinindow = window.open('', '_blank', 'width=950,height=650,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,screenX=150,screenY=150,top=150,left=150');
                 popupWinindow.document.open();
                 popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
                 return false;    

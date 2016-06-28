@@ -64,3 +64,17 @@ height: 570px;
 .marginleft{
     margin-left: 10px;
 }
+
+.certificate-stud-cont{
+ font-family: "Times New Roman",Times,serif;
+  margin-top: 180px;
+  font-size: 25px;
+  color: #000000 !important;
+  //text-transform: uppercase;
+  border: none;
+}
+
+.certificate-stud-cont td{
+    color: #000000 !important;
+    font-size: 23px !important;
+}    

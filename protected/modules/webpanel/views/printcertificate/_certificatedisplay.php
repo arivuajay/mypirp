@@ -8,6 +8,8 @@ if ($student_id != "") {
     $sinfo = Students::model()->with("dmvAffiliateInfo")->findByPk($student_id);
 
     if (!empty($sinfo)) {
+        $std_liveplace = array();
+        $std_place = "";
         $agency_code = $sinfo->dmvAffiliateInfo->agency_code;
         $agency_name = $sinfo->dmvAffiliateInfo->agency_name;
         $class_id = $sinfo->clas_id;
@@ -19,13 +21,23 @@ if ($student_id != "") {
         $last_name = $sinfo->last_name;
         $address1 = $sinfo->address1;
         $address2 = $sinfo->address2;
+        $std_address = trim($sinfo->address1." ".$sinfo->address2);       
         $city = $sinfo->city;
         $state = $sinfo->state;
         $zip = $sinfo->zip;
-        $dob = ($sinfo->dob!="0000-00-00")?date("m/d/Y",strtotime($sinfo->dob)):"-";
+        $std_liveplace[] = $city;
+        $std_liveplace[] = $state;        
+        if(!empty($std_liveplace))
+        {    
+            $std_place = array_filter($std_liveplace);
+            $std_place = implode(" ,",$std_place);
+            $std_place = trim($std_place);
+        }    
+        
+        $dob = ($sinfo->dob != "0000-00-00") ? date("m/d/Y", strtotime($sinfo->dob)) : "-";
         $gender = ($sinfo->gender == "F") ? "Female" : "Male";
         $licence_number = $sinfo->licence_number;
-        $clas_date = ($sinfo->course_completion_date!="0000-00-00")?date("m/d/Y",strtotime($sinfo->course_completion_date)):"-";
+        $clas_date = ($sinfo->course_completion_date != "0000-00-00") ? date("m/d/Y", strtotime($sinfo->course_completion_date)) : "-";
         ?>
         <div class="certificate-cont">
             <table width="100" border="0" align="center" cellpadding="0" cellspacing="0" class="cert-table">
@@ -107,7 +119,7 @@ if ($student_id != "") {
                                                                 </tr>
                                                                 <tr>
                                                                     <td align="center" valign="top" nowrap="nowrap">&nbsp;</td>
-                                                                    <td align="left" valign="top" nowrap="nowrap"><img src="<?php echo $themeUrl;?>/img/line.jpg" width="157" height="10" /></td>
+                                                                    <td align="left" valign="top" nowrap="nowrap"><img src="<?php echo $themeUrl; ?>/img/line.jpg" width="157" height="10" /></td>
                                                                     <td align="center" valign="top" nowrap="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                                                 </tr>
                                                                 <tr>
@@ -116,7 +128,7 @@ if ($student_id != "") {
                                                                 </tr>
                                                                 <tr>
                                                                     <td width="21%" height="35"><br />                              </td>
-                                                                    <td width="64%" style="padding-left: 10px;"><img src="<?php echo $themeUrl;?>/img/bart_sig.jpg" width="185" height="58" /></td>
+                                                                    <td width="64%" style="padding-left: 10px;"><img src="<?php echo $themeUrl; ?>/img/bart_sig.jpg" width="185" height="58" /></td>
                                                                     <td width="15%">&nbsp;</td>
                                                                 </tr>
                                                                 <tr>
@@ -127,7 +139,7 @@ if ($student_id != "") {
                                                                     <td height="25" colspan="3"><table width="100%" border="0" cellpadding="0" cellspacing="0">
                                                                             <tr>
                                                                                 <td width="22%">&nbsp;</td>
-                                                                                <td width="45%" style="padding-left: 10px;"><img src="<?php echo $themeUrl;?>/img/cath_sig.jpg" width="140" height="49" /></td>
+                                                                                <td width="45%" style="padding-left: 10px;"><img src="<?php echo $themeUrl; ?>/img/cath_sig.jpg" width="140" height="49" /></td>
                                                                                 <td width="33%">&nbsp;</td>
                                                                             </tr>
                                                                         </table></td>
@@ -154,7 +166,7 @@ if ($student_id != "") {
                                                 <tr> </tr>
                                                 <tr>
                                                     <td align="center" nowrap="nowrap" valign="top" width="60%">This document has been printed with a security process to deter fraud.</td>
-                                                    <td align="right" valign="top" width="40%">American Safety Inc.<img src="<?php echo $themeUrl;?>/img/button_copyright.jpg" alt="Edit" width="15" height="15" border="0" />&nbsp;&nbsp;</td>
+                                                    <td align="right" valign="top" width="40%">American Safety Inc.<img src="<?php echo $themeUrl; ?>/img/button_copyright.jpg" alt="Edit" width="15" height="15" border="0" />&nbsp;&nbsp;</td>
                                                 </tr>
                                             </tbody>
                                         </table></td>
@@ -163,31 +175,18 @@ if ($student_id != "") {
                         </table></td>
                 </tr>
                 <tr>
-
-                </tr>
-                <tr style="display: none;">
-                    <td><table align="center" border="0">
-                            <tbody>
-                                <tr>
-                                    <td style="padding-top: 540px;"><table align="right" border="0" width="750px">
-                                            <tbody>
-                                                <tr>
-                                                    <td>&nbsp;</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 23px;" align="left" valign="top" width="90%"><?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 23px;" align="left" valign="top" width="90%"><?php echo $address1; ?>&nbsp;<?php echo $address2; ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="font-size: 23px;" align="left" valign="top" width="90%"><?php echo $city; ?>,&nbsp;<?php echo $state; ?>&nbsp;<?php echo $zip; ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table></td>
-                                </tr>
-                            </tbody>
-                        </table></td>
+                </tr>               
+            </table>
+        </div>
+        <div class="certificate-stud-cont">
+            <table cellspacing="0" cellpadding="0" height="100" align="center" width="900px">
+                <tr>
+                    <td align="left" nowrap="nowrap" valign="top">
+                        <?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?>
+                        <?php echo ($std_address!="")?"<br>".$std_address:""; ?>
+                        <?php echo ($std_place!="")?"<br>".$std_place."  ":""; 
+                        echo ($zip!="")?$zip:"";?>
+                    </td>      
                 </tr>
             </table>
         </div>
