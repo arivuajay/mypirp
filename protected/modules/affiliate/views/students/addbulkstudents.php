@@ -6,11 +6,6 @@ $this->title = 'Add Students';
 $this->breadcrumbs = array(
     'Add Students',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <?php
 $form = $this->beginWidget('CActiveForm', array(
@@ -91,8 +86,8 @@ $form = $this->beginWidget('CActiveForm', array(
         </table>  
     </div>
 </div>
-<?php $this->endWidget(); ?>
-<script type="text/javascript">
+<?php $this->endWidget(); 
+$js = <<< EOD
     $(document).ready(function () {
 
         $('input[name="Students\\[completion_date_all\\]"]').on('ifChecked', function (event) {
@@ -115,8 +110,7 @@ $form = $this->beginWidget('CActiveForm', array(
             });
 
         });
-
-        $('.year').datepicker({dateFormat: 'yyyy'});
-        $('.date').datepicker({format: 'mm/dd/yyyy'});
     });
-</script>
+EOD;
+Yii::app()->clientScript->registerScript('_addbulk_sdts', $js);
+?> 

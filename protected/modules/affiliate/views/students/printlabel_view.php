@@ -18,9 +18,9 @@
 
         $std_city[] = $infos->city;
         $std_city[] = $infos->state;
-        $std_city[] = $infos->zip;
         $final_city = array_filter($std_city);
         $std_cty_info = implode(",", $final_city);
+        $std_cty_info = $std_cty_info." ".$infos->zip;
 
         if ($i == 1 || $i == 3)
             $style = "width: 33%";

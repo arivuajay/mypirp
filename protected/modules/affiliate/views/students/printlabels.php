@@ -6,12 +6,6 @@ $this->title = 'Print Labels';
 $this->breadcrumbs = array(
     'Print Labels',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 
@@ -41,7 +35,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'startdate', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date')); ?>                               
+                                <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date',"readonly"=>"readonly")); ?>                               
                             </div>   
                             <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
                         </div>
@@ -52,7 +46,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'enddate', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date')); ?>                               
+                                <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date',"readonly"=>"readonly")); ?>                               
                             </div> 
                             <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
                         </div>
@@ -76,32 +70,28 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 $js = <<< EOD
 $(document).ready(function(){
  
-$("#print_res").click(function() {
-    var startdate = $("#Students_startdate").val();
-    var enddate = $("#Students_enddate").val();
-        
-    $("#startdate_error").hide();    
-    $("#enddate_error").hide();
-   
-   if(startdate=="")
-    {
-        $("#startdate_error").show();
-        return false;
-    }
-    
-   if(enddate=="")
-    {
-        $("#enddate_error").show();
-        return false;
-    }
-        
-    return true;
-        
-});   
-        
-$('.year').datepicker({ dateFormat: 'yyyy' }); 
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+    $("#print_res").click(function() {
+        var startdate = $("#Students_startdate").val();
+        var enddate = $("#Students_enddate").val();
+
+        $("#startdate_error").hide();    
+        $("#enddate_error").hide();
+
+       if(startdate=="")
+        {
+            $("#startdate_error").show();
+            return false;
+        }
+
+       if(enddate=="")
+        {
+            $("#enddate_error").show();
+            return false;
+        }
+
+        return true;
+
+    });       
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_printlabels', $js);

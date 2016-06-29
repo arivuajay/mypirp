@@ -2,13 +2,6 @@
 /* @var $this StudentsController */
 /* @var $model Students */
 /* @var $form CActiveForm */
-
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 
 <div class="row">
@@ -33,7 +26,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             echo $form->dropDownList($model, 'clas_id', $classes, array('class' => 'form-control',"empty"=>"Select Class"));
                             echo $form->error($model, 'clas_id');
                         } else {
-                            echo $model->dmvClasses->clas_date;
+                            echo date("m/d/Y",strtotime($model->dmvClasses->clas_date));
                         }
                         ?>    
                     </div>
@@ -141,7 +134,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'dob', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'dob', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'dob'); ?>
                     </div>
@@ -169,7 +162,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'course_completion_date'); ?>
                     </div>
@@ -188,11 +181,3 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         </div>
     </div><!-- ./col -->
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('.year').datepicker({dateFormat: 'yyyy'});
-        $('.date').datepicker({format: 'yyyy-mm-dd'});        
-       
-    });
-</script>

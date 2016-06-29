@@ -45,9 +45,9 @@
 </header>
 <?php
 $headermenus = <<< EOD
-    $(document).ready(function () {
-        $('.dropdown-toggle').dropdown();
-    });
+   
+    jQuery('.dropdown-toggle').dropdown();
+   
 EOD;
 Yii::app()->clientScript->registerScript('_form55', $headermenus);
 ?>

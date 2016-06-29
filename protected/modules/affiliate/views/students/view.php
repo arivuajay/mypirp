@@ -30,14 +30,14 @@ $this->breadcrumbs = array(
                 array(
                     'name' => 'dob',
                     'type' => 'raw',
-                    'value' => ($model->dob != "0000-00-00") ? date("m/d/Y", strtotime($model->dob)) : "-"                    
+                    'value' => ($model->dob != "0000-00-00") ? Myclass::date_dispformat($model->dob) : "-"                    
                 ),
                 'licence_number',
                 'notes',
                 array(
                     'name' => 'course_completion_date',
                     'type' => 'raw',
-                    'value' => ($model->course_completion_date != "0000-00-00") ? date("m/d/Y", strtotime($model->course_completion_date)) : "-"                    
+                    'value' => ($model->course_completion_date != "0000-00-00") ? Myclass::date_dispformat($model->course_completion_date) : "-"                    
                 ),
             ),
         ));
@@ -54,5 +54,3 @@ $this->breadcrumbs = array(
         ?>
     </div>
 </div>
-
-

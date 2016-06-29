@@ -135,6 +135,9 @@ class Students extends CActiveRecord {
 
         if ($this->startdate != "" && $this->enddate != "") {
             
+            $this->startdate = Myclass::dateformat($this->startdate);
+            $this->enddate   = Myclass::dateformat($this->enddate);
+            
             if($this->label_flag)
             $criteria->addCondition("course_completion_date >= '" . $this->startdate . "' AND course_completion_date <= '" . $this->enddate . "'");
             else    

@@ -6,12 +6,6 @@ $this->title = 'Print Students';
 $this->breadcrumbs = array(
     'Print Students',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 
@@ -40,7 +34,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'startdate', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date')); ?>                               
+                                <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date',"readonly"=>"readonly")); ?>                               
                             </div>   
                             <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
                         </div>
@@ -51,7 +45,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'enddate', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date')); ?>                               
+                                <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date',"readonly"=>"readonly")); ?>                               
                             </div> 
                             <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
                         </div>
@@ -77,7 +71,7 @@ if ($model->startdate != "" && $model->enddate != "") {
 
     $totalstudents= "Total Students - ".$model->search()->getTotalItemCount();
     $aff_info = ($model->affiliate_id > 0) ? "<strong>" . $model->dmvAffiliateInfo->agency_name . " " . $model->dmvAffiliateInfo->agency_code . "</strong>" : "";
-    $date_disp = "From " . date("d/m/Y", strtotime($model->startdate)) . " until " . date("d/m/Y", strtotime($model->enddate));
+    $date_disp = "From " . Myclass::date_dispformat($model->startdate) . " until " . Myclass::date_dispformat($model->enddate);
     ?>
     <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>
 
@@ -102,7 +96,7 @@ if ($model->startdate != "" && $model->enddate != "") {
                         'header' => 'DOB',
                         'name' => 'dob',
                         'value' => function($data) {
-                            echo ($data->dob != "") ? date("d/m/Y", strtotime($data->dob)) : "-";
+                            echo ($data->dob != "0000-00-00") ? Myclass::date_dispformat($data->dob) : "-";
                         }
                     ),
                     array(
@@ -150,39 +144,36 @@ if ($model->startdate != "" && $model->enddate != "") {
 $js = <<< EOD
 $(document).ready(function(){
  
-$("#printdiv").click(function() {   
-    var innerContents = document.getElementById("Getprintval").innerHTML;
-    var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
-    popupWinindow.document.open();
-    popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
-});     
+    $("#printdiv").click(function() {   
+        var innerContents = document.getElementById("Getprintval").innerHTML;
+        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+        popupWinindow.document.open();
+        popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
+    });     
 
-$("#print_res").click(function() {
-    var startdate = $("#Students_startdate").val();
-    var enddate = $("#Students_enddate").val();
-        
-    $("#startdate_error").hide();    
-    $("#enddate_error").hide();
-   
-   if(startdate=="")
-    {
-        $("#startdate_error").show();
-        return false;
-    }
-    
-   if(enddate=="")
-    {
-        $("#enddate_error").show();
-        return false;
-    }
-        
-    return true;
-        
-});   
-        
-$('.year').datepicker({ dateFormat: 'yyyy' }); 
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+    $("#print_res").click(function() {
+        var startdate = $("#Students_startdate").val();
+        var enddate = $("#Students_enddate").val();
+
+        $("#startdate_error").hide();    
+        $("#enddate_error").hide();
+
+       if(startdate=="")
+        {
+            $("#startdate_error").show();
+            return false;
+        }
+
+       if(enddate=="")
+        {
+            $("#enddate_error").show();
+            return false;
+        }
+
+        return true;
+
+    });   
+ 
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_instructor', $js);

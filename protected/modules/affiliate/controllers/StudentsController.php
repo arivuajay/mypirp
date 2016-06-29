@@ -1,11 +1,13 @@
 <?php
 
 class StudentsController extends Controller {
+
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/aff_column1';
+
     /**
      * @return array action filters
      */
@@ -28,9 +30,9 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'printlabels' , 'getclasses'),
+                'actions' => array('index', 'view', 'create', 'update', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'printlabels', 'getclasses'),
                 'users' => array('@'),
-                 'expression'=> 'AffiliateIdentity::checkAffiliate()',
+                'expression' => 'AffiliateIdentity::checkAffiliate()',
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -57,20 +59,19 @@ class StudentsController extends Controller {
 
     public function actionPrintstudents() {
         $model = new Students('search');
-        
+
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['Students']))
             $model->attributes = $_GET['Students'];
 
         $this->render('printstudents', compact('model'));
     }
-    
-    public function actionPrintlabels()
-    {
+
+    public function actionPrintlabels() {
         $model = new Students('search');
-        
+
         $model->unsetAttributes();  // clear any default values
-         if (isset($_GET['Students'])) {
+        if (isset($_GET['Students'])) {
             $model->attributes = $_GET['Students'];
 
             $startdate = $model->startdate;
@@ -81,7 +82,7 @@ class StudentsController extends Controller {
             $criteria->addCondition('affiliate_id = ' . Yii::app()->user->affiliate_id);
 
             if ($startdate != "" && $enddate != "")
-                $criteria->addCondition("course_completion_date >= '" . $startdate . "' AND course_completion_date <= '" . $enddate . "'");
+                $criteria->addCondition("course_completion_date >= '" . Myclass::dateformat($startdate) . "' AND course_completion_date <= '" . Myclass::dateformat($enddate) . "'");
 
             $std_infos = Students::model()->findAll($criteria);
 
@@ -96,7 +97,7 @@ class StudentsController extends Controller {
         }
 
         $this->render('printlabels', compact('model'));
-    }        
+    }
 
     public function getcertificatenumber($student_id, $clas_id) {
         $certificate_number = "-";
@@ -114,30 +115,27 @@ class StudentsController extends Controller {
 
     public function actionAddbulkstudents($cid) {
         $model = new Students;
-        
+        $model->unsetAttributes();
+
         $aid = Yii::app()->user->affiliate_id;
-        
+
         $flag = 0;
         if (isset($_POST['Students'])) {
             for ($i = 1; $i <= 20; $i++) {
                 if (isset($_POST['Students'][$i]['first_name']) && trim($_POST['Students'][$i]['first_name']) != '') {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
-                    
-                    if(isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all']=="Yes" && isset($_POST['Students'][1]['course_completion_date'])&& $_POST['Students'][1]['course_completion_date']!="")
-                    {
-                        $course_completion_date = date("Y-m-d",strtotime($_POST['Students'][1]['course_completion_date']));
-                        $model->course_completion_date = $course_completion_date;
-                    }elseif($model->course_completion_date!="")
-                    {
-                        $model->course_completion_date =  date("Y-m-d",strtotime($model->course_completion_date));
+
+                    if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
+                        $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
+                    } elseif ($model->course_completion_date != "") {
+                        $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
                     }
-                    
-                    if($model->dob!="")
-                    {
-                        $model->dob =  date("Y-m-d",strtotime($model->dob));
-                    }  
-                                              
+
+                    if ($model->dob != "") {
+                        $model->dob = Myclass::dateformat($model->dob);
+                    }
+
                     $model->affiliate_id = $aid;
                     $model->clas_id = $cid;
                     $model->save();
@@ -152,13 +150,6 @@ class StudentsController extends Controller {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/cid/' . $cid));
             }
-        }
-
-        if ($model->dob == "0000-00-00") {
-            $model->dob = "";
-        }
-        if ($model->course_completion_date == "0000-00-00") {
-            $model->course_completion_date = "";
         }
 
         $this->render('addbulkstudents', compact('model'));
@@ -202,20 +193,22 @@ class StudentsController extends Controller {
     public function actionCreate() {
         $model = new Students;
         $model->scenario = "create";
-        
-        $affid =  Yii::app()->user->affiliate_id;
+
+        $affid = Yii::app()->user->affiliate_id;
         $classes = DmvClasses::all_classes($affid);
-        
-        $model->unsetAttributes();  
-        
+
+        $model->unsetAttributes();
+
         $model->affiliate_id = Yii::app()->user->affiliate_id;
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
+            $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
+            $model->course_completion_date = ($model->course_completion_date != "") ? Myclass::dateformat($model->course_completion_date) : "";
             if ($model->save()) {
-                Yii::app()->user->setFlash('success', 'Students Created Successfully!!!');
+                Yii::app()->user->setFlash('success', 'Student created successfully!!!');
                 $this->redirect(array('index'));
             }
         }
@@ -224,7 +217,6 @@ class StudentsController extends Controller {
         $this->render('create', compact('model', 'affiliates', 'classes'));
     }
 
-
     /**
      * Updates a particular model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -232,13 +224,15 @@ class StudentsController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-         $model->scenario = "create";
+        $model->scenario = "create";
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
+            $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
+            $model->course_completion_date = ($model->course_completion_date != "") ? Myclass::dateformat($model->course_completion_date) : "";
             if ($model->save()) {
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
                 $this->redirect(array('students/viewstudents/cid/' . $model->clas_id));
@@ -247,10 +241,14 @@ class StudentsController extends Controller {
 
         if ($model->course_completion_date == "0000-00-00") {
             $model->course_completion_date = "";
+        } else {
+            $model->course_completion_date = Myclass::date_dispformat($model->course_completion_date);
         }
 
         if ($model->dob == "0000-00-00") {
             $model->dob = "";
+        } else {
+            $model->dob = Myclass::date_dispformat($model->dob);
         }
 
 
@@ -284,20 +282,6 @@ class StudentsController extends Controller {
             $model->attributes = $_GET['Students'];
 
         $this->render('index', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new Students('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Students']))
-            $model->attributes = $_GET['Students'];
-
-        $this->render('admin', array(
             'model' => $model,
         ));
     }

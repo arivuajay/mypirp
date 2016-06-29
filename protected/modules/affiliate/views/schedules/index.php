@@ -1,19 +1,11 @@
 <?php
 /* @var $this SchedulesController */
 /* @var $dataProvider CActiveDataProvider */
-
 $this->title = 'Manage Classes';
 $this->breadcrumbs = array(
     'Manage Classes',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
-
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <p><strong>Note: ASI staff will enter your class schedules. Once you see your class appear here then you can enter your students into that class. </strong></p>
 <?php //$this->renderPartial('_search', compact('model')); ?>
@@ -25,7 +17,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'header' => 'Date',
                 'name' => 'clas_date',
                 'value' => function($data) {
-                    echo date('m/d/Y', strtotime($data->clas_date));
+                    echo Myclass::date_dispformat($data->clas_date);
                 },
             ),
             'start_time',
@@ -77,14 +69,3 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         ?>
     </div>
 </div>
-<?php
-$js = <<< EOD
-$(document).ready(function(){
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
-});
-EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
-?>

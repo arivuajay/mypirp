@@ -224,6 +224,16 @@ class Myclass extends CController {
         $card['CA']= 'Cash';
         $card['MO']= 'Money Order';
         return $card;
-    }        
+    }    
+    
+    public static function dateformat($cdate)
+    {
+        return date("Y-m-d",strtotime($cdate));
+    }  
+    
+    public static function date_dispformat($cdate)
+    {
+        return date("m/d/Y",strtotime($cdate));
+    } 
        
 }
