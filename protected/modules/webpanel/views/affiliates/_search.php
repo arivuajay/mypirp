@@ -28,7 +28,7 @@
                             <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div>  
                             <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
                         </div>
@@ -39,7 +39,7 @@
                             <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div> 
                             <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
                         </div>

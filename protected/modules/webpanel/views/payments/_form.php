@@ -2,13 +2,6 @@
 /* @var $this PaymentsController */
 /* @var $model Payment */
 /* @var $form CActiveForm */
-
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 $cardtypes = Myclass::card_types();
 ?>
 
@@ -42,7 +35,7 @@ $cardtypes = Myclass::card_types();
                         <?php if ($model->isNewRecord){ ?>
                         <?php echo $form->dropDownList($model, 'class_id', $schedules, array('class' => 'form-control', "empty" => "Select Class")); ?>
                         <?php }else{
-                           echo $model->dmvClasses->clas_date." ".$model->dmvClasses->start_time." TO ".$model->dmvClasses->end_time;
+                           echo Myclass::date_dispformat($model->dmvClasses->clas_date)." ".$model->dmvClasses->start_time." TO ".$model->dmvClasses->end_time;
                         }?>
                         <?php echo $form->error($model, 'class_id'); ?>
                     </div>
@@ -53,7 +46,7 @@ $cardtypes = Myclass::card_types();
                     <div class="col-sm-5">                       
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'payment_date'); ?>
                     </div>
@@ -138,10 +131,7 @@ $ajaxClassUrl = Yii::app()->createUrl('/webpanel/payments/getclasses');
 $payment_type = $model->payment_type;
 $js = <<< EOD
 $(document).ready(function(){
-    var payment_type  = '{$payment_type}';
-    
-    $('.year').datepicker({ dateFormat: 'yyyy' });
-    $('.date').datepicker({ format: 'yyyy-mm-dd' });     
+    var payment_type  = '{$payment_type}';  
    
     if(payment_type=="CQ")
         $("#chequenumber").show();
@@ -180,5 +170,5 @@ $(document).ready(function(){
     
 });
 EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
+Yii::app()->clientScript->registerScript('_form_payment', $js);
 ?>

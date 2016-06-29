@@ -26,7 +26,7 @@ class DmvPostMessage extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('message_title, descr', 'required'),
+            array('message_title, descr,posted_date', 'required'),
             array('admin_id', 'numerical', 'integerOnly' => true),
             array('message_title', 'length', 'max' => 20),
             array('posted_date', 'safe'),

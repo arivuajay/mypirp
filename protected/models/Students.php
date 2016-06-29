@@ -112,6 +112,8 @@ class Students extends CActiveRecord {
      * based on the search/filter conditions.
      */
     public function search() {
+        $datamod = array();
+        $datamod = $_GET; 
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
@@ -137,6 +139,9 @@ class Students extends CActiveRecord {
             
             $this->startdate = Myclass::dateformat($this->startdate);
             $this->enddate   = Myclass::dateformat($this->enddate);
+            
+            $datamod['Students']['startdate'] = $this->startdate;
+            $datamod['Students']['enddate']   = $this->enddate;
             
             if($this->label_flag)
             $criteria->addCondition("course_completion_date >= '" . $this->startdate . "' AND course_completion_date <= '" . $this->enddate . "'");
@@ -176,6 +181,7 @@ class Students extends CActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                'params' => $datamod
             )
         ));
     }

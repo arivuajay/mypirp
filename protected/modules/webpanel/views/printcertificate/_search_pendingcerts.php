@@ -35,7 +35,7 @@
                             <?php echo $form->labelEx($model, 'clasdate', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div>   
                         </div>
                     </div> 

@@ -94,8 +94,16 @@ class PrintCertificate extends CActiveRecord {
     }
     
     public function printCertificatesReport($startdate,$enddate){
-            $this->startdate = $startdate;
-            $this->enddate = $enddate;
+            
+            $datamod = array();
+            $datamod = $_GET;
+        
+            $this->startdate = Myclass::dateformat($startdate);
+            $this->enddate = Myclass::dateformat($enddate);
+            
+            $datamod['PrintCertificate']['startdate'] = $this->startdate;
+            $datamod['PrintCertificate']['enddate'] = $this->enddate;
+            
             $criteria = new CDbCriteria;
             $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affiliate_instructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
             $criteria->together = true;
@@ -104,22 +112,12 @@ class PrintCertificate extends CActiveRecord {
             $criteria->join .= '  INNER JOIN dmv_aff_instructor  t3 ON t1.affiliate_id = t3.affiliate_id';
             $criteria->join .= '  INNER JOIN dmv_add_instructor  t4 ON t3.instructor_id = t4.instructor_id';
             $criteria->addCondition("t2.admin_id ='".Yii::app()->user->admin_id."' AND t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'");
-            
-
             $criteria->group='dmvStudents.student_id';
-//            $criteria->addCondition("issue_date >= '" . $this->startdate . "' AND issue_date <= '" . $this->enddate . "'");
             return new CActiveDataProvider($this, array(
                     'criteria'=>$criteria,
-//                    'criteria' => array(
-//                                        'condition'=>"t.issue_date BETWEEN '" . $this->startdate . "' AND '" . $this->enddate . "'",
-//                                        'join'=>'INNER JOIN `dmv_students` AS `t1` ON `t1`.`student_id` = `t`.`student_id`',
-//                                        'join'=>'INNER JOIN `dmv_affiliate_info` AS `t2` ON `t1`.`affiliate_id` = `t2`.`affiliate_id`',
-//                                        'join'=>'INNER JOIN `dmv_aff_instructor` AS `t3` ON `t1`.`affiliate_id` = `t3`.`affiliate_id`',
-//                                        'join'=>'INNER JOIN `dmv_add_instructor` AS `t4` ON `t3`.`instructor_id` = `t4`.`instructor_id`',
-//                                        'group'=>'`t1`.`student_id`',
-//                                    ),
                     'pagination' => array(
                         'pageSize' => PAGE_SIZE,
+                         'params' => $datamod
                     )
                 ));
     }

@@ -28,9 +28,9 @@ class InstructorsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','getinstructors','exceldownload'),
-                'expression'=> "AdminIdentity::checkAccess('webpanel.instructors.{$this->action->id}')",
-            ),           
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'getinstructors', 'exceldownload'),
+                'expression' => "AdminIdentity::checkAccess('webpanel.instructors.{$this->action->id}')",
+            ),
             array('deny', // deny all users
                 'users' => array('*'),
             ),
@@ -44,7 +44,7 @@ class InstructorsController extends Controller {
     public function actionCreate() {
         $x_aff = array();
         $model = new DmvAddInstructor;
-        
+
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $firstItem = array('0' => '- ALL -');
         $affiliates = $firstItem + $affiliates_arr;
@@ -56,7 +56,8 @@ class InstructorsController extends Controller {
 
             $model->attributes = $_POST['DmvAddInstructor'];
             $model->admin_id = Yii::app()->user->admin_id;
-            $model->created_date = date("Y-m-d",time());
+            $model->instructor_dob = ($model->instructor_dob!="")?Myclass::dateformat($model->instructor_dob):"";
+            $model->created_date = date("Y-m-d", time());
             if ($model->save()) {
                 $instructor_id = $model->instructor_id;
 
@@ -64,10 +65,10 @@ class InstructorsController extends Controller {
                 if (isset($model->Affiliate) && !empty($model->Affiliate)) {
                     $aff_array = $model->Affiliate;
                     if (in_array("0", $aff_array)) {
-                         $aff_ins = new DmvAffInstructor;
-                         $aff_ins->affiliate_id = 0;
-                         $aff_ins->instructor_id = $instructor_id;
-                         $aff_ins->save();                        
+                        $aff_ins = new DmvAffInstructor;
+                        $aff_ins->affiliate_id = 0;
+                        $aff_ins->instructor_id = $instructor_id;
+                        $aff_ins->save();
                     } else {
                         foreach ($aff_array as $aff) {
                             $aff_ins = new DmvAffInstructor;
@@ -77,9 +78,9 @@ class InstructorsController extends Controller {
                         }
                     }
                 }
-                 
+
                 Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor created successfully. Ins Id - {$model->instructor_id}", "instructors");
-                
+
                 Yii::app()->user->setFlash('success', 'Instructor Created Successfully!!!');
                 $this->redirect(array('index'));
             }
@@ -100,7 +101,7 @@ class InstructorsController extends Controller {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
-        $firstItem  = array('0' => '- ALL -');
+        $firstItem = array('0' => '- ALL -');
         $affiliates = $firstItem + $affiliates_arr;
 
         // Uncomment the following line if AJAX validation is needed
@@ -108,6 +109,7 @@ class InstructorsController extends Controller {
 
         if (isset($_POST['DmvAddInstructor'])) {
             $model->attributes = $_POST['DmvAddInstructor'];
+            $model->instructor_dob = ($model->instructor_dob!="")?Myclass::dateformat($model->instructor_dob):"";
             if ($model->save()) {
                 $instructor_id = $model->instructor_id;
                 // Save affliates for this instructor
@@ -115,14 +117,14 @@ class InstructorsController extends Controller {
 
                     $this->delete_aff_ins($instructor_id);
 
-                    $aff_array = $model->Affiliate;                    
+                    $aff_array = $model->Affiliate;
                     //if (count(array_filter($aff_array)) == count($aff_array)) {
                     if (in_array("0", $aff_array)) {
                         $aff_ins = new DmvAffInstructor;
                         $aff_ins->affiliate_id = 0;
                         $aff_ins->instructor_id = $instructor_id;
                         $aff_ins->save();
-                    } else {                        
+                    } else {
                         foreach ($aff_array as $aff) {
                             $aff_ins = new DmvAffInstructor;
                             $aff_ins->affiliate_id = $aff;
@@ -131,13 +133,13 @@ class InstructorsController extends Controller {
                         }
                     }
                 }
-                
+
                 Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor updated successfully. Ins Id - {$model->instructor_id}", "instructors");
                 Yii::app()->user->setFlash('success', 'Instructor Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
-        
+
         /* Selected affliates */
         $ins_aff_list = DmvAffInstructor::get_ins_affliates($id);
         $x_aff = array();
@@ -149,6 +151,8 @@ class InstructorsController extends Controller {
 
         if ($model->instructor_dob == "0000-00-00") {
             $model->instructor_dob = "";
+        }else{
+             $model->instructor_dob = ($model->instructor_dob!="")?Myclass::date_dispformat($model->instructor_dob):"";
         }
 
         $this->render('update', compact('model', 'affiliates', 'x_aff'));
@@ -160,11 +164,11 @@ class InstructorsController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        
+
         $this->delete_aff_ins($id);
-        
+
         $model = $this->loadModel($id);
-        Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor deleted successfully. Ins Id - {$model->instructor_id}", "instructors");        
+        Myclass::addAuditTrail("{$model->ins_first_name} - {$model->instructor_last_name} instructor deleted successfully. Ins Id - {$model->instructor_id}", "instructors");
         $model->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -173,15 +177,15 @@ class InstructorsController extends Controller {
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
         }
     }
-    
-    public function delete_aff_ins($instructor_id = null){          
+
+    public function delete_aff_ins($instructor_id = null) {
         $criteria = new CDbCriteria;
         $criteria->condition = "instructor_id= :instructor_id";
         $criteria->params = (array(':instructor_id' => $instructor_id));
         DmvAffInstructor::model()->deleteAll($criteria);
-          
+
         return true;
-    } 
+    }
 
     /**
      * Lists all models.
@@ -189,31 +193,30 @@ class InstructorsController extends Controller {
     public function actionIndex() {
         $model = new DmvAddInstructor('search');
         $firstItem = array('0' => '- ALL -');
-        $affiliates_arr = DmvAffiliateInfo::all_affliates(); 
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $affiliates = $firstItem + $affiliates_arr;
-        
+
         $instructors_arr = DmvAddInstructor::all_instructors();
         $instructors = $firstItem + $instructors_arr;
-        
-        
+
+
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['DmvAddInstructor']))
             $model->attributes = $_GET['DmvAddInstructor'];
 
-        $this->render('index', compact('model', 'affiliates','instructors'));
+        $this->render('index', compact('model', 'affiliates', 'instructors'));
     }
-    
-    public function actiongetinstructors()
-    {
-        $options = '';       
-        $afid = isset($_POST['id']) ? $_POST['id'] : '';   
-        
+
+    public function actiongetinstructors() {
+        $options = '';
+        $afid = isset($_POST['id']) ? $_POST['id'] : '';
+
         /* Using in schedules form and instrucor search */
-        $default_val = isset($_POST['form']) ? "Select Instructor" : 'ALL'; 
-        $default_option_val = isset($_POST['form']) ? "" : '0'; 
-        
-        if ($afid != '') {   
-            $options = "<option value='".$default_option_val."'>".$default_val."</option>";
+        $default_val = isset($_POST['form']) ? "Select Instructor" : 'ALL';
+        $default_option_val = isset($_POST['form']) ? "" : '0';
+
+        if ($afid != '') {
+            $options = "<option value='" . $default_option_val . "'>" . $default_val . "</option>";
             $data_instructors = DmvAddInstructor::all_instructors($afid);
             foreach ($data_instructors as $k => $info) {
                 $options .= "<option value='" . $k . "'>" . $info . "</option>";
@@ -247,28 +250,30 @@ class InstructorsController extends Controller {
             Yii::app()->end();
         }
     }
-    
-    public function actionExceldownload(){   
-        
-        $from_date ='';
-        $to_date ='';
+
+    public function actionExceldownload() {
+
+        $from_date = '';
+        $to_date = '';
         $admin_id = Yii::app()->user->getId();
-        if (isset($_GET['DmvAddInstructor'])){            
+        if (isset($_GET['DmvAddInstructor'])) {
             $from_date = $_GET['DmvAddInstructor']['start_date'];
-            $to_date = $_GET['DmvAddInstructor']['end_date'];        
-        }
+            $to_date = $_GET['DmvAddInstructor']['end_date'];
+
             $ret_result = Yii::app()->db->createCommand("SELECT instructor_id as 'Instructor ID',instructor_ss as 'Instructor ss',instructor_last_name as 'Last Name',ins_first_name as 'First Name',
                     instructor_initial as 'Initial',instructor_suffix as 'Instructor Suffix',instructor_code as 'Instructor Code',instructor_client_id as 'Client id',instructor_dob as 'Instructor DOB',
                     enabled as 'Enabled',gender as 'Gender',addr1 as 'Address1',addr2 as 'Address2',city as 'City',state as 'State',zip as 'Zip',phone as 'Phone',created_date as 'Created Date'
-                    FROM dmv_add_instructor WHERE  admin_id = '".$admin_id."' AND created_date >= '".$from_date."' AND created_date <= '".$to_date."'");
-            $file_name = 'instructors_' . date('Y-m-d').'.csv';
-                  
-            Yii::import('ext.ECSVExport');           
+                    FROM dmv_add_instructor WHERE  admin_id = '" . $admin_id . "' AND created_date >= '" . Myclass::dateformat($from_date) . "' AND created_date <= '" . Myclass::dateformat($to_date) . "'");
+            $file_name = 'instructors_' . date('Y-m-d') . '.csv';
+
+            Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
-            $content = $csv->toCSV();                   
+            $content = $csv->toCSV();
             Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
             exit();
-//            $this->redirect(array('index'));
+        }
+
+        $this->redirect(array('index'));
     }
 
 }

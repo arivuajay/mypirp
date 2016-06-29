@@ -66,6 +66,7 @@ class AffiliatesController extends Controller {
             $valid = $model->validate();
             $valid = $refmodel->validate() && $valid;
             if ($valid) {
+                $model->agency_approved_date = ($model->agency_approved_date!="")?Myclass::dateformat($model->agency_approved_date):"";
                 $model->aff_created_date = date("Y-m-d",time());
                 $model->sponsor_code = "28";
                 $model->file_type    = "QTR";
@@ -101,7 +102,7 @@ class AffiliatesController extends Controller {
 
         if (isset($_POST['DmvAffiliateInfo'])) {
             $model->attributes = $_POST['DmvAffiliateInfo'];
-
+            $model->agency_approved_date = ($model->agency_approved_date!="")?Myclass::dateformat($model->agency_approved_date):"";
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate updated successfully. Aff id - {$model->affiliate_id}", "affiliates");
                 
@@ -113,6 +114,8 @@ class AffiliatesController extends Controller {
         if($model->agency_approved_date == "0000-00-00")
         {
             $model->agency_approved_date = "";
+        }else{
+            $model->agency_approved_date = Myclass::date_dispformat($model->agency_approved_date);
         }    
 
         $this->render('update', compact('model', 'refmodel'));
@@ -187,8 +190,8 @@ class AffiliatesController extends Controller {
         $to_date ='';
         $admin_id = Yii::app()->user->getId();
         if (isset($_GET['DmvAffiliateInfo'])){            
-            $from_date = $_GET['DmvAffiliateInfo']['start_date'];
-            $to_date = $_GET['DmvAffiliateInfo']['end_date'];        
+            $from_date = Myclass::dateformat($_GET['DmvAffiliateInfo']['start_date']);
+            $to_date = Myclass::dateformat($_GET['DmvAffiliateInfo']['end_date']);                
         }
             $ret_result = Yii::app()->db->createCommand("SELECT ai.affiliate_id as 'Agency ID',ai.agency_code as 'Agency Code',ai.agency_name as 'Agency Name',ai.user_id as 'User Name',
                     ai.password as 'Password',ai.enabled as 'Enabled',ai.aff_created_date as 'Created Date',ai.sponsor_code as 'Sponsor Code',ai.file_type as 'File Type',ai.email_addr as 'Email Address',
@@ -197,14 +200,14 @@ class AffiliatesController extends Controller {
                     ai.phone_ext as 'Phone Ext',ai.fax as 'Fax',ai.owner_last_name as 'Owner Last Name',ai.owner_first_name as 'Owner First Name',ai.owner_initial as 'Owner Initial',ai.owner_suffix as 'Owner Suffix',ai.agency_approved_date as 'Agency Approved Date',
                     ac.commission_id as 'Commission Id',ac.student_fee as 'student Fee',ac.aff_book_fee as 'Book Fee',ac.referral_code as 'Referral Code',ac.referral_amt as 'Referral Amount'
                     FROM dmv_affiliate_info as ai, dmv_affiliate_commission as ac WHERE  ai.affiliate_id = ac.affiliate_id AND ai.admin_id = '".$admin_id."' AND ai.aff_created_date >= '".$from_date."' AND ai.aff_created_date <= '".$to_date."'");
-            $file_name = 'affiliates_' . date('Y-m-d').'.csv';
+            
+            $file_name = 'affiliates_' . date('m-d-Y').'.csv';
                   
             Yii::import('ext.ECSVExport');           
             $csv = new ECSVExport($ret_result);
             $content = $csv->toCSV();                   
             Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
             exit();
-//            $this->redirect(array('index'));
         }
 
 }

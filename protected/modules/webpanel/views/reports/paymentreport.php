@@ -6,26 +6,20 @@ $this->title = 'Payment Report';
 $this->breadcrumbs = array(
     'Payment Report',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
 
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
-?>
-<?php $this->renderPartial('_search_paymentreport', compact('model','affiliates')); ?>
-<?php
+$this->renderPartial('_search_paymentreport', compact('model', 'affiliates'));
+
 if ($model->startdate != "" || $model->enddate != "") {
-    $startdate = date("m/d/Y", strtotime($model->startdate));
-    $enddate = date("m/d/Y", strtotime($model->enddate));
-
+    $startdate = Myclass::date_dispformat($model->startdate);
+    $enddate = Myclass::date_dispformat($model->enddate);
     $totalcount = $model->search()->getTotalItemCount();
-    ?>
-    <?php if ($totalcount > 0) { ?>
+
+    if ($totalcount > 0) {
+        ?>
         <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>    
         <div class="col-lg-12 col-md-12">&nbsp;</div>
     <?php } ?>  
-        <div id="Getprintval">
+    <div id="Getprintval">
         <div class="col-lg-12 col-md-12">
             <div class="row">
                 <?php
@@ -33,9 +27,17 @@ if ($model->startdate != "" || $model->enddate != "") {
                     array(
                         'header' => 'Agency Name',
                         'name' => 'dmvClasses.Affliate.agency_name',
-                        'value' =>$data->dmvClasses->Affliate->agency_name,
+                        'value' => $data->dmvClasses->Affliate->agency_name,
                     ),
-                    'payment_date',
+                    array(
+                        'name' => 'payment_date',
+                        'value' => function($data) {
+                            if (true == strtotime($data->payment_date))
+                                echo Myclass::date_dispformat($data->payment_date);
+                            else
+                                echo "-";
+                        }
+                    ),
                     'total_students',
                     'payment_amount'
                 );
@@ -46,7 +48,7 @@ if ($model->startdate != "" || $model->enddate != "") {
                     'dataProvider' => $model->search(),
                     'extendedSummary' => array(
                         'columns' => array(
-                            'payment_amount' => array('label' => 'Total Amount Received', 'class' => 'TbSumOperation')
+                            'payment_amount' => array('label' => 'Total amount received in this page', 'class' => 'TbSumOperation')
                         )
                     ),
                     'responsiveTable' => true,
@@ -61,14 +63,11 @@ if ($model->startdate != "" || $model->enddate != "") {
                 ?>
             </div>
         </div>  
-      </div>       
+    </div>       
 <?php } ?>
 <?php
 $js = <<< EOD
 $(document).ready(function(){
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
         
    $("#print_res").click(function() {
         var startdate = $("#Payment_startdate").val();
@@ -95,12 +94,12 @@ $('.date').datepicker({ format: 'yyyy-mm-dd' });
         
     $("#printdiv").click(function() {   
         var innerContents = document.getElementById("Getprintval").innerHTML;
-        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
         popupWinindow.document.open();
         popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
     });      
     
 });
 EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
+Yii::app()->clientScript->registerScript('_form_preport', $js);
 ?>

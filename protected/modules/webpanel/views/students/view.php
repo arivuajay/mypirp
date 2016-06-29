@@ -2,74 +2,55 @@
 /* @var $this StudentsController */
 /* @var $model Students */
 
-$this->title='View #'.$model->student_id;
-$this->breadcrumbs=array(
-	'Students'=>array('index'),
-	'View '.'Students',
+$this->title = 'View #' . $model->first_name;
+$this->breadcrumbs = array(
+    'Students' => array('index'),
+    'View ' . 'Student',
 );
 ?>
-<div class="user-view">
-    
-    <p>
-        <?php        $this->widget(
-                'booster.widgets.TbButton', array(
-                    'label' => 'Update',
-                    'url' => array('update', 'id' =>  $model->student_id ),
-                    'buttonType' => 'link',
-                    'context' => 'primary',
-//                    'visible' => UserIdentity::checkAccess(Yii::app()->user->name)
-                )
-        );
-        echo "&nbsp;&nbsp;";
-        $this->widget(
-                'application.components.MyTbButton', array(
-                    'label' => 'Delete',
-                    'url' => array('delete', 'id' =>  $model->student_id ),
-                    'buttonType' => 'link',
-                    'context' => 'danger',
-                    'htmlOptions' => array('confirm' => 'Are you sure you want to delete this item?'),
-                    'visible' => UserIdentity::checkAccess(Yii::app()->user->name)
-                )
-        );
-        echo "&nbsp;&nbsp;";
-        $this->widget(
-                'booster.widgets.TbButton', array(
-            'label' => 'Download',
-            'url' => array('view', 'id' =>  $model->student_id , 'export' => 'PDF'),
-            'buttonType' => 'link',
-            'context' => 'warning',
-//                    'visible' => UserIdentity::checkAccess(Yii::app()->user->name)
-                )
-        );
+<div class="col-lg-8">
+    <div class="user-view">
+        <?php
+        $this->widget('zii.widgets.CDetailView', array(
+            'data' => $model,
+            'htmlOptions' => array('class' => 'table table-striped table-bordered'),
+            'attributes' => array(
+                'first_name',
+                'middle_name',
+                'last_name',
+                'stud_suffix',
+                'address1',
+                'address2',
+                'city',
+                'state',
+                'zip',
+                'phone',
+                'email',
+                'gender',
+                array(
+                    'name' => 'dob',
+                    'type' => 'raw',
+                    'value' => ($model->dob != "0000-00-00") ? Myclass::date_dispformat($model->dob) : "-"                    
+                ),
+                'licence_number',
+                'notes',
+                array(
+                    'name' => 'course_completion_date',
+                    'type' => 'raw',
+                    'value' => ($model->course_completion_date != "0000-00-00") ? Myclass::date_dispformat($model->course_completion_date) : "-"                    
+                ),
+            ),
+        ));
         ?>
-    </p>
-    
-    <?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-        'htmlOptions' => array('class'=>'table table-striped table-bordered'),
-	'attributes'=>array(
-		'student_id',
-		'affiliate_id',
-		'clas_id',
-		'first_name',
-		'middle_name',
-		'last_name',
-		'stud_suffix',
-		'address1',
-		'address2',
-		'city',
-		'state',
-		'zip',
-		'phone',
-		'email',
-		'gender',
-		'dob',
-		'licence_number',
-		'notes',
-		'course_completion_date',
-	),
-)); ?>
+    </div>
 </div>
-
-
-
+<div class="col-lg-12 col-md-12">
+    <div class="row">
+        <?php
+        if (Yii::app()->request->urlReferrer == "")
+            echo CHtml::link('Back', array('students/index'), array('class' => 'btn btn-primary'));
+        else
+            echo CHtml::link('Back', Yii::app()->request->urlReferrer, array('class' => 'btn btn-primary'));
+        ?>
+    </div>
+</div>

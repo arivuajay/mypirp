@@ -61,6 +61,7 @@ class MessagesController extends Controller {
         if (isset($_POST['DmvPostMessage'])) {
             $model->attributes = $_POST['DmvPostMessage'];
             $model->admin_id = Yii::app()->user->admin_id;
+            $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->message_title} message created successfully. Message id - {$model->message_id}", "messages");
                 
@@ -88,6 +89,7 @@ class MessagesController extends Controller {
         if (isset($_POST['DmvPostMessage'])) {
             $model->attributes = $_POST['DmvPostMessage'];
             $model->admin_id = Yii::app()->user->admin_id;
+            $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->message_title} message updated successfully. Message id - {$model->message_id}", "messages");
                
@@ -95,6 +97,13 @@ class MessagesController extends Controller {
                 $this->redirect(array('index'));
             }
         }
+        
+        if($model->posted_date == "0000-00-00")
+        {
+            $model->posted_date = "";
+        }else{
+            $model->posted_date = Myclass::date_dispformat($model->posted_date);
+        } 
 
         $this->render('update', array(
             'model' => $model,
@@ -130,20 +139,6 @@ class MessagesController extends Controller {
             $model->attributes = $_GET['DmvPostMessage'];
 
         $this->render('index', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new DmvPostMessage('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['DmvPostMessage']))
-            $model->attributes = $_GET['DmvPostMessage'];
-
-        $this->render('admin', array(
             'model' => $model,
         ));
     }

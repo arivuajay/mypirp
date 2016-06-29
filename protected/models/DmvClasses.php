@@ -138,7 +138,9 @@ class DmvClasses extends CActiveRecord {
      */
     public function search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
-
+        $datamod = array();
+        $datamod = $_GET; 
+        
         $criteria = new CDbCriteria;
         
         $default_order = 'clas_id DESC';
@@ -156,7 +158,9 @@ class DmvClasses extends CActiveRecord {
         $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
         
         if($this->agencycode!="")
-        $criteria->addCondition("Affliate.agency_code = '".$this->agencycode."'");    
+        {    
+            $criteria->addCondition("Affliate.agency_code = '".$this->agencycode."'");             
+        }    
         
         if($this->agencyname!="")
         $criteria->compare('Affliate.agency_name', $this->agencyname, true);
@@ -167,12 +171,16 @@ class DmvClasses extends CActiveRecord {
         if($this->start_date!="" && $this->end_date!="")
         {    
             $criteria->addCondition('clas_date >= :startDate AND clas_date <= :endDate');
-            $criteria->params = array(':startDate' => $this->start_date, ':endDate' => $this->end_date);
+            $criteria->params = array(':startDate' => Myclass::dateformat($this->start_date), ':endDate' => Myclass::dateformat($this->end_date));
+            
+            $datamod['DmvClasses']['start_date'] = Myclass::dateformat($this->start_date);
+            $datamod['DmvClasses']['end_date'] = Myclass::dateformat($this->end_date);
         }    
         
         $criteria->with = array("Affliate",'Instructor');
         $criteria->together = true;
-
+        
+       
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => $default_order,
@@ -180,6 +188,8 @@ class DmvClasses extends CActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                'params' => $datamod
+                
             )
         ));
     }

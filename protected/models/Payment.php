@@ -126,13 +126,18 @@ class Payment extends CActiveRecord {
      * based on the search/filter conditions.
      */
     public function search() {
+        $datamod = array();
+        $datamod = $_GET;
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
         $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
         
         if ($this->start_date != "" && $this->end_date != "") {
-            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->start_date . "' AND dmvClasses.clas_date <= '" . $this->end_date . "'");
+            $datamod['Payment']['start_date'] = Myclass::dateformat($this->start_date);
+            $datamod['Payment']['end_date'] = Myclass::dateformat($this->end_date);
+            
+            $criteria->addCondition("dmvClasses.clas_date >= '" . Myclass::dateformat($this->start_date) . "' AND dmvClasses.clas_date <= '" . Myclass::dateformat($this->end_date) . "'");
         }
         
         if ($this->affcode != "") {
@@ -141,7 +146,11 @@ class Payment extends CActiveRecord {
         
         /* For payment report */
         if ($this->startdate != "" && $this->enddate != "") {
-            $criteria->addCondition("payment_date >= '" . $this->startdate . "' AND payment_date <= '" . $this->enddate . "'");
+            
+            $datamod['Payment']['startdate'] = Myclass::dateformat($this->startdate);
+            $datamod['Payment']['enddate'] = Myclass::dateformat($this->enddate);
+            
+            $criteria->addCondition("payment_date >= '" . Myclass::dateformat($this->startdate) . "' AND payment_date <= '" . Myclass::dateformat($this->enddate) . "'");
         }
         
         if($this->affiliatesid!=""){
@@ -158,26 +167,32 @@ class Payment extends CActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                'params' => $datamod
             )
         ));
     }
     
      public function print_certificate_search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
-
+        $datamod = array();
+        $datamod = $_GET;
+        
         $criteria = new CDbCriteria;
         $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
         
         $criteria->addCondition("payment_complete='Y' and print_certificate='Y'");
         
         if ($this->start_date != "" && $this->end_date != "") {
-            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->start_date . "' AND dmvClasses.clas_date <= '" . $this->end_date . "'");
+            $datamod['Payment']['start_date'] = Myclass::dateformat($this->start_date);
+            $datamod['Payment']['end_date'] = Myclass::dateformat($this->end_date);
+            
+            $criteria->addCondition("dmvClasses.clas_date >= '" .  Myclass::dateformat($this->start_date) . "' AND dmvClasses.clas_date <= '" . Myclass::dateformat($this->end_date) . "'");
         }
         
         if ($this->affcode != "") {
             $criteria->addCondition("Affliate.agency_code='" . $this->affcode . "'");
         }
-
+        
         $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
         $criteria->together = true;
 
@@ -188,12 +203,15 @@ class Payment extends CActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                 'params' => $datamod
             )
         ));
     }
     
     public function referal_report_search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
+        $datamod = array();
+        $datamod = $_GET;
 
         $criteria = new CDbCriteria;
         $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
@@ -201,7 +219,10 @@ class Payment extends CActiveRecord {
          $criteria->addCondition("payment_amount > 0");
          
         if ($this->startdate != "" && $this->enddate != "") {
-            $criteria->addCondition("payment_date >= '" . $this->startdate . "' AND payment_date <= '" . $this->enddate . "'");
+            $datamod['Payment']['startdate'] = Myclass::dateformat($this->startdate);
+            $datamod['Payment']['enddate'] = Myclass::dateformat($this->enddate);
+            
+            $criteria->addCondition("payment_date >= '" . Myclass::dateformat($this->startdate) . "' AND payment_date <= '" . Myclass::dateformat($this->enddate) . "'");
         }  
         
         if ($this->refcode != "" ) {
@@ -218,6 +239,7 @@ class Payment extends CActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                 'params' => $datamod
             )
         ));
     }

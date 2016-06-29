@@ -75,10 +75,10 @@ if (!empty($std_ids)) {
                 $std_place = trim($std_place);
             }
 
-            $dob = ($sinfo->dob != "0000-00-00") ? date("m/d/Y", strtotime($sinfo->dob)) : "-";
+            $dob = ($sinfo->dob != "0000-00-00") ? Myclass::date_dispformat($sinfo->dob) : "-";
             $gender = ($sinfo->gender == "F") ? "Female" : "Male";
             $licence_number = $sinfo->licence_number;
-            $clas_date = ($sinfo->course_completion_date != "0000-00-00") ? date("m/d/Y", strtotime($sinfo->course_completion_date)) : "-";
+            $clas_date = ($sinfo->course_completion_date != "0000-00-00") ? Myclass::date_dispformat($sinfo->course_completion_date) : "-";
             ?>
             <div class="certificate-cont">
                 <table width="100" border="0" cellpadding="0" cellspacing="0" class="cert-table">

@@ -53,6 +53,7 @@ class PostdocumentController extends Controller {
      */
     public function actionCreate() {
         $model = new PostDocument;
+        $model->unsetAttributes();  
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -79,7 +80,7 @@ class PostdocumentController extends Controller {
                 }
 
                 $model->admin_id = Yii::app()->user->admin_id;
-
+                $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
                 if ($model->save()) {
                     Myclass::addAuditTrail("{$model->doc_title} document created successfully. Doc id - {$model->id}", "postdocument");
                     
@@ -87,10 +88,6 @@ class PostdocumentController extends Controller {
                     $this->redirect(array('index'));
                 }
             }
-        }
-
-        if ($model->posted_date == "0000-00-00") {
-            $model->posted_date = "";
         }
 
         $this->render('create', array(
@@ -132,6 +129,7 @@ class PostdocumentController extends Controller {
                 }
 
                 $model->admin_id = Yii::app()->user->admin_id;
+                $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
                 if ($model->save()) {
                     Myclass::addAuditTrail("{$model->doc_title} document updated successfully. Doc id - {$model->id}", "postdocument");
                     
@@ -140,6 +138,13 @@ class PostdocumentController extends Controller {
                 }
             }
         }
+        
+        if($model->posted_date == "0000-00-00")
+        {
+            $model->posted_date = "";
+        }else{
+            $model->posted_date = Myclass::date_dispformat($model->posted_date);
+        } 
 
         $this->render('update', array(
             'model' => $model,

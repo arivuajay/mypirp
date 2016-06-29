@@ -6,15 +6,7 @@ $this->title = 'Print Certificates';
 $this->breadcrumbs = array(
     'Print Certificates',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
-
-
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
 <div class="col-lg-12 col-md-12">
@@ -79,14 +71,3 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         ?>
     </div>
 </div>
-<?php
-$js = <<< EOD
-$(document).ready(function(){
-
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' });
-
-});
-EOD;
-Yii::app()->clientScript->registerScript('_form_pc', $js);
-?>

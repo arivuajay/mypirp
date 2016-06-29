@@ -68,7 +68,7 @@ class BookordersController extends Controller {
             $model->client_type = ($model->book_instructor == 1) ? "I" : "A";
             $model->book_instructor = ($model->book_instructor == 1) ? "Y" : "N";
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Book order created  successfully. Book id - {$model->book_id} ", "bookorders");
                 Yii::app()->user->setFlash('success', 'BookOrders Created Successfully!!!');
@@ -93,12 +93,15 @@ class BookordersController extends Controller {
         if (isset($_POST['BookOrders'])) {
             $model->attributes = $_POST['BookOrders'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Book order updated  successfully. Book id - {$model->book_id} ", "bookorders");
                 Yii::app()->user->setFlash('success', 'BookOrders Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
+        
+         $model->payment_date = Myclass::date_dispformat($model->payment_date);
 
         $this->render('update', array(
             'model' => $model,

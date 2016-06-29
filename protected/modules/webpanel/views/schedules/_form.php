@@ -2,16 +2,8 @@
 /* @var $this SchedulesController */
 /* @var $model DmvClasses */
 /* @var $form CActiveForm */
-
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 $country = Myclass::getallcountries();
 ?>
-
 <div class="row">
     <div class="col-lg-12 col-xs-12">
         <div class="box box-primary">
@@ -53,7 +45,7 @@ $country = Myclass::getallcountries();
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'clas_date'); ?>
                     </div>
@@ -80,7 +72,7 @@ $country = Myclass::getallcountries();
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'date2', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'date2', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'date2'); ?>
                     </div>                    
@@ -159,7 +151,7 @@ $country = Myclass::getallcountries();
                             <div class="col-sm-5">
                                 <div class="input-group">
                                     <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                    <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date">
+                                    <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date" readonly="readonly">
                                 </div> 
                             </div>
                         </div>
@@ -182,13 +174,8 @@ $country = Myclass::getallcountries();
 </div>
 <?php
 $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
-?>
-<script type="text/javascript">
+$js = <<< EOD
     $(document).ready(function () {
-
-        $('.year').datepicker({dateFormat: 'yyyy'});
-        $('.date').datepicker({format: 'yyyy-mm-dd'});
-
         //$.fn.dataTableExt.sErrMode = 'throw';   
         $("#DmvClasses_affiliate_id").change(function () {
             var id = $(this).val();
@@ -196,7 +183,7 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
 
             $.ajax({
                 type: "POST",
-                url: '<?php echo $ajaxInstructorsUrl; ?>',
+                url: '{$ajaxInstructorsUrl}',
                 data: dataString,
                 cache: false,
                 success: function (html) {
@@ -205,4 +192,6 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
             });
         });
     });
-</script>
+EOD;
+Yii::app()->clientScript->registerScript('_form_schedule', $js);
+?>

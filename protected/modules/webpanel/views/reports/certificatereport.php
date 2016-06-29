@@ -6,32 +6,12 @@ $this->title = 'Certificate Report';
 $this->breadcrumbs = array(
     'Certificate Report',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <?php $this->renderPartial('_search_certificate', compact('model')); ?>
 <?php 
 if ($model->startdate != "" || $model->enddate != "") {
-    $startdate = date("m/d/Y", strtotime($model->startdate));
-    $enddate = date("m/d/Y", strtotime($model->enddate));
-    $admin_id = Yii::app()->user->getId();
-    $criteria = new CDbCriteria();
-//       $criteria->condition = 'issue_date >= :startdate AND issue_date <= :enddate';
-        $criteria->condition = 't2.admin_id = :admin_id AND t.issue_date BETWEEN :startdate AND  :enddate';
-       $criteria->params = array (':admin_id'=>$admin_id,':startdate'=>$model->startdate,':enddate'=>$model->enddate);
-       $criteria->with = array("dmvStudents","dmvStudents.dmvAffiliateInfo","dmvStudents.dmvAffiliateInfo.affiliate_instructor","dmvStudents.dmvAffiliateInfo.affiliate_instructor.Instructor");
-            $criteria->together = true;
-            $criteria->join = ' INNER JOIN dmv_students  t1 ON t1.student_id=t.student_id';
-            $criteria->join .= '  INNER JOIN dmv_affiliate_info  t2 ON t1.affiliate_id = t2.affiliate_id';
-            $criteria->join .= '  INNER JOIN dmv_aff_instructor  t3 ON t1.affiliate_id = t3.affiliate_id';
-            $criteria->join .= '  INNER JOIN dmv_add_instructor  t4 ON t3.instructor_id = t4.instructor_id';
-        $criteria->group='dmvStudents.student_id';
-        $item_count = PrintCertificate::model()->count($criteria);
     
+    $item_count = $model->printCertificatesReport($model->startdate,$model->enddate)->getTotalItemCount();    
     ?>
     <?php if ($item_count > 0) { ?>
         <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>    
@@ -42,8 +22,8 @@ if ($model->startdate != "" || $model->enddate != "") {
             <div class="row">
                 
                 <?php
-                
-                
+                $startdate_disp = Myclass::date_dispformat($model->startdate);
+                $enddate_disp = Myclass::date_dispformat($model->enddate);
 
                 $gridColumns = array(
                     array(
@@ -86,7 +66,7 @@ if ($model->startdate != "" || $model->enddate != "") {
                     . "<div class='panel-heading'>"
                     . "<div class='pull-right'>{summary}</div>"
                     . "<h3 class='panel-title'>Certificate Report</h3></div>"
-                    . "<div class='panel-body'><p>Total Number of Certificate From {$startdate} until {$enddate} is {$item_count} {extendedSummary}</p>  {items}{pager}</div></div>",
+                    . "<div class='panel-body'><p>Total Number of Certificate From {$startdate_disp} until {$enddate_disp} is {$item_count} {extendedSummary}</p>  {items}{pager}</div></div>",
                     'columns' => $gridColumns
                         )
                 );
@@ -97,10 +77,7 @@ if ($model->startdate != "" || $model->enddate != "") {
 <?php } ?>
 <?php
 $js = <<< EOD
-$(document).ready(function(){
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
+$(document).ready(function(){        
         
    $("#print_res").click(function() {
         var startdate = $("#PrintCertificate_startdate").val();
@@ -127,12 +104,12 @@ $('.date').datepicker({ format: 'yyyy-mm-dd' });
         
     $("#printdiv").click(function() {   
         var innerContents = document.getElementById("Getprintval").innerHTML;
-        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
         popupWinindow.document.open();
         popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
     });      
     
 });
 EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
+Yii::app()->clientScript->registerScript('_form_cert_report', $js);
 ?>

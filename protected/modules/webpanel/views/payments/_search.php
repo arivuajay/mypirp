@@ -35,7 +35,7 @@
                             <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div>   
                         </div>
                     </div> 
@@ -45,7 +45,7 @@
                             <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div> 
                         </div>
                     </div> 

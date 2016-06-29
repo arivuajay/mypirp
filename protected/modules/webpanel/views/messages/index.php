@@ -28,7 +28,12 @@ $this->breadcrumbs = array(
                 'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
             ),
             'message_title',
-            'posted_date',
+            array(
+                'name' => 'posted_date',
+                'value' => function($data) {
+                    echo Myclass::date_dispformat($data->posted_date);
+                },
+            ),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',

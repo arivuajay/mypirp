@@ -6,15 +6,6 @@ $this->title = 'Print Certificates Pending';
 $this->breadcrumbs = array(
     'Print Certificates Pending',
 );
-
-
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
-echo  $model->pnewclassid;
 ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search_pendingcerts', compact('model')); ?>
@@ -57,10 +48,7 @@ echo  $model->pnewclassid;
 <?php
 $js = <<< EOD
 $(document).ready(function(){         
-  
-    $('.year').datepicker({ dateFormat: 'yyyy' });
-    $('.date').datepicker({ format: 'yyyy-mm-dd' });
-      
+        
     $("#pcertificate").click(function(){
         var classid = $("#DmvClasses_pnewclassid").val();
         $("#pnewclassid_error").hide();

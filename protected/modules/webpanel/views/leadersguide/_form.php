@@ -2,17 +2,8 @@
 /* @var $this LeadersguideController */
 /* @var $model LeadersGuide */
 /* @var $form CActiveForm */
-
-
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 $cardtypes = Myclass::card_types();
 unset($cardtypes["MO"]);
-
 $instructors = array();
 ?>
 
@@ -76,7 +67,7 @@ $instructors = array();
                     <div class="col-sm-5">
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'payment_date'); ?>
                     </div>
@@ -172,10 +163,7 @@ $js = <<< EOD
 $(document).ready(function(){
     var payment_type  = '{$payment_type}';
     var guide_instructor = '{$guide_instructor}';
-    
-    $('.year').datepicker({ dateFormat: 'yyyy' });
-    $('.date').datepicker({ format: 'yyyy-mm-dd' });     
-   
+  
     if(payment_type=="CQ")
       $("#chequenumber").show();
              

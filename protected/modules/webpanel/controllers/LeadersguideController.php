@@ -67,7 +67,7 @@ class LeadersguideController extends Controller {
             $model->client_type = ($model->guide_instructor == 1) ? "I" : "A";
             $model->guide_instructor = ($model->guide_instructor == 1) ? "Y" : "N";
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Leaders guide created successfully. Guide id - {$model->guide_id}", "leadersguide");
                 Yii::app()->user->setFlash('success', 'LeadersGuide Created Successfully!!!');
@@ -92,13 +92,16 @@ class LeadersguideController extends Controller {
         if (isset($_POST['LeadersGuide'])) {
             $model->attributes = $_POST['LeadersGuide'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Leaders guide updated successfully. Guide id - {$model->guide_id}", "leadersguide");
                 Yii::app()->user->setFlash('success', 'LeadersGuide Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
-
+        
+        $model->payment_date = Myclass::date_dispformat($model->payment_date);
+         
         $this->render('update', array(
             'model' => $model,
         ));

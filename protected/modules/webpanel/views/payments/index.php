@@ -54,7 +54,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'name' => 'payment_date',
                 'value' => function($data) {
                     if (true == strtotime($data->payment_date))
-                        echo date("m/d/Y", strtotime($data->payment_date));
+                        echo Myclass::date_dispformat($data->payment_date);
                     else
                         echo "-";
                 }

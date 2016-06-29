@@ -6,14 +6,6 @@ $this->title = 'Instructors Management';
 $this->breadcrumbs = array(
     'Instructors',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerScriptFile($themeUrl . '/js/datatables/jquery.dataTables.js', $cs_pos_end);
-//$cs->registerScriptFile($themeUrl . '/js/datatables/dataTables.bootstrap.js', $cs_pos_end);
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 
 <div class="col-lg-12 col-md-12">
@@ -72,17 +64,18 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 
 <?php
 $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
-?>
-<script type="text/javascript">
+
+$js = <<< EOD
     $(document).ready(function () {
         //$.fn.dataTableExt.sErrMode = 'throw';
+        
         $("#DmvAddInstructor_Affiliate").change(function () {
             var id = $(this).val();
             var dataString = 'id=' + id;
 
             $.ajax({
                 type: "POST",
-                url: '<?php echo $ajaxInstructorsUrl; ?>',
+                url: '{$ajaxInstructorsUrl}',
                 data: dataString,
                 cache: false,
                 success: function (html) {
@@ -97,6 +90,7 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
                 $("#startdate_error").hide();
             }
         });
+                
         $("#DmvAddInstructor_end_date").change(function () {
             if ($(this).val() != '') {
                 $("#enddate_error").hide();
@@ -125,9 +119,7 @@ $ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructor
             return true;
 
         });
-
-        $('.year').datepicker({dateFormat: 'yyyy'});
-        $('.date').datepicker({format: 'yyyy-mm-dd'});
-
     });
-</script>
+EOD;
+Yii::app()->clientScript->registerScript('_index_instructor', $js);
+?>

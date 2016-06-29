@@ -94,7 +94,7 @@ class ReportsController extends Controller {
                 WHERE DFI.admin_id = '" . $admin_id . "' AND (DFI.aff_created_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMAI.instructor_id = DMI.instructor_id AND DFI.country_code = DMC.id AND DFI.affiliate_id = DMAI.affiliate_id");
 
 
-            $file_name = $quarterlyannual . date('Y-m-d') . '.csv';
+            $file_name = $quarterlyannual . date('m-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
@@ -110,8 +110,8 @@ class ReportsController extends Controller {
         $to_date = '';
         $admin_id = Yii::app()->user->getId();
         if (isset($_GET['DmvAddInstructor'])) {
-            $from_date = $_GET['DmvAddInstructor']['start_date'];
-            $to_date = $_GET['DmvAddInstructor']['end_date'];
+            $from_date = Myclass::dateformat($_GET['DmvAddInstructor']['start_date']);
+            $to_date = Myclass::dateformat($_GET['DmvAddInstructor']['end_date']);
 
             $ret_result = Yii::app()->db->createCommand("SELECT
                 DFI.agency_code AS 'Agency Code',DFI.agency_name AS 'Delivery Agency Name',DMI.ins_first_name AS 'Instructor First Name',DMI.instructor_last_name AS 'Instructor Last Name',
@@ -123,7 +123,7 @@ class ReportsController extends Controller {
                 WHERE DFI.admin_id = '" . $admin_id . "' AND (DMCL.clas_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMCL.instructor_id = DMI.instructor_id AND DMCL.country = DMC.id AND DFI.affiliate_id = DMCL.affiliate_id ORDER BY DFI.agency_code");
 
 
-            $file_name = 'montylyreports' . date('Y-m-d') . '.csv';
+            $file_name = 'montylyreports' . date('m-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
@@ -139,8 +139,8 @@ class ReportsController extends Controller {
         $to_date = '';
         $admin_id = Yii::app()->user->getId();
         if (isset($_GET['Students'])) {
-            $from_date = $_GET['Students']['start_date'];
-            $to_date = $_GET['Students']['end_date'];
+            $from_date = Myclass::dateformat($_GET['Students']['start_date']);
+            $to_date = Myclass::dateformat($_GET['Students']['end_date']);
 
             $ret_result = Yii::app()->db->createCommand("SELECT CONCAT(DMS.last_name,' ',DMS.first_name,' ',DMS.middle_name) as 'Student Name',CONCAT(DATE_FORMAT(DMS.dob,'%m%d%y'),'',DMS.gender) as 'DOB',
                 CONCAT(DATE_FORMAT(DMS.course_completion_date,'%y%m%d'),'28',DFI.agency_code,'00') as 'Completion Date',CONCAT(DMS.licence_number,'C') as 'Licence Number'
@@ -148,7 +148,7 @@ class ReportsController extends Controller {
             WHERE DFI.admin_id = '" . $admin_id . "' AND (DMS.course_completion_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMS.affiliate_id = DFI.affiliate_id AND DMS.clas_id = DMC.clas_id  AND DMC.instructor_id = DMI.instructor_id  ORDER BY DMS.student_id");
 
 
-            $file_name = 'studentcompletionreport' . date('Y-m-d') . '.csv';
+            $file_name = 'studentcompletionreport' . date('m-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
@@ -163,7 +163,7 @@ class ReportsController extends Controller {
         $ret_result = Yii::app()->db->createCommand("SELECT DMS.first_name as 'First Name', DMS.last_name as 'Last Name', DMS.zip as 'Zip', count(DMS.student_id) as 'No of Duplicates' 
                FROM dmv_students DMS, dmv_affiliate_info   DFI WHERE DFI.admin_id = '" . $admin_id . "' AND DFI.affiliate_id = DMS.affiliate_id  GROUP BY DMS.first_name, DMS.last_name, DMS.zip HAVING  count(DMS.student_id)>1 order by DMS.first_name");
 
-        $file_name = 'duplicates' . date('Y-m-d') . '.csv';
+        $file_name = 'duplicates' . date('m-d-Y') . '.csv';
 
         Yii::import('ext.ECSVExport');
         $csv = new ECSVExport($ret_result);
@@ -180,8 +180,9 @@ class ReportsController extends Controller {
         if (isset($_GET['Students'])) {
             $model->attributes = $_GET['Students'];
 
-            $startdate = $model->startdate;
-            $enddate = $model->enddate;
+            $startdate = Myclass::dateformat($model->startdate);
+            $enddate = Myclass::dateformat($model->enddate);
+
             $affiliate_id = $model->affiliate_id;
 
             $criteria = new CDbCriteria;
@@ -194,7 +195,7 @@ class ReportsController extends Controller {
                 $criteria->addCondition('affiliate_id = ' . $affiliate_id);
 
             $std_infos = Students::model()->findAll($criteria);
-
+           
             if (!empty($std_infos)) {
                 $html2pdf = Yii::app()->ePdf->HTML2PDF();
                 $html2pdf->WriteHTML($this->renderPartial('printlabel_view', array("std_infos" => $std_infos), true));

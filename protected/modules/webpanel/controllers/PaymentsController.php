@@ -66,6 +66,7 @@ class PaymentsController extends Controller {
         if (isset($_POST['Payment'])) {
 
             $model->attributes = $_POST['Payment'];
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
             if ($model->save()) {
                 Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
@@ -123,12 +124,15 @@ class PaymentsController extends Controller {
         if (isset($_POST['Payment'])) {
             $model->attributes = $_POST['Payment'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
+            $model->payment_date = Myclass::dateformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Payment updated successfully. Class id - {$model->class_id} ", "payments");
                 Yii::app()->user->setFlash('success', 'Payment Updated Successfully!!!');
                 $this->redirect(array('index'));
             }
         }
+        
+        $model->payment_date = Myclass::date_dispformat($model->payment_date);
 
         $this->render('update', array(
             'model' => $model,
@@ -166,20 +170,6 @@ class PaymentsController extends Controller {
             $model->attributes = $_GET['Payment'];
 
         $this->render('index', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new Payment('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Payment']))
-            $model->attributes = $_GET['Payment'];
-
-        $this->render('admin', array(
             'model' => $model,
         ));
     }

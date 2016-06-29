@@ -17,10 +17,10 @@
         $std_add_info = implode(",", $final_address);
 
         $std_city[] = $infos->city;
-        $std_city[] = $infos->state;
-        $std_city[] = $infos->zip;
+        $std_city[] = $infos->state;        
         $final_city = array_filter($std_city);
         $std_cty_info = implode(",", $final_city);
+        $std_cty_info = $std_cty_info. " ".$infos->zip;
 
         if ($i == 1 || $i == 3)
             $style = "width: 33%";

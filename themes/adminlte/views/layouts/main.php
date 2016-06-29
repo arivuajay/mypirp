@@ -33,6 +33,14 @@
         $cs->registerScriptFile($themeUrl . '/js/dropdown.js', $cs_pos_end);
         $cs->registerScriptFile($themeUrl . '/js/iCheck/icheck.js', $cs_pos_end);
         $cs->registerScriptFile($themeUrl . '/js/app.js', $cs_pos_end);
+        $cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
+        $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
+        $js = <<< EOD
+                
+        jQuery('.year').datepicker({dateFormat: 'yyyy'});
+        jQuery('.date').datepicker({format: 'mm/dd/yyyy'});   
+EOD;
+        $cs->registerScript('_additional_s', $js);
         ?>
     </body>
 </html>

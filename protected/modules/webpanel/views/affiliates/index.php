@@ -5,12 +5,6 @@ $this->title = 'Affiliates Management';
 $this->breadcrumbs = array(
     'Affiliate Infos',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
@@ -76,45 +70,40 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 </div>
 <?php
 $js = <<< EOD
-$(document).ready(function(){
-        
-$("#DmvAffiliateInfo_start_date").change(function() {
-    if($(this).val() != ''){
-        $("#startdate_error").hide();
-    } 
-}); 
-$("#DmvAffiliateInfo_end_date").change(function() {
-    if($(this).val() != ''){
-        $("#enddate_error").hide();
-    } 
-});
+$(document).ready(function(){        
+    $("#DmvAffiliateInfo_start_date").change(function() {
+        if($(this).val() != ''){
+            $("#startdate_error").hide();
+        } 
+    }); 
+    $("#DmvAffiliateInfo_end_date").change(function() {
+        if($(this).val() != ''){
+            $("#enddate_error").hide();
+        } 
+    });
 
-$("#export_csv").click(function() {
-    var startdate = $("#DmvAffiliateInfo_start_date").val();
-    var enddate = $("#DmvAffiliateInfo_end_date").val();
-        
-    $("#startdate_error").hide();    
-    $("#enddate_error").hide();
-   
-   if(startdate=="")
-    {
-        $("#startdate_error").show();
-        return false;
-    }
-    
-   if(enddate=="")
-    {
-        $("#enddate_error").show();
-        return false;
-    }
-        
-    return true;
-        
-}); 
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+    $("#export_csv").click(function() {
+        var startdate = $("#DmvAffiliateInfo_start_date").val();
+        var enddate = $("#DmvAffiliateInfo_end_date").val();
+
+        $("#startdate_error").hide();    
+        $("#enddate_error").hide();
+
+       if(startdate=="")
+        {
+            $("#startdate_error").show();
+            return false;
+        }
+
+       if(enddate=="")
+        {
+            $("#enddate_error").show();
+            return false;
+        }
+
+        return true;
+
+    });     
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_instructor', $js);

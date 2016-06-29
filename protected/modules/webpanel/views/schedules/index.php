@@ -20,9 +20,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         if (AdminIdentity::checkAccess('webpanel.schedules.delete')) {
             echo '&nbsp;&nbsp;';
             echo CHtml::link('<i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;Delete Selected', '', array('class' => 'marginleft btn btn-danger pull-right','id'=>'class-deleted'));
-            
-//            echo '<button id="class-deleted" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete Selected</button>';
-        }
+         }
         ?>
         <?php
         if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
@@ -51,7 +49,12 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'name' => 'Affliate.agency_code',
                 'value' => $data->Affliate->agency_code,
             ),
-            'clas_date',
+            array(
+                'name' => 'clas_date',
+                'value' => function($data) {
+                    echo Myclass::date_dispformat($data->clas_date);
+                },
+            ),
             'start_time',
             'end_time',
             'loc_city',
@@ -112,11 +115,11 @@ $(document).ready(function(){
             $('#add-schedule').hide();
             $.ajax({
                 method: "POST",
-                url: "$validate_url",
+                url: "{$validate_url}",
                 async: false,
                 data: idList,
                 success: function(res){
-                        var red_url="$success_url"+'/'+res;
+                        var red_url="{$success_url}"+'/'+res;
                     window.location= red_url;
                         return false;
                     },
@@ -127,19 +130,7 @@ $(document).ready(function(){
             alert('Please select any one checkbox.');
         }
     });
-        
-    $("#DmvClasses_startdate").change(function () {
-        if ($(this).val() != '') {
-            $("#startdate_error").hide();
-        }
-    });
-        
-    $("#DmvClasses_enddate").change(function () {
-        if ($(this).val() != '') {
-            $("#enddate_error").hide();
-        }
-    });
-
+ 
     $("#export_csv").click(function () {
         var startdate = $("#DmvClasses_startdate").val();
         var enddate = $("#DmvClasses_enddate").val();
@@ -163,10 +154,7 @@ $(document).ready(function(){
 
     });
 
-    $('.year').datepicker({ dateFormat: 'yyyy' });
-    $('.date').datepicker({ format: 'yyyy-mm-dd' });
-
 });
 EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
+Yii::app()->clientScript->registerScript('_form_schedule', $js);
 ?>

@@ -2,12 +2,6 @@
 /* @var $this InstructorsController */
 /* @var $model DmvAddInstructor */
 /* @var $form CActiveForm */
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 
 <div class="row">
@@ -98,7 +92,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     <div class="col-sm-5">                       
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'instructor_dob', array('class' => 'form-control date')); ?>
+                            <?php echo $form->textField($model, 'instructor_dob', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                         </div> 
                         <?php echo $form->error($model, 'instructor_dob'); ?>
                     </div>
@@ -178,14 +172,3 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
         </div>
     </div><!-- ./col -->
 </div>
-<?php
-$js = <<< EOD
-$(document).ready(function(){
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
-});
-EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
-?>

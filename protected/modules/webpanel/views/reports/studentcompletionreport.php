@@ -6,12 +6,6 @@ $this->title = 'Student Completion Report';
 $this->breadcrumbs = array(
     'Student Completion Report',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
-
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
@@ -38,7 +32,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div>  
                             <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
                         </div>
@@ -49,7 +43,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                             <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>
+                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
                             </div> 
                             <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
                         </div>
@@ -75,44 +69,29 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 $js = <<< EOD
 $(document).ready(function(){
         
-$("#Students_start_date").change(function() {
-    if($(this).val() != ''){
-        $("#startdate_error").hide();
-    } 
-}); 
-$("#Students_end_date").change(function() {
-    if($(this).val() != ''){
-        $("#enddate_error").hide();
-    } 
-});
+    $("#export_csv").click(function() {
+        var startdate = $("#Students_start_date").val();
+        var enddate = $("#Students_end_date").val();
 
-$("#export_csv").click(function() {
-    var startdate = $("#Students_start_date").val();
-    var enddate = $("#Students_end_date").val();
-        
-    $("#startdate_error").hide();    
-    $("#enddate_error").hide();
-   
-   if(startdate=="")
-    {
-        $("#startdate_error").show();
-        return false;
-    }
-    
-   if(enddate=="")
-    {
-        $("#enddate_error").show();
-        return false;
-    }
-        
-    return true;
-        
-}); 
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
+        $("#startdate_error").hide();    
+        $("#enddate_error").hide();
+
+       if(startdate=="")
+        {
+            $("#startdate_error").show();
+            return false;
+        }
+
+       if(enddate=="")
+        {
+            $("#enddate_error").show();
+            return false;
+        }
+
+        return true;
+
+    }); 
 });
 EOD;
-Yii::app()->clientScript->registerScript('_form_instructor', $js);
+Yii::app()->clientScript->registerScript('_form_stdcompl_report', $js);
 ?>

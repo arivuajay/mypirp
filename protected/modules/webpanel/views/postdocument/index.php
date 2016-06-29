@@ -6,9 +6,6 @@ $this->title = 'Post Documents';
 $this->breadcrumbs = array(
     'Post Documents',
 );
-$themeUrl = $this->themeUrl;
-$cs = Yii::app()->getClientScript();
-$cs_pos_end = CClientScript::POS_END;
 ?>
 
 <div class="col-lg-12 col-md-12">
@@ -32,7 +29,12 @@ $cs_pos_end = CClientScript::POS_END;
             ),
             'doc_title',
             'file_name',
-            'posted_date',
+            array(
+                'name' => 'posted_date',
+                'value' => function($data) {
+                    echo Myclass::date_dispformat($data->posted_date);
+                },
+            ),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',

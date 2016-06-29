@@ -90,6 +90,7 @@ class StudentsController extends Controller {
 
     public function actionAddbulkstudents($aid, $cid) {
         $model = new Students;
+        $model->unsetAttributes();
         $flag = 0;
         
         if (isset($_POST['Students'])) {      
@@ -100,18 +101,15 @@ class StudentsController extends Controller {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
                    
-                    if(isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all']=="Yes" && isset($_POST['Students'][1]['course_completion_date'])&& $_POST['Students'][1]['course_completion_date']!="")
-                    {
-                        $model->course_completion_date = date("Y-m-d",strtotime($_POST['Students'][1]['course_completion_date']));
-                    }elseif($model->course_completion_date!="")
-                    {
-                        $model->course_completion_date =  date("Y-m-d",strtotime($model->course_completion_date));
-                    }   
-                    
-                    if($model->dob!="")
-                    {
-                        $model->dob =  date("Y-m-d",strtotime($model->dob));
-                    }    
+                    if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
+                        $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
+                    } elseif ($model->course_completion_date != "") {
+                        $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
+                    }
+
+                    if ($model->dob != "") {
+                        $model->dob = Myclass::dateformat($model->dob);
+                    }
                             
                     $model->affiliate_id = $aid;
                     $model->clas_id = $cid;
@@ -131,13 +129,6 @@ class StudentsController extends Controller {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/aid/' . $aid . '/cid/' . $cid));
             }
-        }
-
-        if ($model->dob == "0000-00-00") {
-            $model->dob = "";
-        }
-        if ($model->course_completion_date == "0000-00-00") {
-            $model->course_completion_date = "";
         }
 
         $this->render('addbulkstudents', compact('model'));
@@ -180,6 +171,7 @@ class StudentsController extends Controller {
     public function actionCreate() {
         $model = new Students;
         $model->scenario = "create";
+        $model->unsetAttributes();
 
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $firstItem = array('' => '- Select One -');
@@ -191,18 +183,13 @@ class StudentsController extends Controller {
 
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
+            $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
+            $model->course_completion_date = ($model->course_completion_date != "") ? Myclass::dateformat($model->course_completion_date) : "";
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos created successfully. Student id - {$model->student_id}", "students");
                 Yii::app()->user->setFlash('success', 'Students Created Successfully!!!');
                 $this->redirect(array('index'));
             }
-        }
-
-        if ($model->dob == "0000-00-00") {
-            $model->dob = "";
-        }
-        if ($model->course_completion_date == "0000-00-00") {
-            $model->course_completion_date = "";
         }
 
         $this->render('create', compact('model', 'affiliates', 'classes'));
@@ -240,10 +227,10 @@ class StudentsController extends Controller {
 
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
-            if ($model->save()) {
-                
+             $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
+            $model->course_completion_date = ($model->course_completion_date != "") ? Myclass::dateformat($model->course_completion_date) : "";
+            if ($model->save()) {                
                 Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos updated successfully. Student id - {$model->student_id}", "students");
-                
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
                 $this->redirect(array('students/viewstudents/aid/' . $model->affiliate_id . '/cid/' . $model->clas_id));
             }
@@ -251,11 +238,16 @@ class StudentsController extends Controller {
 
         if ($model->course_completion_date == "0000-00-00") {
             $model->course_completion_date = "";
+        } else {
+            $model->course_completion_date = Myclass::date_dispformat($model->course_completion_date);
         }
 
         if ($model->dob == "0000-00-00") {
             $model->dob = "";
+        } else {
+            $model->dob = Myclass::date_dispformat($model->dob);
         }
+
 
 
         $this->render('update', array(
@@ -296,20 +288,6 @@ class StudentsController extends Controller {
     }
 
     /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new Students('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Students']))
-            $model->attributes = $_GET['Students'];
-
-        $this->render('admin', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
@@ -341,23 +319,24 @@ class StudentsController extends Controller {
         $admin_id = Yii::app()->user->getId();
         if (isset($_GET['Students'])){            
             $from_date = $_GET['Students']['start_date'];
-            $to_date = $_GET['Students']['end_date'];        
-        }
-        
+            $to_date = $_GET['Students']['end_date'];  
+            
             $ret_result = Yii::app()->db->createCommand("SELECT dms.student_id AS 'Student ID',dms.affiliate_id AS 'Affiliate ID',dms.clas_id AS 'Class ID',dms.first_name AS 'First Name',
                     dms.middle_name AS 'Middle Name',dms.last_name AS 'Last Name',dms.stud_suffix AS 'Student Suffix',dms.address1 AS 'Address1',dms.address2 AS 'Address2',
                     dms.city AS 'city',dms.state AS 'state',dms.zip AS 'zip',dms.phone AS 'phone',dms.email AS 'email',dms.gender AS 'gender',dms.dob AS 'dob',dms.licence_number AS 'licence_number',
                     dms.notes AS 'Notes',dms.course_completion_date AS 'Course Completion Date',dmc.certificate_number AS 'Certificate Number'
-                    FROM dmv_students AS dms LEFT JOIN dmv_print_certificate AS dmc ON dms.student_id = dmc.student_id,dmv_affiliate_info AS dma WHERE dma.affiliate_id = dms.affiliate_id AND dma.admin_id='".$admin_id."' AND dms.course_completion_date >= '".$from_date."' AND dms.course_completion_date <= '".$to_date."'");
+                    FROM dmv_students AS dms LEFT JOIN dmv_print_certificate AS dmc ON dms.student_id = dmc.student_id,dmv_affiliate_info AS dma WHERE dma.affiliate_id = dms.affiliate_id AND dma.admin_id='".$admin_id."' AND dms.course_completion_date >= '". Myclass::dateformat($from_date)."' AND dms.course_completion_date <= '". Myclass::dateformat($to_date)."'");
             
-            $file_name = 'students_' . date('Y-m-d').'.csv';
+            $file_name = 'students_' . date('m-d-Y').'.csv';
                   
             Yii::import('ext.ECSVExport');           
             $csv = new ECSVExport($ret_result);
             $content = $csv->toCSV();                   
             Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
             exit();
-//            $this->redirect(array('index'));
+        }
+        
+        $this->redirect(array('index'));
     }
 
 }
