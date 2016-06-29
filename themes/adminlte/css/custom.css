@@ -78,3 +78,8 @@ height: 570px;
     color: #000000 !important;
     font-size: 23px !important;
 }    
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+    background-color: #ffffff;
+    cursor: default;
+}

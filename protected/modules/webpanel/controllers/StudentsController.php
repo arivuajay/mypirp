@@ -101,10 +101,21 @@ class StudentsController extends Controller {
                     $model->attributes = $_POST['Students'][$i];
                    
                     if(isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all']=="Yes" && isset($_POST['Students'][1]['course_completion_date'])&& $_POST['Students'][1]['course_completion_date']!="")
-                    $model->course_completion_date = $_POST['Students'][1]['course_completion_date'];
+                    {
+                        $model->course_completion_date = date("Y-m-d",strtotime($_POST['Students'][1]['course_completion_date']));
+                    }elseif($model->course_completion_date!="")
+                    {
+                        $model->course_completion_date =  date("Y-m-d",strtotime($model->course_completion_date));
+                    }   
+                    
+                    if($model->dob!="")
+                    {
+                        $model->dob =  date("Y-m-d",strtotime($model->dob));
+                    }    
                             
                     $model->affiliate_id = $aid;
                     $model->clas_id = $cid;
+                  
                     $model->save();
                     $flag++;
                 }
