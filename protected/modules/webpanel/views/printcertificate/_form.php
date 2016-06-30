@@ -14,7 +14,7 @@ $cs_pos_end = CClientScript::POS_END;
             <?php
             $form = $this->beginWidget('CActiveForm', array(
                 'id' => 'print-certificate-form',
-                'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),
+                'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal',"target"=>"_blank"),
                 'clientOptions' => array(
                     'validateOnSubmit' => true,
                 ),
@@ -44,7 +44,7 @@ $cs_pos_end = CClientScript::POS_END;
             <div class="box-footer">
                 <div class="form-group">
                     <div class="col-sm-0 col-sm-offset-2">
-                        <?php echo CHtml::submitButton('Save', array('class' => 'btn btn-primary')); ?>
+                        <?php echo CHtml::submitButton('RePrint', array('class' => 'btn btn-primary',"id"=>"reprint")); ?>
                     </div>
                 </div>
             </div>
@@ -55,6 +55,16 @@ $cs_pos_end = CClientScript::POS_END;
 <?php
 $js = <<< EOD
 $(document).ready(function(){   
+    $("#reprint").click(function(){
+        var std_id = $("#PrintCertificate_student_id").val();
+        var note = $("#PrintCertificate_notes").val();
+        if(note!="" && std_id!="")
+        {
+            setTimeout(function(){
+                 document.getElementById("print-certificate-form").reset();
+            }, 2000);
+        }    
+    });       
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_instructor', $js);

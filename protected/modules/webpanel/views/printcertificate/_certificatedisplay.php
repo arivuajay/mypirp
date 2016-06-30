@@ -21,18 +21,8 @@ if ($student_id != "") {
         $last_name = $sinfo->last_name;
         $address1 = $sinfo->address1;
         $address2 = $sinfo->address2;
-        $std_address = trim($sinfo->address1." ".$sinfo->address2);       
-        $city = $sinfo->city;
-        $state = $sinfo->state;
-        $zip = $sinfo->zip;
-        $std_liveplace[] = $city;
-        $std_liveplace[] = $state;        
-        if(!empty($std_liveplace))
-        {    
-            $std_place = array_filter($std_liveplace);
-            $std_place = implode(" ,",$std_place);
-            $std_place = trim($std_place);
-        }    
+        $std_address = trim($sinfo->address1." ".$sinfo->address2);   
+        $std_place = $sinfo->city.", ".$sinfo->state." " .$sinfo->zip;   
         
         $dob = ($sinfo->dob != "0000-00-00") ? Myclass::date_dispformat($sinfo->dob) : "-";
         $gender = ($sinfo->gender == "F") ? "Female" : "Male";

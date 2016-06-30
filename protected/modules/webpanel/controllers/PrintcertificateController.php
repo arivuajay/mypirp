@@ -1,5 +1,5 @@
 <?php
-
+require_once ($_SERVER['DOCUMENT_ROOT'].'/protected/extensions/html2pdf/vendor/tecnickcom/tcpdf/tcpdf.php');
 class PrintcertificateController extends Controller {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -113,7 +113,6 @@ class PrintcertificateController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionPrintstudentcertificate($id) {
-        require_once ($_SERVER['DOCUMENT_ROOT'].'/protected/extensions/html2pdf/vendor/tecnickcom/tcpdf/tcpdf.php');
        
         $model = new PrintCertificate('search');
         $class_id = $id;
@@ -180,18 +179,49 @@ class PrintcertificateController extends Controller {
 
             $model->attributes = $_POST['PrintCertificate'];
             $student_id = $model->student_id;
-            $class_id = $id;
+            $class_id   = Yii::app()->request->getQuery('id');
+            
             $certificate_number = PrintCertificate::model()->find("class_id=" . $class_id . " and student_id=" . $student_id)->certificate_number;
 
             if ($certificate_number != "") {
                 $pmodel = PrintCertificate::model()->findByPk($certificate_number);
                 $pmodel->attributes = $_POST['PrintCertificate'];
                 $pmodel->class_id = $class_id;
+              
                 if ($pmodel->save()) {
                     Myclass::addAuditTrail("Notes Updated Successfully. Student id - {$student_id}", "printcertificate");
-                    Yii::app()->user->setFlash('success', 'Notes Updated Successfully!!!');
-                    $this->redirect(array('index'));
+                    
+                    $sresults_info = Students::model()->with("dmvAffiliateInfo")->findByPk($student_id);
+                           
+                    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);            
+                    $pdf->SetCreator(PDF_CREATOR);
+                    $pdf->SetAuthor('Cresmo');
+                    $pdf->SetTitle("RePrint");
+                    $pdf->setPrintHeader(false);
+                    $pdf->setPrintFooter(false);
+                    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+                    //set margins
+                    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+                    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+                    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+                    //set auto page breaks
+                    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+                    //set image scale factor
+                    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+                    $pdf->SetAutoPageBreak(True, PDF_MARGIN_FOOTER);
+                    // set font
+                    $pdf->SetFont('times', '', 10);
+                    
+                    if (!empty($sresults_info)) {  
+                            $html = '';
+                            $pdf->AddPage();	
+                            $html =  $this->renderPartial('certificate_view', array("sinfo" => $sresults_info), true);
+                            $pdf->writeHTML($html, true, false, true, false, '');                       
+                    }
+                    $pdf->Output('certificate.pdf', 'I');                        
                 }
+            }else{
+                $this->redirect(array('index'));
             }
         }
 
