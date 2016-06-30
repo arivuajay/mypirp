@@ -64,14 +64,14 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td>
                         <div class="input-group">
                             <span class="input-group-addon"> <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, '[' . $i . ']' . 'dob', array('class' => 'form-control date', 'size' => 25, "readonly" => "readonly")); ?>
+                            <?php echo $form->textField($model, '[' . $i . ']' . 'dob', array('class' => 'form-control date', 'size' => 25)); ?>
                         </div> 
                     </td>
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'licence_number', array('class' => 'form-control', 'size' => 25)); ?></td>
                     <td>
                         <div class="input-group">
                             <span class="input-group-addon"> <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, '[' . $i . ']' . 'course_completion_date', array('class' => 'ccomplete form-control date', 'size' => 25, "readonly" => "readonly")); ?>
+                                <?php echo $form->textField($model, '[' . $i . ']' . 'course_completion_date', array('class' => 'ccomplete form-control date', 'size' => 25)); ?>
                         </div>
                         <?php
                         if ($i == 1) {

@@ -14,7 +14,7 @@ $cs_pos_end = CClientScript::POS_END;
   <?php
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'print-certificate-form',
-        'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),               
+        'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal',"target"=>"_blank"),               
     ));
     ?>
 <?php

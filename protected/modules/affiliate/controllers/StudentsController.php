@@ -114,8 +114,7 @@ class StudentsController extends Controller {
     }
 
     public function actionAddbulkstudents($cid) {
-        $model = new Students;
-        $model->unsetAttributes();
+        $model = new Students;        
 
         $aid = Yii::app()->user->affiliate_id;
 
@@ -150,6 +149,14 @@ class StudentsController extends Controller {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/cid/' . $cid));
             }
+        }
+        
+        if ($model->course_completion_date == "0000-00-00") {
+            $model->course_completion_date = "";
+        }
+        
+        if ($model->dob == "0000-00-00") {
+            $model->dob = "";
         }
 
         $this->render('addbulkstudents', compact('model'));
@@ -197,7 +204,6 @@ class StudentsController extends Controller {
         $affid = Yii::app()->user->affiliate_id;
         $classes = DmvClasses::all_classes($affid);
 
-        $model->unsetAttributes();
 
         $model->affiliate_id = Yii::app()->user->affiliate_id;
         // Uncomment the following line if AJAX validation is needed
@@ -212,6 +218,14 @@ class StudentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
+        
+        if ($model->course_completion_date == "0000-00-00") {
+            $model->course_completion_date = "";
+        } 
+
+        if ($model->dob == "0000-00-00") {
+            $model->dob = "";
+        } 
 
 
         $this->render('create', compact('model', 'affiliates', 'classes'));

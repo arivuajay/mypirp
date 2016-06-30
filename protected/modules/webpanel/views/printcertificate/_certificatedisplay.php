@@ -48,17 +48,17 @@ if ($student_id != "") {
                                     <td><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
                                             <tbody>
                                                 <tr>
-                                                    <td align="left" nowrap="nowrap" valign="top" width="50%"><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERTIFICATE
+                                                    <td align="left" nowrap="nowrap" valign="top" width="50%"><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERTIFICATE
                                                                 OF COMPLETION</i></h3></td>
-                                                    <td align="center" valign="top" width="40%"><h3>NO:&nbsp;&nbsp;#028-0<?php echo $certificate_no; ?></h3></td>
+                                                    <td align="center" valign="top" width="40%"><h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CNO:&nbsp;&nbsp;#028-0<?php echo $certificate_no; ?></h3></td>
                                                 </tr>
                                                 <tr>
-                                                    <td align="left" nowrap="nowrap" width="30%"><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMERICAN
+                                                    <td align="left" nowrap="nowrap" width="30%"><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMERICAN
                                                                 SAFETY INC.</i></h3></td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
-                                                    <td align="center" nowrap="nowrap" valign="top" width="30%"><b>Delivery Agency Code: <?php echo $agency_code; ?></b> </td>
+                                                    <td align="center" nowrap="nowrap" valign="top" width="30%"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery Agency Code: <?php echo $agency_code; ?></b> </td>
                                                 </tr>
                                             </tbody>
                                         </table>

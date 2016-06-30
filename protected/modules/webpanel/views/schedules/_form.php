@@ -45,7 +45,7 @@ $country = Myclass::getallcountries();
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
+                            <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date')); ?>
                         </div> 
                         <?php echo $form->error($model, 'clas_date'); ?>
                     </div>
@@ -72,7 +72,7 @@ $country = Myclass::getallcountries();
                     <div class="col-sm-5">                          
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'date2', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
+                            <?php echo $form->textField($model, 'date2', array('class' => 'form-control date')); ?>
                         </div> 
                         <?php echo $form->error($model, 'date2'); ?>
                     </div>                    
@@ -151,7 +151,7 @@ $country = Myclass::getallcountries();
                             <div class="col-sm-5">
                                 <div class="input-group">
                                     <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                    <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date" readonly="readonly">
+                                    <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date">
                                 </div> 
                             </div>
                         </div>

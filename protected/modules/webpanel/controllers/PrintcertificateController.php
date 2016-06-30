@@ -113,24 +113,52 @@ class PrintcertificateController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionPrintstudentcertificate($id) {
+        require_once ($_SERVER['DOCUMENT_ROOT'].'/protected/extensions/html2pdf/vendor/tecnickcom/tcpdf/tcpdf.php');
+       
         $model = new PrintCertificate('search');
         $class_id = $id;
+        
+        $classinfo = DmvClasses::model()->findByPk($id);
+        $class_info = Myclass::date_dispformat($classinfo->clas_date) . " " . $classinfo->start_time . " To " . $classinfo->end_time;        
             
         if (isset($_POST['idList'])) {
             
             $std_ids = implode(",",$_POST['idList']);
 
-            $html2pdf = Yii::app()->ePdf->HTML2PDF();
-            $html2pdf->setDefaultFont('times');
-            $html2pdf->WriteHTML($this->renderPartial('certificate_view', array("std_ids" => $std_ids), true));
-            $html2pdf->Output(time() . ".pdf", EYiiPdf::OUTPUT_TO_DOWNLOAD);
-            $html2pdf->Output();             
+            $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);            
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Cresmo');
+            $pdf->SetTitle($class_info);
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+            //set margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            //set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            //set image scale factor
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+            $pdf->SetAutoPageBreak(True, PDF_MARGIN_FOOTER);
+            // set font
+            $pdf->SetFont('times', '', 10);
+            
+            $sresults_info = Students::model()->with("dmvAffiliateInfo")->findAll("student_id in ($std_ids)");
+
+            if (!empty($sresults_info)) {
+            foreach ($sresults_info as $sinfo) {   
+                    $html = '';
+                    $pdf->AddPage();	
+                    $html =  $this->renderPartial('certificate_view', array("sinfo" => $sinfo), true);
+                    $pdf->writeHTML($html, true, false, true, false, '');
+                }
+            }
+            $pdf->Output('certificate.pdf', 'I');           
         }
 
 
-        $classinfo = DmvClasses::model()->findByPk($id);
-        $class_info = Myclass::date_dispformat($classinfo->clas_date) . " " . $classinfo->start_time . " To " . $classinfo->end_time;
-
+       
         $this->render('printstudentcertificate', compact('model', 'class_id', 'class_info'));
     }
 

@@ -320,7 +320,7 @@ $country = Myclass::getallcountries();
                     <div class="col-sm-5">
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'agency_approved_date', array('class' => 'form-control date',"readonly"=>"readonly")); ?>
+                            <?php echo $form->textField($model, 'agency_approved_date', array('class' => 'form-control date')); ?>
                         </div> 
                         <?php echo $form->error($model, 'agency_approved_date'); ?>
                     </div> 

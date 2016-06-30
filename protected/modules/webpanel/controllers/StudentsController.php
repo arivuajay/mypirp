@@ -90,7 +90,7 @@ class StudentsController extends Controller {
 
     public function actionAddbulkstudents($aid, $cid) {
         $model = new Students;
-        $model->unsetAttributes();
+       
         $flag = 0;
         
         if (isset($_POST['Students'])) {      
@@ -129,6 +129,14 @@ class StudentsController extends Controller {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/aid/' . $aid . '/cid/' . $cid));
             }
+        }
+        
+        if ($model->course_completion_date == "0000-00-00") {
+            $model->course_completion_date = "";
+        }
+        
+        if ($model->dob == "0000-00-00") {
+            $model->dob = "";
         }
 
         $this->render('addbulkstudents', compact('model'));
@@ -171,7 +179,6 @@ class StudentsController extends Controller {
     public function actionCreate() {
         $model = new Students;
         $model->scenario = "create";
-        $model->unsetAttributes();
 
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $firstItem = array('' => '- Select One -');
@@ -191,6 +198,14 @@ class StudentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
+        
+        if ($model->course_completion_date == "0000-00-00") {
+            $model->course_completion_date = "";
+        } 
+
+        if ($model->dob == "0000-00-00") {
+            $model->dob = "";
+        } 
 
         $this->render('create', compact('model', 'affiliates', 'classes'));
     }
