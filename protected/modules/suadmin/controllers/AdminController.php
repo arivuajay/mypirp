@@ -58,13 +58,13 @@ class AdminController extends Controller {
         if (isset($_POST['Admin'])) {
             $model->attributes = $_POST['Admin'];
 
-            $domainname = str_replace("http://","",$model->domain_url);
-            $sitename = explode(".",$domainname);
-            if($sitename[0] != 'www')
-            {
-                $addwww = implode(".",$sitename);
-                $model->domain_url = 'http://www.'.$addwww;
-            }
+//            $domainname = str_replace("http://","",$model->domain_url);
+//            $sitename = explode(".",$domainname);
+//            if($sitename[0] != 'www')
+//            {
+//                $addwww = implode(".",$sitename);
+//                $model->domain_url = 'http://www.'.$addwww;
+//            }
 
             if ($model->validate())
             {
@@ -112,12 +112,12 @@ class AdminController extends Controller {
         if (isset($_POST['Admin'])) {
            $model->attributes = $_POST['Admin'];
 
-            $domainname = str_replace("http://", "", $model->domain_url);
-            $sitename = explode(".", $domainname);
-            if ($sitename[0] != 'www') {
-                $addwww = implode(".", $sitename);
-                $model->domain_url = 'http://www.' . $addwww;
-            }
+//            $domainname = str_replace("http://", "", $model->domain_url);
+//            $sitename = explode(".", $domainname);
+//            if ($sitename[0] != 'www') {
+//                $addwww = implode(".", $sitename);
+//                $model->domain_url = 'http://www.' . $addwww;
+//            }
 
             if ($model->validate())
             {

@@ -1,5 +1,12 @@
 <?php
+$affurl = "http://www.mypirpclass.com/affiliate";
+$curenturi= "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
+if($affurl==$curenturi)
+{     
+   header('Location: http://asi.mypirpclass.com/affiliate');  
+   exit;
+}
 ini_set('display_errors', true);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_WARNING & ~E_NOTICE);
 // change the following paths if necessary
@@ -14,22 +21,26 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', 3);
 
 require_once($yii);
 
-$suadmin_array = array('local.mypirpsuadmin');
+$suadmin_array = array('local.mypirpsuadmin',"www.mypirpclass.com");
 
 if (in_array($_SERVER['HTTP_HOST'], $suadmin_array)) {
 
-    $modules = array('suadmin');
+    $modules = 'suadmin';
+    $modules1 = '';
     $def_mod = 'suadmin';
     define('SITENAME', 'MyPirpClass Super Admin');
 } else {
-    $modules = array('webpanel', 'affiliate');
+    $modules = 'webpanel';
+    $modules1 = 'affiliate';
     $def_mod = 'webpanel';
     define('SITENAME', 'MyPirpClass');
 }
 
 if ($modules) {
     defined('ENABLE_MODULES') ||
-            @define('ENABLE_MODULES', implode(',', $modules));
+            @define('ENABLE_MODULES', $modules);
+    defined('ENABLE_MODULES_1') ||
+            @define('ENABLE_MODULES_1', $modules1);
     defined('DEFAULT_MODULE') ||
             @define('DEFAULT_MODULE', $def_mod);
 }

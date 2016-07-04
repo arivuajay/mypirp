@@ -12,7 +12,7 @@ class SuAdminModule extends CWebModule
         // you may place code here to customize the module or the application
         // import the module-level models and components
         $this->setImport(array(
-            'webpanel.components.*',
+            'suadmin.components.*',
         ));
         Yii::app()->theme = 'suadmin';
         $this->layoutPath = Yii::getPathOfAlias('webroot.themes.' . Yii::app()->theme->name . '.views.layouts');

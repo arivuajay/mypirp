@@ -15,7 +15,8 @@ return array(
         'application.components.*',
     ),
     'modules' => array(
-        'webpanel', 'suadmin', 'affiliate',
+        ENABLE_MODULES,
+        ENABLE_MODULES_1,
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
