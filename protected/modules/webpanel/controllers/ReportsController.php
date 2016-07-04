@@ -28,8 +28,7 @@ class ReportsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-
-                'actions' => array('bookorderreport','certificatereport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport'),
+                'actions' => array('bookorderreport', 'certificatereport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport'),
                 'expression' => "AdminIdentity::checkAccess('webpanel.reports.{$this->action->id}')",
             ),
             array('deny', // deny all users
@@ -37,16 +36,18 @@ class ReportsController extends Controller {
             ),
         );
     }
+
     public function actionCertificatereport() {
         $model = new PrintCertificate;
-        
+
         $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['PrintCertificate'])){
+        if (isset($_GET['PrintCertificate'])) {
             $model->attributes = $_GET['PrintCertificate'];
-        }    
-        
+        }
+
         $this->render('certificatereport', compact('model'));
     }
+
     public function actionBookorderreport() {
         $model = new BookOrders;
         $affiliates = DmvAffiliateInfo::all_affliates("Y");
@@ -94,7 +95,7 @@ class ReportsController extends Controller {
                 WHERE DFI.admin_id = '" . $admin_id . "' AND (DFI.aff_created_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMAI.instructor_id = DMI.instructor_id AND DFI.country_code = DMC.id AND DFI.affiliate_id = DMAI.affiliate_id");
 
 
-            $file_name = $quarterlyannual . date('m-d-Y') . '.csv';
+            $file_name = $quarterlyannual . date('F-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
@@ -123,7 +124,7 @@ class ReportsController extends Controller {
                 WHERE DFI.admin_id = '" . $admin_id . "' AND (DMCL.clas_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMCL.instructor_id = DMI.instructor_id AND DMCL.country = DMC.id AND DFI.affiliate_id = DMCL.affiliate_id ORDER BY DFI.agency_code");
 
 
-            $file_name = 'montylyreports' . date('m-d-Y') . '.csv';
+            $file_name = 'montylyreports' . date('F-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
@@ -139,23 +140,141 @@ class ReportsController extends Controller {
         $to_date = '';
         $admin_id = Yii::app()->user->getId();
         if (isset($_GET['Students'])) {
+
             $from_date = Myclass::dateformat($_GET['Students']['start_date']);
             $to_date = Myclass::dateformat($_GET['Students']['end_date']);
+            $sql = "SELECT DMS.licence_number, DMS.first_name,DMS.middle_name,DMS.last_name,dob as PDATE,DMS.gender,course_completion_date as CDATE,DMS.affiliate_id,agency_code,DMC.instructor_id,instructor_client_id  
+                    from  dmv_students DMS  
+                    inner join dmv_affiliate_info DFI on DMS.affiliate_id=DFI.affiliate_id
+                    inner join dmv_classes  DMC on DMS.clas_id =DMC.clas_id 
+                    inner join dmv_add_instructor DMI on DMC.instructor_id =DMI.instructor_id 
+                    where  DFI.admin_id = '" . $admin_id . "' and (course_completion_date  between '$from_date' and '$to_date') 
+                    order by student_id";
+            $command = Yii::app()->db->createCommand($sql);
+            $rowCount = $command->execute(); // execute the non-query SQL
+            $dataReader = $command->query(); // execute a query SQL
 
-            $ret_result = Yii::app()->db->createCommand("SELECT CONCAT(DMS.last_name,' ',DMS.first_name,' ',DMS.middle_name) as 'Student Name',CONCAT(DATE_FORMAT(DMS.dob,'%m%d%y'),'',DMS.gender) as 'DOB',
-                CONCAT(DATE_FORMAT(DMS.course_completion_date,'%y%m%d'),'28',DFI.agency_code,'00') as 'Completion Date',CONCAT(DMS.licence_number,'C') as 'Licence Number'
-            FROM dmv_students DMS,dmv_add_instructor  DMI, dmv_affiliate_info   DFI,dmv_classes  DMC   
-            WHERE DFI.admin_id = '" . $admin_id . "' AND (DMS.course_completion_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') AND DMS.affiliate_id = DFI.affiliate_id AND DMS.clas_id = DMC.clas_id  AND DMC.instructor_id = DMI.instructor_id  ORDER BY DMS.student_id");
+            $data = "";
+            $cr = "\r\n";
+            $cr1 = "\t";
+            if ($rowCount > 0) {
+                foreach ($dataReader as $InsArr) {
+
+                    $row_data = "";
+                    $name = "";
+                    $dob = "000000";
+                    $course_completion_date = "00000";
+                    $stdname = array();
+
+                    $first_name  = isset($InsArr["first_name"]) ? trim($InsArr["first_name"]) : "";
+                    $middle_name = isset($InsArr["middle_name"]) ? trim($InsArr["middle_name"]) : "";
+                    $last_name   = isset($InsArr["last_name"]) ? trim($InsArr["last_name"]) : "";
+
+                    if ($last_name != "") {
+                        $stdname[] = $last_name;
+                    }
+                    if ($first_name != "") {
+                        $stdname [] = $first_name;
+                    }
+                    if ($middle_name != "") {
+                        $stdname [] = $middle_name;
+                    }
+                    if (!empty($stdname))
+                        $name = implode(",", $stdname);
+
+                    $name = $this->add_pad($name, 20);
+                    ///1 to 20
+                    $row_data .= $name;
+
+                    $datebirth = isset($InsArr["PDATE"]) ? $InsArr["PDATE"] : "";
+                    if ($datebirth != "") {
+                        list($dyear, $dmonth, $ddate) = split("-", $datebirth);
+                        $dyr = substr($dyear, -2);
+                        $dob = $dmonth . $ddate . $dyr;
+                    }
+
+                    ///21 to 26	
+                    $row_data .= $dob;
+
+                    ///27
+                    $gender = (isset($InsArr["gender"]) && $InsArr["gender"]!="") ? $InsArr["gender"] : "-";
+                    $row_data .= $gender;
+
+                    //28 to 49
+                    $row_data .= str_repeat(" ", 22);
+
+                    $coursecompletiondate = isset($InsArr["CDATE"]) ? $InsArr["CDATE"] : "";
+                    if ($coursecompletiondate != "") {
+                        list($cyear, $cmonth, $cdate) = split("-", $coursecompletiondate);
+                        $course_comp_yr = substr($cyear, 3);
+                        $course_completion_date = $course_comp_yr . $cmonth . $cdate;
+                    }
+
+                    ///50 to 54
+                    $row_data .= $course_completion_date;
+
+                    //55 to 56
+                    $row_data .= "28";
+
+                    $agency_code = isset($InsArr["agency_code"]) ? $InsArr["agency_code"] : "";
+                    $agency_code = $this->add_pad($agency_code, 3);
+                    /// 57 to 59
+                    $row_data .= $agency_code;
+
+                    // 60 to 61
+                    $row_data .= str_repeat("0", 2);
+
+                    //62 to 66
+                    $row_data .= str_repeat(" ", 5);
 
 
-            $file_name = 'studentcompletionreport' . date('m-d-Y') . '.csv';
+                    $licence_number = isset($InsArr["licence_number"]) ? $InsArr["licence_number"] : "";
+                    $licence_number = ($licence_number != "") ? $this->add_pad($licence_number, 9) : str_repeat(" ", 9);
 
-            Yii::import('ext.ECSVExport');
-            $csv = new ECSVExport($ret_result);
-            $content = $csv->toCSV();
-            Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
+                    ///67 to 75
+                    $row_data .= $licence_number;
+
+                    ///76
+                    $row_data .= "C";
+
+                    /// 77 to 80
+                    $row_data .= str_repeat(" ", 4);
+
+                    //add all row to main data
+                    $data .= $row_data . $cr;
+                }
+                      
+                $file_name = 'Studentcompletionreport-' . date('F-d-Y') . '.txt';
+                                
+                header("Content-type: plain/text");
+                header("Cache-Control: no-store, no-cache");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                header('Content-Disposition: attachment; filename="'.$file_name.'"');   
+                
+                $fp = fopen('php://output','a');// $fp is now the file pointer to file $filename
+                if ($fp) {
+                    fwrite($fp, $data);    //    Write information to the file
+                    fclose($fp);  //    Close the file
+                }               
+              exit;
+            } else {
+                Yii::app()->user->setFlash('danger', 'No records found!!!');
+                $this->redirect(array('studentcompletionreport'));
+            }
         }
         $this->render('studentcompletionreport', compact('model'));
+    }
+
+    public function add_pad($str, $length, $char = " ") {
+        if (strlen($str) > $length) {
+            $str_new = substr($str, 0, $length);
+        } elseif (strlen($str) < $length) {
+            $str_new = str_pad($str, $length, $char, STR_PAD_RIGHT);
+        } else {
+            $str_new = $str;
+        }
+        return ($str_new);
     }
 
     public function actionDuplicates() {
@@ -163,7 +282,7 @@ class ReportsController extends Controller {
         $ret_result = Yii::app()->db->createCommand("SELECT DMS.first_name as 'First Name', DMS.last_name as 'Last Name', DMS.zip as 'Zip', count(DMS.student_id) as 'No of Duplicates' 
                FROM dmv_students DMS, dmv_affiliate_info   DFI WHERE DFI.admin_id = '" . $admin_id . "' AND DFI.affiliate_id = DMS.affiliate_id  GROUP BY DMS.first_name, DMS.last_name, DMS.zip HAVING  count(DMS.student_id)>1 order by DMS.first_name");
 
-        $file_name = 'duplicates' . date('m-d-Y') . '.csv';
+        $file_name = 'duplicates' . date('F-d-Y') . '.csv';
 
         Yii::import('ext.ECSVExport');
         $csv = new ECSVExport($ret_result);
@@ -195,7 +314,7 @@ class ReportsController extends Controller {
                 $criteria->addCondition('affiliate_id = ' . $affiliate_id);
 
             $std_infos = Students::model()->findAll($criteria);
-           
+
             if (!empty($std_infos)) {
                 $html2pdf = Yii::app()->ePdf->HTML2PDF();
                 $html2pdf->WriteHTML($this->renderPartial('printlabel_view', array("std_infos" => $std_infos), true));
@@ -211,15 +330,15 @@ class ReportsController extends Controller {
 
     public function actionReferralreport() {
         $model = new Payment();
-        
+
         $criteria = new CDbCriteria();
-        $criteria->distinct=true;
-        $criteria->condition = "affiliateInfo.admin_id=".Yii::app()->user->admin_id;      
+        $criteria->distinct = true;
+        $criteria->condition = "affiliateInfo.admin_id=" . Yii::app()->user->admin_id;
         $criteria->select = 'referral_code';
-        $criteria->with   = array('affiliateInfo');
+        $criteria->with = array('affiliateInfo');
         $commis_res = DmvAffiliateCommission::model()->findAll($criteria);
         $refcodes = CHtml::listData($commis_res, 'referral_code', 'referral_code');
-        
+
         if (isset($_GET['Payment']))
             $model->attributes = $_GET['Payment'];
 

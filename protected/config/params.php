@@ -3,12 +3,9 @@
 $whitelist = array('127.0.0.1', '::1');
 if (in_array($_SERVER['REMOTE_ADDR'], $whitelist)) {
     $mailsendby = 'smtp';
-    $adminurl   = 'http://localhost/drivingagency/branches/dev/';
-
+    $adminurl   = 'http://localhost/mypirpnew/branches/dev/';
 } else {
     $mailsendby  = 'phpmail';
-  //  $adminurl   = 'http://webadmin.opti-guide.com/';
-
 }
 
 // Custom Params Value
@@ -41,5 +38,6 @@ return array(
   
     // retailer logo path
     'IMG_PATH' => 'messagedoc/',   
+    'REPORT_PATH' => '/stdreports/'
    
 );

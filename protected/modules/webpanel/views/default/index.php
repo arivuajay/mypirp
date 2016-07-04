@@ -65,7 +65,7 @@ $this->breadcrumbs = array(
                     </p>
                 </div>
                 <div class="icon">
-                    <i class="ion-email"></i>
+                    <i class="ion-calendar"></i>
                 </div>
                 <a href="<?php echo Yii::app()->createAbsoluteUrl('/webpanel/schedules') ?>" class="small-box-footer">
                     More info <i class="fa fa-arrow-circle-right"></i>

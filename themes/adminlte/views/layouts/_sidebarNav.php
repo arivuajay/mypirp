@@ -22,7 +22,7 @@
                 array('label' => '<i class="fa fa-users"></i> <span>Instructors</span>', 'url' => array('/webpanel/instructors'), 'visible' => AdminIdentity::checkAccess('webpanel.instructors.index')),
                 array('label' => '<i class="fa fa-envelope-o"></i> <span>Messages</span>', 'url' => array('/webpanel/messages'), 'visible' => AdminIdentity::checkAccess('webpanel.messages.index')),
                 array('label' => '<i class="fa fa-file"></i> <span>Documents</span>', 'url' => array('/webpanel/postdocument'), 'visible' => AdminIdentity::checkAccess('webpanel.postdocument.index')),
-                array('label' => '<i class="fa fa fa-list"></i> <span>Schedules</span>', 'url' => array('/webpanel/schedules'), 'visible' => AdminIdentity::checkAccess('webpanel.schedules.index')),
+                array('label' => '<i class="fa fa fa-calendar"></i> <span>Schedules</span>', 'url' => array('/webpanel/schedules'), 'visible' => AdminIdentity::checkAccess('webpanel.schedules.index')),
                 array('label' => '<i class="fa fa fa-users"></i> <span>Manage students</span>', 'url' => array('/webpanel/students/managestudents'), 'visible' => AdminIdentity::checkAccess('webpanel.students.managestudents')),
                 array('label' => '<i class="fa fa fa-search"></i> <span>Search students</span>', 'url' => array('/webpanel/students/index'), 'visible' => AdminIdentity::checkAccess('webpanel.students.index')),
                 array('label' => '<i class="fa fa fa-print"></i> <span>Print students</span>', 'url' => array('/webpanel/students/printstudents'), 'visible' => AdminIdentity::checkAccess('webpanel.students.printstudents')),

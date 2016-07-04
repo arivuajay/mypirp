@@ -12,7 +12,7 @@ $this->breadcrumbs = array(
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    <i class="fa fa-file-excel-o"></i>  Export to CSV
+                    <i class="glyphicon glyphicon-search"></i>  Search
                 </h3>
                 <div class="clearfix"></div>
             </div>
@@ -52,7 +52,7 @@ $this->breadcrumbs = array(
                     <div class="col-lg-2 col-md-2">
                         <div class="form-group">
                             <label>&nbsp;</label>
-                            <?php echo CHtml::submitButton('Export to CSV', array('id' => 'export_csv','class' => 'btn btn-primary form-control')); ?>
+                            <?php echo CHtml::submitButton('Go', array('id' => 'export_csv','class' => 'btn btn-primary form-control')); ?>
                         </div>
                     </div>
                     
