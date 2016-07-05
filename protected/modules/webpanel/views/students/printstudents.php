@@ -110,7 +110,7 @@ if ($model->startdate != "" && $model->enddate != "") {
                         'header' => 'DOB',
                         'name' => 'dob',
                         'value' => function($data) {
-                            echo ($data->dob != "") ? date("d/m/Y", strtotime($data->dob)) : "-";
+                            echo ($data->dob != "") ? Myclass::date_dispformat($data->dob) : "-";
                         }
                     ),
                     array(
@@ -138,10 +138,10 @@ if ($model->startdate != "" && $model->enddate != "") {
                     'template' => '<div class="panel panel-primary">'
                     . '<div class="panel-heading">'
                     . '<div class="pull-right">{summary}</div>'
-                    . '<h3 class="panel-title"> Students by Agency </h3>'
+                    . '<h3 class="panel-title"> Students by Agency  '.$aff_info.'</h3>'
                     . '</div>'
                     . '<div class="panel-body">'
-                    . '<p><h4>' . $aff_info . ' ' . $date_disp . ' </h4></p>'
+                    . '<p><h4>' . $date_disp . ' </h4></p>'
                     . '<p><h4>'. $totalstudents .'</h4></p>'
                     . '{items}{pager}</div>'
                     . '</div>',

@@ -162,7 +162,7 @@ class Payment extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'sort' => array(
-                'defaultOrder' => 'payment_date ASC',
+                'defaultOrder' => 'payment_date DESC',
             ),
             'criteria' => $criteria,
             'pagination' => array(

@@ -76,7 +76,7 @@ class SchedulesController extends Controller
             if($print_certificate=='Y') {
                 $rval = "Completed";
             }else{
-                $rval = "Submitted";
+                $rval = "Pending";
             }
             return $rval;
         }        

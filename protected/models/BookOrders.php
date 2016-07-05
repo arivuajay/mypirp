@@ -21,7 +21,7 @@
  */
 class BookOrders extends CActiveRecord {
 
-    public $startdate, $enddate;
+    public $startdate, $enddate, $bookorder_page;
 
     /**
      * @return string the associated database table name
@@ -44,7 +44,7 @@ class BookOrders extends CActiveRecord {
             array('client_type, book_instructor, payment_complete', 'length', 'max' => 1),
             array('payment_type', 'length', 'max' => 2),
             array('cheque_number', 'length', 'max' => 15),
-            array('payment_date, payment_notes, startdate, enddate', 'safe'),
+            array('payment_date, payment_notes, startdate, enddate,bookorder_page', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('book_id, affiliate_id, instructor_id, client_type, book_instructor, payment_date, number_of_books, payment_amount, book_fee, shipping_fee, payment_type, cheque_number, payment_complete, payment_notes', 'safe', 'on' => 'search'),
@@ -127,13 +127,14 @@ class BookOrders extends CActiveRecord {
             $datamod['BookOrders']['startdate'] = Myclass::dateformat($this->startdate);
             $datamod['BookOrders']['enddate'] = Myclass::dateformat($this->enddate);
 
+            if($this->bookorder_page==0)
             $criteria->addCondition("payment_complete = 'Y'");
 
             $criteria->addCondition("payment_date >= '" . Myclass::dateformat($this->startdate) . "' AND payment_date <= '" . Myclass::dateformat($this->enddate) . "'");
+        }
 
-            if ($this->affiliate_id > 0) {
-                $criteria->addCondition('t.affiliate_id = ' . $this->affiliate_id);
-            }
+        if ($this->affiliate_id > 0) {
+            $criteria->addCondition('t.affiliate_id = ' . $this->affiliate_id);
         }
 
         $criteria->with = array("affiliateInfo", "instructorInfo");
@@ -144,7 +145,7 @@ class BookOrders extends CActiveRecord {
             //  'totalcounts' => $model->search()->getTotalItemCount(),
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
-                 'params' => $datamod
+                'params' => $datamod
             )
         ));
     }

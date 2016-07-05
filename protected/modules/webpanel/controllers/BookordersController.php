@@ -131,12 +131,15 @@ class BookordersController extends Controller {
     public function actionIndex() {
         $model = new BookOrders('search');
         $model->unsetAttributes();  // clear any default values
+        
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('0' => '- ALL -');
+        $affiliates = $firstItem + $affiliates_arr;
+        
         if (isset($_GET['BookOrders']))
             $model->attributes = $_GET['BookOrders'];
 
-        $this->render('index', array(
-            'model' => $model,
-        ));
+        $this->render('index', compact('model','affiliates' ));
     }
 
     /**

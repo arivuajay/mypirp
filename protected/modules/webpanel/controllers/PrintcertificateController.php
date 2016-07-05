@@ -78,12 +78,13 @@ class PrintcertificateController extends Controller {
         if (isset($_GET['DmvClasses'])) {
             $model->attributes = $_GET['DmvClasses'];
             $agencycode = $model->agencycode;
-            $clasdate = Myclass::dateformat($model->clasdate);
-
+            $clasdate   = $model->clasdate;
+            
             $criteria = new CDbCriteria;
             $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
 
             if ($clasdate != "") {
+                $clasdate = Myclass::dateformat($clasdate);
                 $criteria->addCondition("dmvClasses.clas_date= '" . $clasdate . "'");
             }
 
