@@ -44,9 +44,16 @@ class DefaultController extends Controller
         $criteria->together = true;
         $total_schedules = DmvClasses::model()->count($criteria);
         
+        //students
         $total_students = Students::model()->count("affiliate_id = ".Yii::app()->user->affiliate_id);
         
-        $this->render('index', compact('total_schedules','total_students'));
+        // Documents
+        $total_documents = PostDocument::model()->count("affiliate_id = ".Yii::app()->user->affiliate_id);
+        
+        // Messages
+        $total_messages = DmvPostMessage::model()->count("affiliate_id = ".Yii::app()->user->affiliate_id);
+        
+        $this->render('index', compact('total_schedules','total_students','total_documents','total_messages'));
     }
     public function actionLogin() 
     {

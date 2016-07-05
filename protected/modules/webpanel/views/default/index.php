@@ -73,6 +73,27 @@ $this->breadcrumbs = array(
             </div>
         </div><!-- ./col -->
         <?php }?>
+         <?php if (AdminIdentity::checkAccess('webpanel.postdocument.index')) {?>
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    <h3>
+                        <?php echo $total_documents; ?>
+                    </h3>
+                    <p>
+                        Documents
+                    </p>
+                </div>
+                <div class="icon">
+                    <i class="ion-document"></i>
+                </div>
+                <a href="<?php echo Yii::app()->createAbsoluteUrl('/webpanel/postdocument') ?>" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div><!-- ./col -->
+        <?php }?>
         <?php if (AdminIdentity::checkAccess('webpanel.messages.index')) {?>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->

@@ -7,17 +7,6 @@ $this->breadcrumbs = array(
     'Documents',
 );
 ?>
-
-<div class="col-lg-12 col-md-12">
-    <div class="row">
-        <?php
-        if (AdminIdentity::checkAccess('webpanel.postdocument.create')) {
-            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Document', array('/webpanel/postdocument/create'), array('class' => 'btn btn-success pull-right'));
-        }
-        ?>
-    </div>
-</div>
-
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 
 <div class="col-lg-12 col-md-12">
@@ -26,32 +15,27 @@ $this->breadcrumbs = array(
         $gridColumns = array(
             array('header' => 'SN.',
                 'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
-            ),
-            array(
-                'name' => 'Affliate.agency_name',
-                'value' => $data->dmvAffiliateInfo->agency_name,
-            ),
+            ),           
             'doc_title',
             'file_name',
             array(
                 'name' => 'posted_date',
                 'value' => function($data) {
                     echo Myclass::date_dispformat($data->posted_date);
-                },
+                }
             ),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
                 'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{download}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',
-                'buttons' => array(
-                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.update')"),
-                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.delete')"),
-                    'download' => array(
-                        'label' => "<i class='fa fa-download'></i>",
-                        'url' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->affiliate_id."/".$data->file_name) : ""',
+                'template' => '{download}',
+                'buttons' => array(                    
+                        'download' => array(
+                        'label'   => "<i class='fa fa-download'></i>",
+                        'url'     => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->affiliate_id."/".$data->file_name) : ""',
                         'options' => array('class' => 'newWindow', 'target' => '_blank', 'title' => "Download file"),
                         'visible' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name))',
+                        
                     ),
                 ),
             )

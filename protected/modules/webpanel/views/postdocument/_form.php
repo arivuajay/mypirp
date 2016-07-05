@@ -10,7 +10,7 @@
             <?php
             $form = $this->beginWidget('CActiveForm', array(
                 'id' => 'post-document-form',
-                'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data'), 
+                'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data'),
                 'clientOptions' => array(
                     'validateOnSubmit' => true,
                 ),
@@ -18,6 +18,15 @@
             ));
             ?>
             <div class="box-body">
+                
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'affiliate_id', array('class' => 'col-sm-2 control-label')); ?>                   
+                    <div class="col-sm-5">
+                        <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control', "empty" => "Select One")); ?>         
+                        <?php echo $form->error($model, 'affiliate_id'); ?>
+                    </div>    
+                </div>
+
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'doc_title', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
@@ -25,7 +34,7 @@
                         <?php echo $form->error($model, 'doc_title'); ?>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'image', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
@@ -33,8 +42,8 @@
                         <?php echo $form->error($model, 'image'); ?>
                     </div>
                 </div>
-                
-                 <div class="form-group">
+
+                <div class="form-group">
                     <?php echo $form->labelEx($model, 'posted_date', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">                                                
                         <div class="input-group">

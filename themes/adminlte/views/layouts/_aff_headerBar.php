@@ -1,6 +1,12 @@
 <header class="header">
     <?php echo CHtml::link(Yii::app()->name, array('/affiliate/'), array('class' => 'logo'));
     $aff_infos = DmvAffiliateInfo::getAffiliateInfo();
+    
+    // Unread message count
+    $criteria2 = new CDbCriteria;     
+    $criteria2->addCondition("view_status = 0");
+    $criteria2->addCondition("affiliate_id = ".Yii::app()->user->affiliate_id);
+    $total_messages  = DmvPostMessage::model()->count($criteria2);
     ?>
     <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -12,6 +18,14 @@
 
         <div class="navbar-right">
             <ul class="nav navbar-nav">
+                <li class="dropdown messages-menu">
+                    <a href="<?php echo Yii::app()->createAbsoluteUrl('/affiliate/messages') ?>">
+                        <i class="fa fa-envelope"></i>
+                        <?php if($total_messages>0){?>
+                        <span class="label label-danger"><?php echo $total_messages;?></span>
+                        <?php }?>
+                    </a>
+                </li>
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>

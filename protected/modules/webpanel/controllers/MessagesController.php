@@ -52,16 +52,18 @@ class MessagesController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new DmvPostMessage;
+        $model = new DmvPostMessage;        
+        $model->unsetAttributes(); 
+        
+        $affiliates = DmvAffiliateInfo::all_affliates();
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
-        
-        $model->unsetAttributes();  // 
+         // 
         if (isset($_POST['DmvPostMessage'])) {
             $model->attributes = $_POST['DmvPostMessage'];
-            $model->admin_id = Yii::app()->user->admin_id;
             $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
+            $model->view_status = 0;
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->message_title} message created successfully. Message id - {$model->message_id}", "messages");
                 
@@ -70,9 +72,7 @@ class MessagesController extends Controller {
             }
         }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+        $this->render('create', compact('model','affiliates'));
     }
 
     /**
@@ -82,14 +82,15 @@ class MessagesController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $affiliates = DmvAffiliateInfo::all_affliates();
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
         if (isset($_POST['DmvPostMessage'])) {
             $model->attributes = $_POST['DmvPostMessage'];
-            $model->admin_id = Yii::app()->user->admin_id;
             $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
+            $model->view_status = 0;
             if ($model->save()) {
                 Myclass::addAuditTrail("{$model->message_title} message updated successfully. Message id - {$model->message_id}", "messages");
                
@@ -105,9 +106,7 @@ class MessagesController extends Controller {
             $model->posted_date = Myclass::date_dispformat($model->posted_date);
         } 
 
-        $this->render('update', array(
-            'model' => $model,
-        ));
+        $this->render('update', compact('model','affiliates'));
     }
 
     /**

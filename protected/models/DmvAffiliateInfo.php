@@ -108,6 +108,8 @@ class DmvAffiliateInfo extends CActiveRecord {
              'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'affiliate_id'),
              'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'affiliate_id'),
              'adminInfo' => array(self::BELONGS_TO, 'Admin', 'admin_id'),
+             'postDocument' => array(self::HAS_MANY, 'PostDocument', 'affiliate_id'), 
+             'postMessage' => array(self::HAS_MANY, 'DmvPostMessage', 'affiliate_id'), 
         );
     }
 

@@ -38,23 +38,34 @@ class DefaultController extends Controller {
 
     public function actionIndex() 
     {      
+        
+        
         $chckadmn_condition = "admin_id =".Yii::app()->user->admin_id;
         // Affiliates
         $total_affiliates = DmvAffiliateInfo::model()->count($chckadmn_condition); 
         // Instructors
         $total_instructors = DmvAddInstructor::model()->count($chckadmn_condition);   
-        // Messages
-        $total_messages = DmvPostMessage::model()->count($chckadmn_condition);
-        // Schedules
+        
+        // Messages and documents    
+        $criteria2 = new CDbCriteria;       
+        $criteria2->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id); 
+        $criteria2->with = array("Affliate");
+        $criteria2->together = true;
+        
+        $total_messages  = DmvPostMessage::model()->count($criteria2);
+        $total_documents = PostDocument::model()->count($criteria2);
+        
+        // Schedules    
         $criteria = new CDbCriteria;
         $criteria->addCondition("show_admin = 'Y'");        
         $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id); 
         $criteria->with = array("Affliate");
         $criteria->together = true;
+        
         $total_schedules = DmvClasses::model()->count($criteria);
        
         
-        $this->render('index', compact('total_affiliates','total_instructors','total_messages','total_schedules'));
+        $this->render('index', compact('total_affiliates','total_instructors','total_messages','total_schedules','total_documents'));
     }
     
 

@@ -26,13 +26,13 @@ class DmvPostMessage extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('message_title, descr,posted_date', 'required'),
-            array('admin_id', 'numerical', 'integerOnly' => true),
+            array('affiliate_id,message_title, descr,posted_date', 'required'),
+            array('affiliate_id', 'numerical', 'integerOnly' => true),
             array('message_title', 'length', 'max' => 20),
-            array('posted_date', 'safe'),
+            array('posted_date,view_status', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('message_id, message_title, descr, posted_date, admin_id', 'safe', 'on' => 'search'),
+            array('message_id, message_title, descr, posted_date, affiliate_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -43,6 +43,7 @@ class DmvPostMessage extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'Affliate' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
         );
     }
 
@@ -55,7 +56,7 @@ class DmvPostMessage extends CActiveRecord {
             'message_title' => Myclass::t('Title'),
             'descr' => Myclass::t('Description'),
             'posted_date' => Myclass::t('Posted Date'),
-            'admin_id' => Myclass::t('Admin'),
+            'affiliate_id' => Myclass::t('Affiliate'),
         );
     }
 
@@ -77,16 +78,24 @@ class DmvPostMessage extends CActiveRecord {
         $criteria = new CDbCriteria;
 
 
-        $criteria->condition = "admin_id = :admin_id";
-        $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+         if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
+        {  
+            $criteria->condition = "Affliate.admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+        }    
+        
+        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
+        {    
+            $criteria->addCondition("t.affiliate_id = ".Yii::app()->user->affiliate_id);  
+        }  
 
-        $criteria->compare('message_id', $this->message_id);
-        $criteria->compare('message_title', $this->message_title, true);
-        $criteria->compare('descr', $this->descr, true);
-        $criteria->compare('posted_date', $this->posted_date, true);
-        $criteria->compare('admin_id', $this->admin_id);
+        $criteria->with = array("Affliate");
+        $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
+            'sort' => array(
+                'defaultOrder' => 'posted_date DESC',
+            ),
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,

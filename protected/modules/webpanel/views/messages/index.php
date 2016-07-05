@@ -27,6 +27,10 @@ $this->breadcrumbs = array(
             array('header' => 'SN.',
                 'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
             ),
+             array(
+                'name' => 'Affliate.agency_name',
+                'value' => $data->dmvAffiliateInfo->agency_name,
+            ),
             'message_title',
             array(
                 'name' => 'posted_date',

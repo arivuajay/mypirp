@@ -54,6 +54,8 @@ class PostdocumentController extends Controller {
     public function actionCreate() {
         $model = new PostDocument;
         $model->unsetAttributes();  
+        
+        $affiliates = DmvAffiliateInfo::all_affliates();
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -70,8 +72,8 @@ class PostdocumentController extends Controller {
                     $imgname = time() . '_' . $model->image->name;
                     $model->file_name = $imgname;
 
-                    $adminid = Yii::app()->user->admin_id;
-                    $img_path = $path . $adminid . '/';
+                    $affiliate_id = $model->affiliate_id;
+                    $img_path = $path . $affiliate_id . '/';
 
                     if (!is_dir($img_path)) {
                         mkdir($img_path, 0777, true);
@@ -79,7 +81,6 @@ class PostdocumentController extends Controller {
                     $model->image->saveAs($img_path . $imgname);
                 }
 
-                $model->admin_id = Yii::app()->user->admin_id;
                 $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
                 if ($model->save()) {
                     Myclass::addAuditTrail("{$model->doc_title} document created successfully. Doc id - {$model->id}", "postdocument");
@@ -90,9 +91,7 @@ class PostdocumentController extends Controller {
             }
         }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+        $this->render('create', compact('model','affiliates'));
     }
 
     /**
@@ -102,6 +101,8 @@ class PostdocumentController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        
+         $affiliates = DmvAffiliateInfo::all_affliates();
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
@@ -119,8 +120,8 @@ class PostdocumentController extends Controller {
                     $imgname = time() . '_' . $model->image->name;
                     $model->file_name = $imgname;
 
-                    $adminid = Yii::app()->user->admin_id;
-                    $img_path = $path . $adminid . '/';
+                    $affiliate_id = $model->affiliate_id;
+                    $img_path = $path . $affiliate_id . '/';
 
                     if (!is_dir($img_path)) {
                         mkdir($img_path, 0777, true);
@@ -128,7 +129,6 @@ class PostdocumentController extends Controller {
                     $model->image->saveAs($img_path . $imgname);
                 }
 
-                $model->admin_id = Yii::app()->user->admin_id;
                 $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
                 if ($model->save()) {
                     Myclass::addAuditTrail("{$model->doc_title} document updated successfully. Doc id - {$model->id}", "postdocument");
@@ -146,9 +146,7 @@ class PostdocumentController extends Controller {
             $model->posted_date = Myclass::date_dispformat($model->posted_date);
         } 
 
-        $this->render('update', array(
-            'model' => $model,
-        ));
+        $this->render('update', compact('model','affiliates'));
     }
 
     /**
@@ -166,8 +164,8 @@ class PostdocumentController extends Controller {
         if($file_name!="")
         {    
             $path = Yii::getPathOfAlias('webroot') . '/' . IMG_PATH;
-            $adminid = Yii::app()->user->admin_id;
-            $img_path = $path . $adminid . '/'.$file_name;
+            $affiliate_id = $dmodel->affiliate_id;
+            $img_path = $path . $affiliate_id . '/'.$file_name;
                     
             if(file_exists($img_path))
             unlink($img_path);
