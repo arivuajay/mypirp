@@ -17,7 +17,7 @@
             'tagName' => 'ul', // container tag
             'htmlOptions' => array('class' => 'breadcrumb'), // no attributes on container
             'separator' => '', // no separator
-            'homeLink' => '<li><a href="' . Yii::app()->baseUrl . '/admin/default/index"><i class="fa fa-home"></i> Home</a></li>', // home link template
+            'homeLink' => '<li><a href="' . Yii::app()->baseUrl . '/webpanel/default/index"><i class="fa fa-home"></i> Home</a></li>', // home link template
             'activeLinkTemplate' => '<li><a href="{url}">{label}</a></li>', // active link template
             'inactiveLinkTemplate' => '<li class="active">{label}</li>', // in-active link template
         ));

@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'affiliate_id', array('class' => 'col-sm-2 control-label')); ?>                   
                     <div class="col-sm-5">
-                        <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control', "empty" => "Select One")); ?>         
+                        <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control')); ?>         
                         <?php echo $form->error($model, 'affiliate_id'); ?>
                     </div>    
                 </div>

@@ -27,7 +27,7 @@ class PostDocument extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('doc_title, posted_date,affiliate_id', 'required'),
+            array('doc_title, posted_date', 'required'),
             array('doc_title', 'length', 'max' => 50),
             array('file_name', 'length', 'max' => 250),
             array('posted_date', 'safe'),
@@ -82,17 +82,20 @@ class PostDocument extends CActiveRecord {
         
         if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
         {  
-            $criteria->condition = "Affliate.admin_id = :admin_id";
+            $criteria->condition = "admin_id = :admin_id";
             $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
         }    
         
         if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
         {    
-            $criteria->addCondition("t.affiliate_id = ".Yii::app()->user->affiliate_id);  
+            $admin_id = DmvAffiliateInfo::model()->findByPk(Yii::app()->user->affiliate_id)->admin_id;
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => $admin_id));
+            $criteria->addCondition("affiliate_id = ".Yii::app()->user->affiliate_id." || affiliate_id=0");  
         }  
 
-        $criteria->with = array("Affliate");
-        $criteria->together = true;
+//        $criteria->with = array("Affliate");
+//        $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
             'sort' => array(

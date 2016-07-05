@@ -32,9 +32,9 @@ $this->breadcrumbs = array(
                 'buttons' => array(                    
                         'download' => array(
                         'label'   => "<i class='fa fa-download'></i>",
-                        'url'     => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->affiliate_id."/".$data->file_name) : ""',
+                        'url'     => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->file_name) : ""',
                         'options' => array('class' => 'newWindow', 'target' => '_blank', 'title' => "Download file"),
-                        'visible' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name))',
+                        'visible' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->file_name))',
                         
                     ),
                 ),

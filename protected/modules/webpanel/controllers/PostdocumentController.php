@@ -55,15 +55,20 @@ class PostdocumentController extends Controller {
         $model = new PostDocument;
         $model->unsetAttributes();  
         
-        $affiliates = DmvAffiliateInfo::all_affliates();
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('0' => '- ALL -');
+        $affiliates = $firstItem + $affiliates_arr;
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
-        $path = Yii::getPathOfAlias('webroot') . '/' . IMG_PATH;
+        $img_path = Yii::getPathOfAlias('webroot') . '/' . IMG_PATH.'/';
 
         if (isset($_POST['PostDocument'])) {
-            $model->attributes = $_POST['PostDocument'];
+            
+            $model->attributes   = $_POST['PostDocument'];
+            $model->affiliate_id = $_POST['PostDocument']['affiliate_id'];
+            $model->admin_id     = Yii::app()->user->admin_id;
             
             if ($model->validate()) {
                 $model->image = CUploadedFile::getInstance($model, 'image');
@@ -71,13 +76,6 @@ class PostdocumentController extends Controller {
                 if ($model->image) {
                     $imgname = time() . '_' . $model->image->name;
                     $model->file_name = $imgname;
-
-                    $affiliate_id = $model->affiliate_id;
-                    $img_path = $path . $affiliate_id . '/';
-
-                    if (!is_dir($img_path)) {
-                        mkdir($img_path, 0777, true);
-                    }
                     $model->image->saveAs($img_path . $imgname);
                 }
 
@@ -102,15 +100,19 @@ class PostdocumentController extends Controller {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         
-         $affiliates = DmvAffiliateInfo::all_affliates();
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('0' => '- ALL -');
+        $affiliates = $firstItem + $affiliates_arr;
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
         
-        $path = Yii::getPathOfAlias('webroot') . '/' . IMG_PATH;
+        $img_path = Yii::getPathOfAlias('webroot') . '/' . IMG_PATH .'/';
 
         if (isset($_POST['PostDocument'])) {
             $model->attributes = $_POST['PostDocument'];
+            $model->affiliate_id = $_POST['PostDocument']['affiliate_id'];
+            $model->admin_id     = Yii::app()->user->admin_id;
             
             if ($model->validate()) {
                 
@@ -119,13 +121,6 @@ class PostdocumentController extends Controller {
                 if ($model->image) {
                     $imgname = time() . '_' . $model->image->name;
                     $model->file_name = $imgname;
-
-                    $affiliate_id = $model->affiliate_id;
-                    $img_path = $path . $affiliate_id . '/';
-
-                    if (!is_dir($img_path)) {
-                        mkdir($img_path, 0777, true);
-                    }
                     $model->image->saveAs($img_path . $imgname);
                 }
 

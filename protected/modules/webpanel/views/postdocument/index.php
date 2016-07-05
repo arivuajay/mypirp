@@ -29,7 +29,9 @@ $this->breadcrumbs = array(
             ),
             array(
                 'name' => 'Affliate.agency_name',
-                'value' => $data->dmvAffiliateInfo->agency_name,
+                'value' => function($data) {
+                    echo ($data->affiliate_id>0)?$data->Affliate->agency_name:"-All-";
+                }
             ),
             'doc_title',
             'file_name',
@@ -49,9 +51,9 @@ $this->breadcrumbs = array(
                     'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.postdocument.delete')"),
                     'download' => array(
                         'label' => "<i class='fa fa-download'></i>",
-                        'url' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->affiliate_id."/".$data->file_name) : ""',
+                        'url' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->file_name)) ? Yii::app()->createAbsoluteUrl("/messagedoc/".$data->file_name) : ""',
                         'options' => array('class' => 'newWindow', 'target' => '_blank', 'title' => "Download file"),
-                        'visible' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->affiliate_id."/".$data->file_name))',
+                        'visible' => '(is_file(YiiBase::getPathOfAlias("webroot")."/messagedoc/".$data->file_name))',
                     ),
                 ),
             )
