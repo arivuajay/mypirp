@@ -16,13 +16,20 @@
                 ),
                 'enableAjaxValidation' => true,
             ));
-            
             ?>
             <div class="box-body">
                 <div class="form-group">
+                    <div class="col-sm-2">&nbsp;</div>
+                    <div class="col-sm-5">
+                        <?php echo $form->error($model, 'composite_error'); ?>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
                     <?php echo $form->labelEx($model, 'Affiliate', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">                       
-                        <?php                       
+                        <?php
                         $htmlOptions = array('size' => '5', 'multiple' => 'true', 'id' => 'MasterSelectBox', 'class' => 'form-control', 'options' => $x_aff);
                         echo $form->listBox($model, 'Affiliate', $affiliates, $htmlOptions);
                         ?>
@@ -97,14 +104,14 @@
                         <?php echo $form->error($model, 'instructor_dob'); ?>
                     </div>
                 </div>
-                
-                 <div class="form-group">
-                        <?php echo $form->labelEx($model, 'gender', array('class' => 'col-sm-2 control-label')); ?>
-                        <div class="col-sm-5">
-                            <?php echo $form->dropDownList($model, 'gender', array( "" => "-Select One-","M" => "Male", "F" => "Female"), array('class' => 'form-control')); ?> 
-                            <?php echo $form->error($model, 'gender'); ?>
-                        </div>
+
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'gender', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-sm-5">
+                        <?php echo $form->dropDownList($model, 'gender', array("" => "-Select One-", "M" => "Male", "F" => "Female"), array('class' => 'form-control')); ?> 
+                        <?php echo $form->error($model, 'gender'); ?>
                     </div>
+                </div>
 
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'addr1', array('class' => 'col-sm-2 control-label')); ?>

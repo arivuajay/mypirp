@@ -155,6 +155,8 @@ if ($model->startdate != "" && $model->enddate != "") {
 <?php }
 ?>
 <?php
+$ajaxInstructorsUrl = Yii::app()->createUrl('/webpanel/instructors/getinstructors');
+
 $js = <<< EOD
 $(document).ready(function(){
  
@@ -164,6 +166,22 @@ $("#printdiv").click(function() {
     popupWinindow.document.open();
     popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
 });     
+        
+  $("#Students_affiliate_id").change(function () {
+        var id = $(this).val();
+        var dataString = 'id=' + id;
+
+        $.ajax({
+            type: "POST",
+            url: '{$ajaxInstructorsUrl}',
+            data: dataString,
+            cache: false,
+            success: function (html) {
+                $("#Students_instructorid").html(html);
+            }
+        });
+    });
+       
 
 $("#print_res").click(function() {
     var startdate = $("#Students_startdate").val();

@@ -23,24 +23,46 @@
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'first_name', array('class' => ' control-label')); ?>
                             <?php echo $form->textField($model, 'first_name', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
 
-                     <div class="col-lg-3 col-md-3">
+                     <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'last_name', array('class' => ' control-label')); ?>
                             <?php echo $form->textField($model, 'last_name', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
                     
-                     <div class="col-lg-3 col-md-3">
+                     <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'licence_number', array('class' => ' control-label')); ?>
                             <?php echo $form->textField($model, 'licence_number', array('class' => 'form-control')); ?>
+                        </div>
+                    </div> 
+                    
+                    <div class="clearfix"></div>  
+                    
+                    <div class="col-lg-4 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'clas_id', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date')); ?>
+                            </div> 
+                        </div>
+                    </div> 
+                    
+                    <div class="col-lg-4 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'course_completion_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date')); ?>
+                            </div> 
                         </div>
                     </div> 
 

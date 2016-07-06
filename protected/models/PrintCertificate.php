@@ -88,7 +88,7 @@ class PrintCertificate extends CActiveRecord {
             ),
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => PAGE_SIZE,
+                'pageSize' => 100,
             )
         ));
     }

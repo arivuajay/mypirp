@@ -166,9 +166,9 @@ class ReportsController extends Controller {
                     $course_completion_date = "00000";
                     $stdname = array();
 
-                    $first_name  = isset($InsArr["first_name"]) ? trim($InsArr["first_name"]) : "";
+                    $first_name = isset($InsArr["first_name"]) ? trim($InsArr["first_name"]) : "";
                     $middle_name = isset($InsArr["middle_name"]) ? trim($InsArr["middle_name"]) : "";
-                    $last_name   = isset($InsArr["last_name"]) ? trim($InsArr["last_name"]) : "";
+                    $last_name = isset($InsArr["last_name"]) ? trim($InsArr["last_name"]) : "";
 
                     if ($last_name != "") {
                         $stdname[] = $last_name;
@@ -197,7 +197,7 @@ class ReportsController extends Controller {
                     $row_data .= $dob;
 
                     ///27
-                    $gender = (isset($InsArr["gender"]) && $InsArr["gender"]!="") ? $InsArr["gender"] : "-";
+                    $gender = (isset($InsArr["gender"]) && $InsArr["gender"] != "") ? $InsArr["gender"] : "-";
                     $row_data .= $gender;
 
                     //28 to 49
@@ -243,21 +243,21 @@ class ReportsController extends Controller {
                     //add all row to main data
                     $data .= $row_data . $cr;
                 }
-                      
+
                 $file_name = 'Studentcompletionreport-' . date('F-d-Y') . '.txt';
-                                
+
                 header("Content-type: plain/text");
                 header("Cache-Control: no-store, no-cache");
                 header("Pragma: no-cache");
                 header("Expires: 0");
-                header('Content-Disposition: attachment; filename="'.$file_name.'"');   
-                
-                $fp = fopen('php://output','a');// $fp is now the file pointer to file $filename
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');
+
+                $fp = fopen('php://output', 'a'); // $fp is now the file pointer to file $filename
                 if ($fp) {
                     fwrite($fp, $data);    //    Write information to the file
                     fclose($fp);  //    Close the file
-                }               
-              exit;
+                }
+                exit;
             } else {
                 Yii::app()->user->setFlash('danger', 'No records found!!!');
                 $this->redirect(array('studentcompletionreport'));
@@ -305,13 +305,23 @@ class ReportsController extends Controller {
             $affiliate_id = $model->affiliate_id;
 
             $criteria = new CDbCriteria;
-            $criteria->addCondition('first_name != ""');
+            $criteria->addCondition('t.first_name != ""');
 
             if ($startdate != "" && $enddate != "")
                 $criteria->addCondition("course_completion_date >= '" . $startdate . "' AND course_completion_date <= '" . $enddate . "'");
 
             if ($affiliate_id)
                 $criteria->addCondition('affiliate_id = ' . $affiliate_id);
+
+            if ($model->agencycode != "")
+                $criteria->addCondition("dmvAffiliateInfo.agency_code = '" . $model->agencycode . "'");
+
+
+            if ($model->agencyname != "")
+                $criteria->compare('dmvAffiliateInfo.agency_name', $model->agencyname, true);
+
+            $criteria->with = array("dmvAffiliateInfo");
+            $criteria->together = true;
 
             $std_infos = Students::model()->findAll($criteria);
 

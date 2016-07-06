@@ -56,20 +56,18 @@ class StudentsController extends Controller {
 
     public function actionPrintstudents() {
         $model = new Students('search');
-
-        $affiliates_arr = DmvAffiliateInfo::all_affliates();
-        $firstItem = array('0' => '- ALL -');
-        $affiliates = $firstItem + $affiliates_arr;
-
-        $instructors_arr = DmvAddInstructor::all_instructors();
-        $scndItem = array('0' => '- None -');
-        $instructors = $scndItem + $instructors_arr;
-
-
-
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['Students']))
             $model->attributes = $_GET['Students'];
+        
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem = array('0' => 'ALL');
+        $affiliates = $firstItem + $affiliates_arr;
+        
+        $affid = ($model->affiliate_id!="")?$model->affiliate_id:NULL;
+        $instructors_arr = DmvAddInstructor::all_instructors($affid);
+        $scndItem = array('0' => 'ALL');
+        $instructors = $scndItem + $instructors_arr;
 
         $this->render('printstudents', compact('model', 'affiliates', 'instructors'));
     }

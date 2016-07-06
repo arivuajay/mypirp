@@ -26,7 +26,8 @@
  */
 class Students extends CActiveRecord {
 
-    public $instructorid, $startdate, $enddate, $certificatenumber,$label_flag,$start_date, $end_date, $completion_date_all;
+    public $instructorid, $startdate, $enddate, $certificatenumber, $label_flag, $start_date, $end_date, $completion_date_all;
+    public $agencycode, $agencyname, $clasdate;
 
     /**
      * @return string the associated database table name
@@ -49,6 +50,7 @@ class Students extends CActiveRecord {
             array('address1, address2, email', 'length', 'max' => 50),
             array('gender', 'length', 'max' => 1),
             array('dob, course_completion_date,notes,instructorid,certificatenumber,startdate,enddate,label_flag,completion_date_all', 'safe'),
+            array('agencycode, agencyname,clasdate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('student_id, affiliate_id, clas_id, first_name, middle_name, last_name, stud_suffix, address1, address2, city, state, zip, phone, email, gender, dob, licence_number, notes, course_completion_date', 'safe', 'on' => 'search'),
@@ -74,7 +76,7 @@ class Students extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'student_id' => Myclass::t('Student'),
-            'affiliate_id' => Myclass::t('Agency Code'),
+            'affiliate_id' => Myclass::t('Affiliate'),
             'clas_id' => Myclass::t('Class Date'),
             'first_name' => Myclass::t('First Name'),
             'middle_name' => Myclass::t('Middle Name'),
@@ -95,7 +97,9 @@ class Students extends CActiveRecord {
             'affiliateid' => "Delivery Agency School",
             'instructorid' => 'Instructor Name',
             'startdate' => "Start Date",
-            'enddate' => "End Date"
+            'enddate' => "End Date",
+            'agencycode' => "Agency Code",
+            'agencyname' => "Agency Name"
         );
     }
 
@@ -113,53 +117,71 @@ class Students extends CActiveRecord {
      */
     public function search() {
         $datamod = array();
-        $datamod = $_GET; 
+        $datamod = $_GET;
         // @todo Please modify the following code to remove attributes that should not be searched.
+        $_action = Yii::app()->controller->action->id;
 
         $criteria = new CDbCriteria;
-        
+
         if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
             $criteria->condition = "dmvAffiliateInfo.admin_id = :admin_id";
             $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
         }
-       
+
         if ($this->affiliate_id != "" && $this->clas_id != "") {
+
             $criteria->condition = "t.affiliate_id = :affiliate_id and t.clas_id = :clas_id";
             $criteria->params = (array(':affiliate_id' => $this->affiliate_id, ':clas_id' => $this->clas_id));
-        }elseif(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-        {    
+        } elseif (isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id != "") {
+
             $criteria->condition = "t.affiliate_id = :affiliate_id";
             $criteria->params = (array(':affiliate_id' => Yii::app()->user->affiliate_id));
-        }   
+        }
 
         if ($this->licence_number != "")
             $criteria->addCondition("licence_number=" . $this->licence_number);
-
+        
+        if ($this->agencycode != "")
+            $criteria->addCondition("dmvAffiliateInfo.agency_code = '".$this->agencycode."'");  
+        
+        if ($this->course_completion_date != "")
+        {    
+            $this->course_completion_date = Myclass::dateformat($this->course_completion_date);
+            $criteria->addCondition("course_completion_date = '" . $this->course_completion_date . "'");
+            $datamod['Students']['course_completion_date'] = $this->course_completion_date;
+        }  
+        
+        if ($this->clasdate != "")
+        {    
+            $this->clasdate = Myclass::dateformat($this->clasdate);
+            $criteria->addCondition("dmvClasses.clas_date = '" . $this->clasdate . "'");
+            $datamod['Students']['clasdate'] = $this->clasdate;
+        } 
+        
         if ($this->startdate != "" && $this->enddate != "") {
-            
+
             $this->startdate = Myclass::dateformat($this->startdate);
-            $this->enddate   = Myclass::dateformat($this->enddate);
-            
+            $this->enddate = Myclass::dateformat($this->enddate);
+
             $datamod['Students']['startdate'] = $this->startdate;
-            $datamod['Students']['enddate']   = $this->enddate;
-            
-            if($this->label_flag)
-            $criteria->addCondition("course_completion_date >= '" . $this->startdate . "' AND course_completion_date <= '" . $this->enddate . "'");
-            else    
-            $criteria->addCondition("dmvClasses.clas_date >= '" . $this->startdate . "' AND dmvClasses.clas_date <= '" . $this->enddate . "'");
+            $datamod['Students']['enddate'] = $this->enddate;
+
+            if ($this->label_flag)
+                $criteria->addCondition("course_completion_date >= '" . $this->startdate . "' AND course_completion_date <= '" . $this->enddate . "'");
+            else
+                $criteria->addCondition("dmvClasses.clas_date >= '" . $this->startdate . "' AND dmvClasses.clas_date <= '" . $this->enddate . "'");
 
             if ($this->affiliate_id > 0) {
                 $criteria->addCondition('t.affiliate_id = ' . $this->affiliate_id);
-            }elseif(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-            {
-                 $criteria->addCondition('t.affiliate_id = ' . Yii::app()->user->affiliate_id);
-            }    
+            } elseif (isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id != "") {
+                $criteria->addCondition('t.affiliate_id = ' . Yii::app()->user->affiliate_id);
+            }
 
             if ($this->instructorid > 0) {
                 $criteria->addCondition('dmvClasses.instructor_id = ' . $this->instructorid);
             }
         }
-        
+
 
         $criteria->compare('t.first_name', $this->first_name, true);
         $criteria->compare('middle_name', $this->middle_name, true);
@@ -172,32 +194,36 @@ class Students extends CActiveRecord {
         $criteria->compare('t.phone', $this->phone, true);
         $criteria->compare('t.email', $this->email, true);
         $criteria->compare('t.gender', $this->gender, true);
-        $criteria->compare('course_completion_date', $this->course_completion_date, true);
+        //$criteria->compare('course_completion_date', $this->course_completion_date, true);
 
         $criteria->with = array("dmvAffiliateInfo", 'dmvClasses');
         $criteria->together = true;
 
+        if ($_action == "printstudents")
+            $pagesize = 100;
+        else
+            $pagesize = PAGE_SIZE;
+
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => PAGE_SIZE,
+                'pageSize' => $pagesize,
                 'params' => $datamod
             )
         ));
     }
-    
-    public function getConcatened()
-    {
-        return $this->first_name. " " . $this->last_name; 
+
+    public function getConcatened() {
+        return $this->first_name . " " . $this->last_name;
     }
-    
-    public static function get_student_list($classid=NULL)
-    {        
-        $get_stdlist = Students::model()->findAll("clas_id=" . $classid);    
-        $students   = CHtml::listData($get_stdlist, 'student_id', 'concatened');
-        
+
+    public static function get_student_list($classid = NULL) {
+        $get_stdlist = Students::model()->findAll("clas_id=" . $classid);
+        $students = CHtml::listData($get_stdlist, 'student_id', 'concatened');
+
         return $students;
-    }     
+    }
+
     /**
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!

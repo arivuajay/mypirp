@@ -28,7 +28,7 @@ $this->breadcrumbs = array(
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>                 
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'startdate', array('class' => ' control-label')); ?>
                             <div class="input-group">
@@ -39,7 +39,7 @@ $this->breadcrumbs = array(
                         </div>
                     </div> 
 
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'enddate', array('class' => ' control-label')); ?>
                             <div class="input-group">
@@ -50,14 +50,29 @@ $this->breadcrumbs = array(
                         </div>
                     </div> 
                     
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'affiliate_id', array('class' => 'control-label')); ?>                   
-                            <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control', "empty" => "ALL")); ?>         
+                            <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control selectpicker', "empty" => "ALL" ,"data-live-search"=>"true")); ?>         
+                        </div>
+                    </div> 
+                    <div class="clearfix"></div>   
+                    
+                    <div class="col-lg-4 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'agencycode', array('class' => ' control-label')); ?>
+                            <?php echo $form->textField($model, 'agencycode', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
 
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-4 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'agencyname', array('class' => ' control-label')); ?>
+                            <?php echo $form->textField($model, 'agencyname', array('class' => 'form-control')); ?>
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-4 col-md-3">
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <?php echo CHtml::submitButton('Filter', array("id" => 'print_res', 'class' => 'btn btn-primary form-control')); ?>

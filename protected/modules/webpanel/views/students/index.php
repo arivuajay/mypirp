@@ -20,7 +20,7 @@ $this->breadcrumbs = array(
 
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
-<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "") { ?>
+<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "" || $model->clasdate!="" || $model->agencycode!="" || $model->course_completion_date!="") { ?>
     <div class="col-lg-12 col-md-12">
         <div class="row">
             <?php
@@ -99,12 +99,15 @@ $(document).ready(function(){
         
    $("#search_stud").click(function() {
     var first_name = $("#Students_first_name").val();
-    var last_name = $("#Students_last_name").val();
+    var last_name  = $("#Students_last_name").val();
     var licence_number = $("#Students_licence_number").val();
+    var clasdate       = $("#Students_clasdate").val();
+    var agencycode     = $("#Students_agencycode").val();
+    var course_completion_date = $("#Students_course_completion_date").val();
         
     $("#disp_error").hide();   
    
-    if(first_name=="" && last_name=="" && licence_number=="")
+    if(first_name=="" && last_name=="" && licence_number=="" && clasdate=="" && agencycode=="" && course_completion_date=="")
      {
          $("#disp_error").show();
          return false;

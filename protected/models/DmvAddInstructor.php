@@ -42,8 +42,7 @@ class DmvAddInstructor extends CActiveRecord {
         // will receive user inputs.
         return array(
             array('instructor_last_name, ins_first_name, instructor_code', 'required'),
-            array('instructor_ss, instructor_suffix, instructor_code', 'length', 'max' => 10),
-            array('instructor_code', 'unique'),
+            array('instructor_ss, instructor_suffix, instructor_code', 'length', 'max' => 10),           
             array('instructor_last_name, ins_first_name, state', 'length', 'max' => 20),
             array('instructor_initial', 'length', 'max' => 5),
             array('instructor_client_id', 'length', 'max' => 11),
@@ -55,8 +54,26 @@ class DmvAddInstructor extends CActiveRecord {
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('instructor_id, instructor_ss, instructor_last_name, ins_first_name, instructor_initial, instructor_suffix, instructor_code, instructor_client_id, instructor_dob, enabled, gender, addr1, addr2, city, state, zip, phone, created_date', 'safe', 'on' => 'search'),
+            array('*', 'compositeUniqueKeysValidator'),
         );
     }
+    
+    public function compositeUniqueKeysValidator() {
+        $this->validateCompositeUniqueKeys();
+    }
+    
+     public function behaviors() {
+        return array(
+            'ECompositeUniqueKeyValidatable' => array(
+                'class' => 'ext.ECompositeUniqueKeyValidatable',
+                'uniqueKeys' => array(
+                    'attributes' => 'instructor_code, admin_id',
+                    'errorAttributes' => 'composite_error',                  
+                    'errorMessage' => 'Instructor code already exist!!'
+                )
+            ),
+        );
+    }       
 
     /**
      * @return array relational rules.

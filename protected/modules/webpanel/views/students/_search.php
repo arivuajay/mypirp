@@ -100,7 +100,35 @@
                             <?php echo $form->textField($model, 'licence_number', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
-
+                    <div class="clearfix"></div>  
+                    
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'clas_id', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date')); ?>
+                            </div> 
+                        </div>
+                    </div> 
+                    
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'agencycode', array('class' => ' control-label')); ?>
+                            <?php echo $form->textField($model, 'agencycode', array('class' => 'form-control')); ?>
+                        </div>
+                    </div> 
+                    
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'course_completion_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date')); ?>
+                            </div> 
+                        </div>
+                    </div> 
+                    
                     <div class="col-lg-2 col-md-2">
                         <div class="form-group">
                             <label>&nbsp;</label>
