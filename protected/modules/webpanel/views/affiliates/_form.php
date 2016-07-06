@@ -31,7 +31,7 @@ $country = Myclass::getallcountries();
                     <div class="form-group">
                         <?php echo $form->labelEx($model, 'sponser_email', array('class' => 'col-sm-2 control-label')); ?>
                         <div class="col-sm-5">
-                            <?php echo $form->textField($model, 'sponser_email', array('class' => 'form-control', "value" => "Danielle@americansafetyinstitute.com")); ?>                           
+                            <?php echo $form->textField($model, 'sponser_email', array('class' => 'form-control', "value" => "nadine@americansafetyinstitute.com")); ?>                           
                         </div>
                     </div>
 

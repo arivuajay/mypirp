@@ -125,9 +125,13 @@ class StudentsController extends Controller {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
 
-                    if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
-                        $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
-                    } elseif ($model->course_completion_date != "") {
+//                    if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
+//                        $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
+//                    } elseif ($model->course_completion_date != "") {
+//                        $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
+//                    }
+                    
+                    if ($model->course_completion_date != "") {
                         $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
                     }
 

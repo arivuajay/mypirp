@@ -37,8 +37,8 @@
         $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
         $js = <<< EOD
                 
-        jQuery('.year').datepicker({dateFormat: 'yyyy'});
-        jQuery('.date').datepicker({format: 'mm/dd/yyyy'});   
+        jQuery('.year').datepicker({dateFormat: 'yyyy' , forceParse: false});
+        jQuery('.date').datepicker({format: 'mm/dd/yyyy' , forceParse: false});   
 EOD;
         $cs->registerScript('_additional_s', $js);
      ?>           

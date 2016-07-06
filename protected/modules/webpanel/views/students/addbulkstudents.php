@@ -91,8 +91,8 @@ $form = $this->beginWidget('CActiveForm', array(
         </table>  
     </div>
 </div>
-<?php $this->endWidget(); ?>
-<script type="text/javascript">
+<?php $this->endWidget(); 
+$js = <<< EOD
     $(document).ready(function () {
 
         $('input[name="Students\\[completion_date_all\\]"]').on('ifChecked', function (event) {
@@ -115,8 +115,7 @@ $form = $this->beginWidget('CActiveForm', array(
             });
         
         });
-
-        $('.year').datepicker({dateFormat: 'yyyy'});
-        $('.date').datepicker({format: 'mm/dd/yyyy'});
     });
-</script>
+EOD;
+Yii::app()->clientScript->registerScript('_addbulk_sdts', $js);
+?> 
