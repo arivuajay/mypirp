@@ -20,12 +20,31 @@ $this->breadcrumbs = array(
 
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search', compact('model')); ?>
-<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "" || $model->clasdate!="" || $model->agencycode!="" || $model->course_completion_date!="") { ?>
+<?php if ($model->first_name != "" || $model->last_name != "" || $model->licence_number != "" || $model->clasdate != "" || $model->agencycode != "" || $model->course_completion_date != "") { ?>
     <div class="col-lg-12 col-md-12">
         <div class="row">
             <?php
             $gridColumns = array(
                 'first_name',
+                array(
+                    'header' => 'Class Date',
+                    'name' => 'dmvClasses.clas_date',
+                    'value' => function($data) {
+                        echo ($data->dmvClasses->clas_date != "") ? Myclass::date_dispformat($data->dmvClasses->clas_date) : "-";
+                    }
+                ),
+                array(
+                    'name' => 'dmvAffiliateInfo.agency_code',
+                    'value' => function($data) {
+                        echo ($data->dmvAffiliateInfo->agency_code != "") ? $data->dmvAffiliateInfo->agency_code : "-";
+                    }
+                ),
+                array(
+                    'name' => 'course_completion_date',
+                    'value' => function($data) {
+                        echo ($data->course_completion_date != "") ? Myclass::date_dispformat($data->course_completion_date) : "-";
+                    }
+                ),
                 'middle_name',
                 'last_name',
                 'city',
@@ -59,6 +78,7 @@ $this->breadcrumbs = array(
             $this->widget('booster.widgets.TbExtendedGridView', array(
                 //  'filter' => $model,
                 'type' => 'striped bordered datatable',
+                'enableSorting' => false,
                 'dataProvider' => $model->search(),
                 'responsiveTable' => true,
                 'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  Students</h3></div><div class="panel-body">{items}{pager}</div></div>',

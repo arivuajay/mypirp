@@ -33,7 +33,7 @@ class Admin extends CActiveRecord {
         return array(
             array('username, password, email,domain_url , client_name', 'required'),
             array('username, email,domain_url', 'unique'),
-            array('domain_url', 'url', 'defaultScheme' => 'http'),
+            array('domain_url', 'url', 'defaultScheme' => 'https'),
             array('email', 'email'),
             array('email', 'required', 'on' => 'forgotpassword'),
             array('password,current_password,re_password', 'required', 'on' => 'changepassword'),

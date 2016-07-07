@@ -28,8 +28,8 @@ class StudentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses','exceldownload'),
-                'expression'=> "AdminIdentity::checkAccess('webpanel.students.{$this->action->id}')",
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'addbulkstudents', 'managestudents', 'viewstudents', 'printstudents', 'getclasses', 'exceldownload'),
+                'expression' => "AdminIdentity::checkAccess('webpanel.students.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -59,12 +59,12 @@ class StudentsController extends Controller {
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['Students']))
             $model->attributes = $_GET['Students'];
-        
+
         $affiliates_arr = DmvAffiliateInfo::all_affliates();
         $firstItem = array('0' => 'ALL');
         $affiliates = $firstItem + $affiliates_arr;
-        
-        $affid = ($model->affiliate_id!="")?$model->affiliate_id:NULL;
+
+        $affid = ($model->affiliate_id != "") ? $model->affiliate_id : NULL;
         $instructors_arr = DmvAddInstructor::all_instructors($affid);
         $scndItem = array('0' => 'ALL');
         $instructors = $scndItem + $instructors_arr;
@@ -88,23 +88,23 @@ class StudentsController extends Controller {
 
     public function actionAddbulkstudents($aid, $cid) {
         $model = new Students;
-       
+
         $flag = 0;
-        
-        if (isset($_POST['Students'])) {      
-        
+
+        if (isset($_POST['Students'])) {
+
             for ($i = 1; $i <= 20; $i++) {
-               
+
                 if (isset($_POST['Students'][$i]['first_name']) && trim($_POST['Students'][$i]['first_name']) != '') {
                     $model = new Students;
                     $model->attributes = $_POST['Students'][$i];
-                   
-                   // if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
-                   //     $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
-                   // } elseif ($model->course_completion_date != "") {
-                   //     $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
-                   // }
-                    
+
+                    // if (isset($_POST['Students']['completion_date_all']) && $_POST['Students']['completion_date_all'] == "Yes" && isset($_POST['Students'][1]['course_completion_date']) && $_POST['Students'][1]['course_completion_date'] != "") {
+                    //     $model->course_completion_date = Myclass::dateformat($_POST['Students'][1]['course_completion_date']);
+                    // } elseif ($model->course_completion_date != "") {
+                    //     $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
+                    // }
+
                     if ($model->course_completion_date != "") {
                         $model->course_completion_date = Myclass::dateformat($model->course_completion_date);
                     }
@@ -112,31 +112,36 @@ class StudentsController extends Controller {
                     if ($model->dob != "") {
                         $model->dob = Myclass::dateformat($model->dob);
                     }
-                            
+
                     $model->affiliate_id = $aid;
                     $model->clas_id = $cid;
-                  
+
                     $model->save();
                     $flag++;
                 }
             }
 
             if ($flag > 0) {
-                
+
                 Myclass::addAuditTrail(" {$flag} student(s) added successfully. Class id - {$cid}", "students");
-                
+
                 Yii::app()->user->setFlash('success', $flag . ' student(s) added successfully!!!');
-                $this->redirect(array('schedules/index'));
+
+                if (isset($_POST['saveandcont']))
+                    $this->redirect(array('students/addbulkstudents/aid/' . $aid . '/cid/' . $cid));
+                else
+                    $this->redirect(array('schedules/index'));
+                
             } else {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/aid/' . $aid . '/cid/' . $cid));
             }
         }
-        
+
         if ($model->course_completion_date == "0000-00-00") {
             $model->course_completion_date = "";
         }
-        
+
         if ($model->dob == "0000-00-00") {
             $model->dob = "";
         }
@@ -200,14 +205,14 @@ class StudentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
-        
+
         if ($model->course_completion_date == "0000-00-00") {
             $model->course_completion_date = "";
-        } 
+        }
 
         if ($model->dob == "0000-00-00") {
             $model->dob = "";
-        } 
+        }
 
         $this->render('create', compact('model', 'affiliates', 'classes'));
     }
@@ -244,9 +249,9 @@ class StudentsController extends Controller {
 
         if (isset($_POST['Students'])) {
             $model->attributes = $_POST['Students'];
-             $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
+            $model->dob = ($model->dob != "") ? Myclass::dateformat($model->dob) : "";
             $model->course_completion_date = ($model->course_completion_date != "") ? Myclass::dateformat($model->course_completion_date) : "";
-            if ($model->save()) {                
+            if ($model->save()) {
                 Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos updated successfully. Student id - {$model->student_id}", "students");
                 Yii::app()->user->setFlash('success', 'Student Updated Successfully!!!');
                 $this->redirect(array('students/viewstudents/aid/' . $model->affiliate_id . '/cid/' . $model->clas_id));
@@ -278,11 +283,11 @@ class StudentsController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        
-        $model = $this->loadModel($id);        
+
+        $model = $this->loadModel($id);
         Myclass::addAuditTrail("{$model->first_name} - {$model->last_name} student infos deleted successfully. Student id - {$id}", "students");
         $model->delete();
-         
+
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax'])) {
             Yii::app()->user->setFlash('success', 'Students Deleted Successfully!!!');
@@ -328,31 +333,31 @@ class StudentsController extends Controller {
             Yii::app()->end();
         }
     }
-    
-    public function actionExceldownload(){   
-        
-        $from_date ='';
-        $to_date ='';
+
+    public function actionExceldownload() {
+
+        $from_date = '';
+        $to_date = '';
         $admin_id = Yii::app()->user->getId();
-        if (isset($_GET['Students'])){            
+        if (isset($_GET['Students'])) {
             $from_date = $_GET['Students']['start_date'];
-            $to_date = $_GET['Students']['end_date'];  
-            
+            $to_date = $_GET['Students']['end_date'];
+
             $ret_result = Yii::app()->db->createCommand("SELECT dms.student_id AS 'Student ID',dms.affiliate_id AS 'Affiliate ID',dms.clas_id AS 'Class ID',dms.first_name AS 'First Name',
                     dms.middle_name AS 'Middle Name',dms.last_name AS 'Last Name',dms.stud_suffix AS 'Student Suffix',dms.address1 AS 'Address1',dms.address2 AS 'Address2',
                     dms.city AS 'city',dms.state AS 'state',dms.zip AS 'zip',dms.phone AS 'phone',dms.email AS 'email',dms.gender AS 'gender',dms.dob AS 'dob',dms.licence_number AS 'licence_number',
                     dms.notes AS 'Notes',dms.course_completion_date AS 'Course Completion Date',dmc.certificate_number AS 'Certificate Number'
-                    FROM dmv_students AS dms LEFT JOIN dmv_print_certificate AS dmc ON dms.student_id = dmc.student_id,dmv_affiliate_info AS dma WHERE dma.affiliate_id = dms.affiliate_id AND dma.admin_id='".$admin_id."' AND dms.course_completion_date >= '". Myclass::dateformat($from_date)."' AND dms.course_completion_date <= '". Myclass::dateformat($to_date)."'");
-            
-            $file_name = 'students_' . date('m-d-Y').'.csv';
-                  
-            Yii::import('ext.ECSVExport');           
+                    FROM dmv_students AS dms LEFT JOIN dmv_print_certificate AS dmc ON dms.student_id = dmc.student_id,dmv_affiliate_info AS dma WHERE dma.affiliate_id = dms.affiliate_id AND dma.admin_id='" . $admin_id . "' AND dms.course_completion_date >= '" . Myclass::dateformat($from_date) . "' AND dms.course_completion_date <= '" . Myclass::dateformat($to_date) . "'");
+
+            $file_name = 'students_' . date('m-d-Y') . '.csv';
+
+            Yii::import('ext.ECSVExport');
             $csv = new ECSVExport($ret_result);
-            $content = $csv->toCSV();                   
+            $content = $csv->toCSV();
             Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
             exit();
         }
-        
+
         $this->redirect(array('index'));
     }
 

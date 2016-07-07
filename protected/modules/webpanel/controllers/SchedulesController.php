@@ -54,7 +54,7 @@ class SchedulesController extends Controller {
     public function actionCreate() {
         $instructors = array();
         $model = new DmvClasses;
-        $model->unsetAttributes();  // clear 
+        //$model->unsetAttributes();  // clear 
         
         $affiliates = DmvAffiliateInfo::all_affliates();
 
@@ -111,6 +111,14 @@ class SchedulesController extends Controller {
                 Yii::app()->user->setFlash('success', 'Classes Created Successfully!!!');
                 $this->redirect(array('index'));
             }
+        }
+        
+        if ($model->clas_date == "0000-00-00") {
+            $model->clas_date = "";
+        }
+
+        if ($model->date2 == "0000-00-00") {
+            $model->date2 = "";
         }
 
         $this->render('create', compact('model', 'affiliates', 'instructors'));

@@ -148,7 +148,13 @@ class StudentsController extends Controller {
 
             if ($flag > 0) {
                 Yii::app()->user->setFlash('success', $flag . ' student(s) added successfully!!!');
-                $this->redirect(array('schedules/index'));
+                
+                if (isset($_POST['saveandcont']))
+                    $this->redirect(array('students/addbulkstudents/cid/' . $cid));
+                else
+                    $this->redirect(array('schedules/index'));
+                
+                
             } else {
                 Yii::app()->user->setFlash('danger', 'Please fill atleast one student details to save!!!');
                 $this->redirect(array('students/addbulkstudents/cid/' . $cid));

@@ -203,7 +203,8 @@ class DmvClasses extends CActiveRecord {
         $criteria = new CDbCriteria;
         $criteria->condition = "affiliate_id = :affiliate_id";
         $criteria->params = (array(':affiliate_id' => $affid));    
-      
+        $criteria->order = 'clas_date DESC';
+        
         $classed_list = DmvClasses::model()->findAll($criteria);
         $val = CHtml::listData($classed_list, 'clas_id', 'concatened');
         return $val;  

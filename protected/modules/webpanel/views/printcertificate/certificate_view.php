@@ -86,7 +86,11 @@ if (!empty($sinfo)) {
                 </td>	
             </tr>
         </table>  	
-    </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <?php if( strlen($agency_name)<33)
+    {?>   
+    <br><br><br>
+    <?php }?>
     <br><br><br><br><span style="font-size:12pt;"><?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?><br><?php echo $std_address; ?><br><?php echo $std_place; ?></span>
         <?php
     }

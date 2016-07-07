@@ -15,6 +15,7 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
+         <?php echo CHtml::submitButton('Save and continue', array('class' => 'marginleft btn btn-primary pull-right', "name"=>"saveandcont")); ?> 
         <?php echo CHtml::submitButton('Save', array('class' => 'btn btn-success pull-right')); ?>
     </div>
 </div>
