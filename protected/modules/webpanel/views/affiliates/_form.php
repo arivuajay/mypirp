@@ -2,6 +2,8 @@
 /* @var $this AffliatesController */
 /* @var $model DmvAffiliateInfo */
 /* @var $form CActiveForm */
+
+$themeUrl = $this->themeUrl;
 $country = Myclass::getallcountries();
 ?>
 
@@ -105,17 +107,23 @@ $country = Myclass::getallcountries();
                 
                     <div class="form-group">
                         <?php echo $form->labelEx($model, 'ssn', array('class' => 'col-sm-2 control-label')); ?>
-                        <div class="col-sm-5">
-                            <?php echo $form->textField($model, 'ssn', array('class' => 'form-control', 'size' => 25, 'maxlength' => 25)); ?>
+                        <div class="col-sm-4">
+                            <?php echo $form->passwordField($model, 'ssn', array('class' => 'form-control', 'size' => 25, 'maxlength' => 25)); ?>
                             <?php echo $form->error($model, 'ssn'); ?>
+                        </div>
+                         <div class="col-sm-1">
+                         <a href="javascript:void(0);" id="clickssn" data-toggle="tooltip" data-placement="right"  title="<?php echo $model->ssn;?>"><img src="<?php echo $themeUrl . '/img/preview.gif'; ?>"></a>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <?php echo $form->labelEx($model, 'fedid', array('class' => 'col-sm-2 control-label')); ?>
-                        <div class="col-sm-5">
-                            <?php echo $form->textField($model, 'fedid', array('class' => 'form-control', 'size' => 25, 'maxlength' => 25)); ?>
+                        <div class="col-sm-4">
+                            <?php echo $form->passwordField($model, 'fedid', array('class' => 'form-control', 'size' => 25, 'maxlength' => 25)); ?>                           
                             <?php echo $form->error($model, 'fedid'); ?>
+                        </div>
+                        <div class="col-sm-1">
+                         <a href="javascript:void(0);"id="clickfed" data-toggle="tooltip" data-placement="right"  title="<?php echo $model->fedid;?>"><img src="<?php echo $themeUrl . '/img/preview.gif'; ?>"></a>
                         </div>
                     </div>
                 <?php } ?>   
@@ -354,3 +362,33 @@ $country = Myclass::getallcountries();
         </div>
     </div><!-- ./col -->
 </div>
+<?php
+$js = <<< EOD
+$(document).ready(function(){
+        
+    $("#clickfed").on('click',function(){
+        var type = $("#DmvAffiliateInfo_fedid").attr("type");   
+      
+        if(type=="password")
+        {
+            $("#DmvAffiliateInfo_fedid").removeAttr("type");
+        }else{
+            $("#DmvAffiliateInfo_fedid").attr("type","password");
+        }
+    });    
+      
+    $("#clickssn").on('click',function(){
+        var type = $("#DmvAffiliateInfo_ssn").attr("type");   
+      
+        if(type=="password")
+        {
+            $("#DmvAffiliateInfo_ssn").removeAttr("type");
+        }else{
+            $("#DmvAffiliateInfo_ssn").attr("type","password");
+        }
+    });     
+    
+});
+EOD;
+Yii::app()->clientScript->registerScript('_form_affiliate', $js);
+?>

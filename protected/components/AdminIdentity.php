@@ -19,7 +19,7 @@ class AdminIdentity extends CUserIdentity {
      */
     public function authenticate() {
 
-        $host = 'https://'.$_SERVER['HTTP_HOST'];         
+        $host = 'http://'.$_SERVER['HTTP_HOST'];         
         $user = Admin::model()->find("username = '".$this->username."' and domain_url = '".$host."'");
 
         if ($user === null) {
