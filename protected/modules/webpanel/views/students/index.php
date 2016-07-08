@@ -26,6 +26,8 @@ $this->breadcrumbs = array(
             <?php
             $gridColumns = array(
                 'first_name',
+                 'middle_name',
+                'last_name',
                 array(
                     'header' => 'Class Date',
                     'name' => 'dmvClasses.clas_date',
@@ -39,29 +41,28 @@ $this->breadcrumbs = array(
                         echo ($data->dmvAffiliateInfo->agency_code != "") ? $data->dmvAffiliateInfo->agency_code : "-";
                     }
                 ),
-                array(
-                    'name' => 'course_completion_date',
-                    'value' => function($data) {
-                        echo ($data->course_completion_date != "") ? Myclass::date_dispformat($data->course_completion_date) : "-";
-                    }
-                ),
-                'middle_name',
-                'last_name',
-                'city',
-                'phone',
-                'email',
-                array(
-                    'header' => 'Gender',
-                    'name' => 'gender',
-                    'value' => function($data) {
-                        if ($data->gender == "M")
-                            echo "Male";
-                        elseif ($data->gender == "F")
-                            echo "Female";
-                        else
-                            echo "-";
-                    }
-                ),
+//                array(
+//                    'name' => 'course_completion_date',
+//                    'value' => function($data) {
+//                        echo ($data->course_completion_date != "") ? Myclass::date_dispformat($data->course_completion_date) : "-";
+//                    }
+//                ),
+               
+               // 'city',
+               // 'phone',
+              //  'email',
+//                array(
+//                    'header' => 'Gender',
+//                    'name' => 'gender',
+//                    'value' => function($data) {
+//                        if ($data->gender == "M")
+//                            echo "Male";
+//                        elseif ($data->gender == "F")
+//                            echo "Female";
+//                        else
+//                            echo "-";
+//                    }
+//                ),
                 'licence_number',
                 array(
                     'header' => 'Actions',
