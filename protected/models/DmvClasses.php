@@ -91,7 +91,8 @@ class DmvClasses extends CActiveRecord {
             'Instructor' => array(self::BELONGS_TO, 'DmvAddInstructor', 'instructor_id'),
             'Payment' => array(self::HAS_MANY, 'Payment', 'class_id'),
             'studentsCount' => array(self::STAT, 'Students', 'clas_id'),
-            'ClassCertificate' => array(self::HAS_MANY, 'PrintCertificate', 'clas_id'),
+            'Affliate' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
+            'Students' => array(self::HAS_MANY, 'Students', 'clas_id'),
         );
     }
 
@@ -207,6 +208,58 @@ class DmvClasses extends CActiveRecord {
         
         $classed_list = DmvClasses::model()->findAll($criteria);
         $val = CHtml::listData($classed_list, 'clas_id', 'concatened');
+        return $val;  
+    }
+    
+    
+//    public function getConcatened_totalstudents()
+//    {
+//       return date("F d,Y", strtotime($this->clas_date)) . " " . $this->start_time . " to " . $this->end_time."  (Students : " . $this->studentsCount . ")"; 
+//    }
+    
+    public static function unpaid_classes_totalstudents($affid = null,$classdate = null){
+        $val = array();
+        $add_qry = "";
+        
+        if($classdate!="")
+        {       
+           $classdate =  Myclass::dateformat($classdate);
+           $add_qry   = " and a.clas_date='".$classdate."'";    
+        }    
+        
+        $sql = "SELECT  a.clas_id,clas_date,start_time,end_time,agency_code,COUNT(c.clas_id) AS stdcounts,d.payment_date,d.payment_amount
+                FROM  dmv_classes a
+                LEFT JOIN dmv_affiliate_info b ON a.affiliate_id=b.affiliate_id
+                LEFT JOIN dmv_students c ON a.clas_id=c.clas_id
+                LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
+                WHERE 
+                b.affiliate_id=".$affid." AND payment_date IS NULL ".$add_qry." GROUP BY a.clas_id ORDER BY clas_date DESC";
+        $command = Yii::app()->db->createCommand($sql);       
+        $classed_list = $command->query(); // execute a query SQL
+        foreach($classed_list as $cinfos)
+        {
+            $clas_id  = $cinfos['clas_id'];
+            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time']."  (Students : " . $cinfos['stdcounts'] . ")"; 
+        }
+        return $val;  
+    }
+    
+     public static function all_classes_totalstudents_payments($affid = null){
+        $val = array();
+        $sql = "SELECT  a.clas_id,clas_date,start_time,end_time,agency_code,COUNT(c.clas_id) AS stdcounts,d.payment_date,d.payment_amount
+                FROM  dmv_classes a
+                LEFT JOIN dmv_affiliate_info b ON a.affiliate_id=b.affiliate_id
+                LEFT JOIN dmv_students c ON a.clas_id=c.clas_id
+                LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
+                WHERE 
+                b.affiliate_id=".$affid." GROUP BY a.clas_id ORDER BY clas_date DESC";
+        $command = Yii::app()->db->createCommand($sql);       
+        $classed_list = $command->query(); // execute a query SQL
+        foreach($classed_list as $cinfos)
+        {
+            $clas_id  = $cinfos['clas_id'];
+            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time']."  (Students : " . $cinfos['stdcounts'] . ") (Payment : ".$cinfos['payment_amount'].")"; 
+        }
         return $val;  
     }
 

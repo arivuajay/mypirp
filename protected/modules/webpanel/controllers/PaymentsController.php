@@ -28,9 +28,9 @@ class PaymentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete', 'getclasses'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
                 'users' => array('@'),
-                'expression'=> "AdminIdentity::checkAccess('webpanel.payments.{$this->action->id}')",
+                'expression' => "AdminIdentity::checkAccess('webpanel.payments.{$this->action->id}')",
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -56,58 +56,90 @@ class PaymentsController extends Controller {
         $model = new Payment;
         $model->scenario = "create";
 
-        $affiliates = DmvAffiliateInfo::all_affliates();
+        //$affiliates = DmvAffiliateInfo::all_affliates();
         $schedules = array();
 
         $model->unsetAttributes();
         // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
+        // $this->performAjaxValidation($model);
 
         if (isset($_POST['Payment'])) {
 
-            $model->attributes = $_POST['Payment'];
-            $model->payment_date = Myclass::dateformat($model->payment_date);
-            $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-            if ($model->save()) {
-                Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
-                Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
-                $this->redirect(array('index'));
+            if (isset($_POST['paymentclass'])) {
+                $model->attributes = $_POST['Payment'];
+                $model->payment_date = Myclass::dateformat($model->payment_date);
+                $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
+                if ($model->save()) {
+                    Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
+                    Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
+                    $this->redirect(array('index'));
+                }
+            } else if (isset($_POST['deleteclass'])) {
+                // delete Class
+                $model->attributes = $_POST['Payment'];
+
+                $id = $model->class_id_payments;
+                Payment::model()->deleteAll("class_id='$id'");
+                PrintCertificate::model()->deleteAll("class_id='$id'");
+                Students::model()->deleteAll("clas_id='$id'");
+
+                $cmodel = DmvClasses::model()->findByPk($id);
+
+                $audit_desc = date("F d,Y", strtotime($cmodel->clas_date)) . " " . $cmodel->start_time . " to " . $cmodel->end_time;
+                Myclass::addAuditTrail("Schedule {$audit_desc} and the related payments , students , certificates deleted successfully. Class id - {$id}", "schedules");
+
+                $cmodel->delete();
+
+                Yii::app()->user->setFlash('success', 'Class deleted successfully!!!');
+                $this->redirect(array('create'));
             }
         }
 
-        $this->render('create', compact('model', 'affiliates'));
+        if (isset($_GET['searchclass'])) {
+
+            $model->attributes = $_GET['Payment'];
+
+            $affcode = $model->affcode;
+            $classdate = ($model->classdate!="")?$model->classdate:NULL;
+            $criteria = new CDbCriteria;
+            $criteria->addCondition("admin_id='" . Yii::app()->user->admin_id . "'");
+            $criteria->addCondition("agency_code='" . $affcode . "'");
+            $affinfo = DmvAffiliateInfo::model()->find($criteria);
+
+            if (!empty($affinfo)) {
+                $affid = $affinfo->affiliate_id;
+                $model->affiliatesid = $affid;                
+                $schedules = $this->un_payment_class_infos($affid,$classdate);
+                $delete_schedules = $this->all_class_infos($affid);
+            }
+        }
+
+        $this->render('create', compact('model', 'affiliates', 'schedules', 'delete_schedules'));
     }
 
-    public function actionGetclasses() {
+    public function un_payment_class_infos($affid,$classdate=null) {
+        /* Get paymented classes of the affliates */
+//        $criteria = new CDbCriteria;
+//        $criteria->select = 't.payment_id,t.class_id';
+//        $criteria->addCondition("dmvClasses.affiliate_id='" . $affid . "'");
+//        $criteria->with = array("dmvClasses");
+//        $criteria->together = true;
+//        $class_payments = Payment::model()->findAll($criteria);
+//        $val = CHtml::listData($class_payments, 'class_id', 'class_id');
 
-        $options = "<option value=''>Select Class</option>";
-        $affid = isset($_POST['id']) ? $_POST['id'] : '';
+        /* Get all classes of the affliates */
+        $data_Classes = DmvClasses::unpaid_classes_totalstudents($affid,$classdate);
 
-        if ($affid != "") {
-            /* Get paymented classes of the affliates */
-            $criteria = new CDbCriteria;
-            $criteria->select = 't.payment_id,t.class_id';
-            $criteria->addCondition("Affliate.admin_id='" . Yii::app()->user->admin_id . "'");
-            $criteria->addCondition("dmvClasses.affiliate_id='" . $affid . "'");
-            $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
-            $criteria->together = true;
-            $class_payments = Payment::model()->findAll($criteria);
-            $val = CHtml::listData($class_payments, 'class_id', 'class_id');
+        /* Get unpaymane classes */
+        //  $finalarray = array_diff_key($data_Classes, $val);
 
-            /* Get all classes of the affliates */
-            $data_Classes = DmvClasses::all_classes($affid);
+        return $data_Classes;
+    }
 
-            /* Get unpaymane classes */
-            $finalarray = array_diff_key($data_Classes, $val);
-
-            if (!empty($finalarray)) {
-                foreach ($finalarray as $k => $info) {
-                    $options .= "<option value='" . $k . "'>" . $info . "</option>";
-                }
-            }
-        }
-        echo $options;
-        exit;
+    public function all_class_infos($affid) {
+        /* Get all classes of the affliates */
+        $data_Classes = DmvClasses::all_classes_totalstudents_payments($affid);
+        return $data_Classes;
     }
 
     /**
@@ -131,7 +163,7 @@ class PaymentsController extends Controller {
                 $this->redirect(array('index'));
             }
         }
-        
+
         $model->payment_date = Myclass::date_dispformat($model->payment_date);
 
         $this->render('update', array(
@@ -148,9 +180,9 @@ class PaymentsController extends Controller {
         $pmodel = $this->loadModel($id);
         $class_id = $pmodel->class_id;
         Myclass::addAuditTrail("Payment deleted successfully and its related class , students , certificates also deleted. Class id - {$class_id} ", "payments");
-        PrintCertificate::model()->deleteAll("class_id=".$class_id);
-        Students::model()->deleteAll("clas_id=".$class_id);
-        DmvClasses::model()->deleteAll("clas_id=".$class_id);
+        PrintCertificate::model()->deleteAll("class_id=" . $class_id);
+        Students::model()->deleteAll("clas_id=" . $class_id);
+        DmvClasses::model()->deleteAll("clas_id=" . $class_id);
         $pmodel->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

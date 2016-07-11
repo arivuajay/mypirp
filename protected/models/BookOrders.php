@@ -141,6 +141,9 @@ class BookOrders extends CActiveRecord {
         $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
+             'sort' => array(
+                'defaultOrder' => 'payment_date DESC',
+            ),            
             'criteria' => $criteria,
             //  'totalcounts' => $model->search()->getTotalItemCount(),
             'pagination' => array(

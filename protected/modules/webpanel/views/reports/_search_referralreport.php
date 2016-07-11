@@ -18,6 +18,7 @@
                     <?php
                     $form = $this->beginWidget('CActiveForm', array(
                         'method' => 'get',
+                        'id' => 'search-form',
                         'action' => array('/webpanel/reports/referralreport'),
                         'htmlOptions' => array('role' => 'form')
                     ));
@@ -57,7 +58,8 @@
                             <?php echo CHtml::submitButton('Filter', array("id" => 'print_res', 'class' => 'btn btn-primary form-control')); ?>
                         </div>
                     </div>
-                    <div class="clearfix"></div>                  
+                    <div class="clearfix"></div>  
+                    <?php echo CHtml::hiddenField('listperpage', $model->listperpage, array('id' => 'listperpage')); ?>  
                     <?php $this->endWidget(); ?>
                 </div>
             </section>

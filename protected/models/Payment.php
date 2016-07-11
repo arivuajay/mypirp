@@ -19,7 +19,7 @@
 class Payment extends CActiveRecord {
 
     public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate,$refcode;
-    public $startdate, $enddate;
+    public $startdate, $enddate, $listperpage,$class_id_payments,$totalpayment,$classdate;
 
     /**
      * @return string the associated database table name
@@ -44,7 +44,7 @@ class Payment extends CActiveRecord {
             array('payment_complete, print_certificate', 'length', 'max' => 1),
             array('moneyorder_number', 'length', 'max' => 20),
             array('payment_date, payment_notes,affcode,start_date,end_date,affiliatesid,print_certificate,refcode', 'safe'),
-            array('startdate,enddate', 'safe'),
+            array('startdate,enddate,listperpage,class_id_payments,classdate', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('payment_id, class_id, payment_date, payment_amount, payment_type, cheque_number, payment_complete, payment_notes, print_certificate, moneyorder_number, total_students', 'safe', 'on' => 'search'),
@@ -91,6 +91,13 @@ class Payment extends CActiveRecord {
         $totaldue = $totstuds*$refamt;
         return $totaldue;
     }  
+    
+    public static function totalpayment($classid)
+    {
+        $var_sum = Payment::model()->findBySql("select sum(payment_amount) as totalpayment from dmv_payment where class_id=".$classid, array());
+        $total_payment = (!empty($var_sum))?$var_sum->totalpayment:"0";
+        return $total_payment;
+    }        
 
     /**
      * @return array customized attribute labels (name=>label)
@@ -109,7 +116,9 @@ class Payment extends CActiveRecord {
             'moneyorder_number' => Myclass::t('Moneyorder Number'),
             'total_students' => Myclass::t('Total Students'),
             'affcode' => 'Agency Code',
-            'affiliatesid' => 'Agency'
+            'affiliatesid' => 'Agency',
+            'class_id_payments' => "Delete Class",
+            'classdate' => "Date"
         );
     }
 
@@ -231,14 +240,23 @@ class Payment extends CActiveRecord {
 
         $criteria->with = array("dmvClasses", "dmvClasses.Affliate", "dmvClasses.Affliate.affiliateCommission");
         $criteria->together = true;
-
+        
+       // $pageSize=Yii::app()->user->getState('pageSize',Yii::app()->params['defaultPageSize']);
+        if(isset($_GET['listperpage']) && $_GET['listperpage']!='')
+        {
+          $listperpage = $_GET['listperpage'];         
+        }else{    
+          $listperpage = 100;
+        }   
+         $datamod['listperpage'] = $listperpage;
+         
         return new CActiveDataProvider($this, array(
             'sort' => array(
-                'defaultOrder' => 'payment_date ASC',
+                'defaultOrder' => 'Affliate.agency_code ASC',
             ),
             'criteria' => $criteria,
             'pagination' => array(
-                'pageSize' => PAGE_SIZE,
+                'pageSize' => $listperpage,
                  'params' => $datamod
             )
         ));

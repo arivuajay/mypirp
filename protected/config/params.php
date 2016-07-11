@@ -33,11 +33,13 @@ return array(
     
     'DEFAULTPAYS' => 1,  
     
-    'LISTPERPAGE' => 15,
+    'LISTPERPAGE' => 100,
     'PAGE_SIZE' => 15,
   
     // retailer logo path
     'IMG_PATH' => 'messagedoc/',   
-    'REPORT_PATH' => '/stdreports/'
+    'REPORT_PATH' => '/stdreports/',
+    'defaultPageSize'=> 20,
+    'pageSizeOptions'=> array(10=>10,50=>50,100=>100,150=>150,200=>200),
    
 );

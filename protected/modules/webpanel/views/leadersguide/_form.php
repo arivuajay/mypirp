@@ -141,6 +141,14 @@ $instructors = array();
                         <?php echo $form->error($model, 'payment_complete'); ?>
                     </div>
                 </div>
+                  
+                    <div class="form-group">
+                    <?php echo $form->labelEx($model, 'payment_notes', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-sm-5">
+                        <?php echo $form->textArea($model, 'payment_notes', array('class' => 'form-control', 'rows' => 6, 'cols' => 50)); ?>
+                        <?php echo $form->error($model, 'payment_notes'); ?>
+                    </div>
+                </div>
 
             </div><!-- /.box-body -->
             <div class="box-footer">

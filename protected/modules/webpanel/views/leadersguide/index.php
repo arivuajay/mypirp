@@ -25,6 +25,11 @@ $this->breadcrumbs = array(
         <?php
         $gridColumns = array(
             array(
+                'header' => 'Agency code',
+                'name' => 'affiliateInfo.agency_code',
+                'value' => $data->affiliateInfo->agency_code,
+            ),
+            array(
                 'name' => 'payment_date',
                 'value' => function($data) {
                     if (true == strtotime($data->payment_date))
@@ -65,6 +70,7 @@ $this->breadcrumbs = array(
         $this->widget('booster.widgets.TbExtendedGridView', array(
             //'filter' => $model,
             'type' => 'striped bordered datatable',
+            'enableSorting' => false,
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
             'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  Leaders Guides</h3></div><div class="panel-body">{items}{pager}</div></div>',

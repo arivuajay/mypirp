@@ -216,12 +216,28 @@ class Students extends CActiveRecord {
     public function getConcatened() {
         return $this->first_name . " " . $this->last_name;
     }
+    
+    public function getConcatenedAddress() {
+        $address =  $this->address1 . " " . $this->address2.", ". $this->city.", ".$this->state." ".$this->zip;
+        return array('data-subtext' => $address);
+    }
 
     public static function get_student_list($classid = NULL) {
-        $get_stdlist = Students::model()->findAll("clas_id=" . $classid);
+        $get_stdlist = Students::model()->byfirstname()->findAll("clas_id=" . $classid);
         $students = CHtml::listData($get_stdlist, 'student_id', 'concatened');
-
         return $students;
+    }
+    
+    public static function get_student_address_list($classid = NULL) {
+        $get_stdlist = Students::model()->byfirstname()->findAll("clas_id=" . $classid);
+        $students_adds = CHtml::listData($get_stdlist, 'student_id', 'concatenedAddress');     
+        return $students_adds;
+    }
+    
+    public function scopes() {
+        return array(
+            'byfirstname' => array('order' => 'first_name'),
+        );
     }
 
     /**

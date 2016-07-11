@@ -43,7 +43,7 @@ class LeadersGuide extends CActiveRecord
 			array('client_type, guide_instructor, payment_complete', 'length', 'max'=>1),
 			array('payment_type', 'length', 'max'=>2),
 			array('cheque_number', 'length', 'max'=>15),
-			array('payment_date', 'safe'),
+			array('payment_date,payment_notes', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('guide_id, affiliate_id, instructor_id, client_type, guide_instructor, payment_date, number_of_guides, payment_amount, guide_fee, shipping_fee, payment_type, cheque_number, payment_complete', 'safe', 'on'=>'search'),
@@ -98,6 +98,7 @@ class LeadersGuide extends CActiveRecord
 			'payment_type' => Myclass::t('Payment Type'),
 			'cheque_number' => Myclass::t('Cheque Number'),
 			'payment_complete' => Myclass::t('Mark as payment complete'),
+                        'payment_notes' => "Payment Notes"
 		);
 	}
 
@@ -141,6 +142,9 @@ class LeadersGuide extends CActiveRecord
                 $criteria->together = true;
 
 		return new CActiveDataProvider($this, array(
+                        'sort' => array(
+                            'defaultOrder' => 'payment_date DESC',
+                        ),                       
 			'criteria'=>$criteria,
                         'pagination' => array(
                             'pageSize' => PAGE_SIZE,

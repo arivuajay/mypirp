@@ -340,6 +340,19 @@ class ReportsController extends Controller {
 
     public function actionReferralreport() {
         $model = new Payment();
+        
+        if (isset($_GET['pageSize'])) {
+             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+        }
+        
+        if(isset($_GET['listperpage']) && $_GET['listperpage']!='')
+        {
+          $listperpage = $_GET['listperpage'];
+        }else{    
+          $listperpage = 100;
+        }        
+         
+        $model->listperpage = $listperpage;
 
         $criteria = new CDbCriteria();
         $criteria->distinct = true;

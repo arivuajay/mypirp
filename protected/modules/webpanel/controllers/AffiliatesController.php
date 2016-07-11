@@ -53,6 +53,8 @@ class AffiliatesController extends Controller {
      */
     public function actionCreate() {
         $model = new DmvAffiliateInfo;
+        $model->scenario = "create";
+        
         $refmodel = new DmvAffiliateCommission;
 
         $model->unsetAttributes();  // clear any default values
@@ -94,6 +96,7 @@ class AffiliatesController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $model->scenario = "update";
 
         $refmodel = DmvAffiliateCommission::model()->find("affiliate_id=" . $model->affiliate_id);
 
@@ -102,13 +105,19 @@ class AffiliatesController extends Controller {
 
         if (isset($_POST['DmvAffiliateInfo'])) {
             $model->attributes = $_POST['DmvAffiliateInfo'];
-            $model->agency_approved_date = ($model->agency_approved_date!="")?Myclass::dateformat($model->agency_approved_date):"";
-            if ($model->save()) {
-                Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate updated successfully. Aff id - {$model->affiliate_id}", "affiliates");
-                
-                Yii::app()->user->setFlash('success', 'Affiliate Info Updated Successfully!!!');
-                $this->redirect(array('index'));
-            }
+            $refmodel->attributes = $_POST['DmvAffiliateCommission'];
+
+            $valid = $model->validate();
+            $valid = $refmodel->validate() && $valid;
+            if ($valid) {
+                $model->agency_approved_date = ($model->agency_approved_date!="")?Myclass::dateformat($model->agency_approved_date):"";
+                if ($model->save()) {
+                    Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate updated successfully. Aff id - {$model->affiliate_id}", "affiliates");
+
+                    Yii::app()->user->setFlash('success', 'Affiliate Info Updated Successfully!!!');
+                    $this->redirect(array('index'));
+                }
+            }    
         }
         
         if($model->agency_approved_date == "0000-00-00")

@@ -19,6 +19,11 @@ if ($model->startdate != "" || $model->enddate != "") {
         <a href="javascript:void(0);" id="printdiv" class="btn m-b-xs  btn-primary pull-right"> <i class="fa fa-print"></i>  Print</a>    
         <div class="col-lg-12 col-md-12">&nbsp;</div>
     <?php } ?>  
+    <div class='col-xs-12 col-sm-4 col-md-3 col-lg-3 pull-right'>
+        <div class='perpage pull-right'>
+            Per Page: <?php echo CHtml::dropDownList('pageSize', $model->listperpage, Yii::app()->params['pageSizeOptions'], array('class' => 'change-pageSize')); ?>
+        </div>
+    </div>
     <div id="Getprintval">
         <div class="col-lg-12 col-md-12">
             <div class="row">
@@ -100,7 +105,7 @@ if ($model->startdate != "" || $model->enddate != "") {
                             else
                                 echo "-";
                         }
-                    ),
+                    ),                   
                 );
                 $this->widget('booster.widgets.TbExtendedGridView', array(
                     //'filter' => $model,
@@ -116,8 +121,8 @@ if ($model->startdate != "" || $model->enddate != "") {
                     'responsiveTable' => true,
                     'template' => "<div class='panel panel-primary'>"
                     . "<div class='panel-heading'>"
-                    . "<div class='pull-right'>{summary}</div>"
-                    . "<h3 class='panel-title'>Book Orders Report</h3></div>"
+                    . "<div class='pull-right'>{summary} </div>"
+                    . "<h3 class='panel-title'>Referral Report</h3></div>"
                     . "<div class='panel-body'><p>From {$startdate} until {$enddate} {extendedSummary}</p> {items}{pager}</div></div>",
                     'columns' => $gridColumns
                         )
@@ -130,7 +135,13 @@ if ($model->startdate != "" || $model->enddate != "") {
 <?php
 $js = <<< EOD
 $(document).ready(function(){
-                
+
+   $('.change-pageSize').on('change', function() {       
+        var id=$(this).val();
+        $("#listperpage").val(id);  
+        $("#search-form").submit();  
+    });
+        
    $("#print_res").click(function() {
         var startdate = $("#Payment_startdate").val();
         var enddate = $("#Payment_enddate").val();

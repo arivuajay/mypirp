@@ -37,6 +37,7 @@ class DefaultController extends Controller {
     
     public function actionCreateaffiliate(){
         $model = new DmvAffiliateInfo;
+        $model->scenario = "create";
         $refmodel = new DmvAffiliateCommission;
         
         $admininfos = Admin::model()->findAll(array("order" => "username"));

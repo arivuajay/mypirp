@@ -40,7 +40,9 @@
  * @property string $aff_notes
  */
 class DmvAffiliateInfo extends CActiveRecord {
-    public $start_date, $end_date;
+
+    public $start_date, $end_date, $existinguserid;
+
     /**
      * @return string the associated database table name
      */
@@ -55,7 +57,9 @@ class DmvAffiliateInfo extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('agency_code,agency_name, user_id, password', 'required'),           
+            array('agency_code,agency_name, user_id, password', 'required'),
+            array('agency_code, user_id', 'unique', "on" => "create"),
+            array('agency_code', 'unique', "on" => "update"),
             array('sponsor_code', 'numerical', 'integerOnly' => true),
             array('agency_code', 'length', 'max' => 3),
             array('agency_name, user_id', 'length', 'max' => 150),
@@ -67,30 +71,47 @@ class DmvAffiliateInfo extends CActiveRecord {
             array('zip, country_code, contact_suffix, con_title, owner_last_name, owner_first_name, owner_initial, owner_suffix', 'length', 'max' => 10),
             array('initial', 'length', 'max' => 5),
             array('phone, phone_ext, fax', 'length', 'max' => 15),
-            array('aff_created_date, agency_approved_date, aff_notes,start_date,end_date,admin_id', 'safe'),
+            array('aff_created_date, agency_approved_date, aff_notes,start_date,end_date,admin_id,existinguserid', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('affiliate_id, agency_code, agency_name, user_id, password, enabled, aff_created_date, sponsor_code, file_type, email_addr, record_type, trans_type, ssn, fedid, addr1, addr2, city, state, zip, country_code, last_name, first_name, initial, contact_suffix, con_title, phone, phone_ext, fax, owner_last_name, owner_first_name, owner_initial, owner_suffix, agency_approved_date, aff_notes', 'safe', 'on' => 'search'),
-            array('*', 'compositeUniqueKeysValidator'),
+            // array('*', 'compositeUniqueKeysValidator'),
+            array('existinguserid,user_id', 'CheckExisting', "on" => "update"),
         );
     }
-    
-    public function compositeUniqueKeysValidator() {
-        $this->validateCompositeUniqueKeys();
+
+    public function CheckExisting($attribute_name, $params) {
+
+        if ($this->existinguserid != $this->user_id) {
+
+            $criteria = new CDbCriteria;
+            $criteria->addCondition("user_id = '" . $this->user_id . "'");
+            $exist_code_count = DmvAffiliateInfo::model()->count($criteria);
+            if ($exist_code_count > 0) {
+                $this->addError('user_id', "User ID \"{$this->user_id}\" has already been taken.");
+                return false;
+            }
+        }
+
+        return true;
     }
-    
-    public function behaviors() {
-        return array(
-            'ECompositeUniqueKeyValidatable' => array(
-                'class' => 'ext.ECompositeUniqueKeyValidatable',
-                'uniqueKeys' => array(
-                    'attributes' => 'agency_code, user_id, admin_id',
-                    'errorAttributes' => 'composite_error',                  
-                    'errorMessage' => 'Agency code / User ID already exist!!'
-                )
-            ),
-        );
-    }       
+
+//    public function compositeUniqueKeysValidator() {
+//        $this->validateCompositeUniqueKeys();
+//    }
+//    
+//    public function behaviors() {
+//        return array(
+//            'ECompositeUniqueKeyValidatable' => array(
+//                'class' => 'ext.ECompositeUniqueKeyValidatable',
+//                'uniqueKeys' => array(
+//                    'attributes' => 'agency_code, user_id, admin_id',
+//                    'errorAttributes' => 'composite_error',                  
+//                    'errorMessage' => 'Agency code / User ID already exist!!'
+//                )
+//            ),
+//        );
+//    }       
 
     /**
      * @return array relational rules.
@@ -99,17 +120,17 @@ class DmvAffiliateInfo extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-             'affiliateCommission' => array(self::HAS_ONE, 'DmvAffiliateCommission', 'affiliate_id'),
-             'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'affiliate_id'),  
-             'affiliate_instructor' => array(self::BELONGS_TO, 'DmvAffInstructor', 'affiliate_id'), 
-             'affSchedules' => array(self::HAS_MANY, 'DmvClasses', 'affiliate_id'),  
-             'students' => array(self::HAS_MANY, 'Students', 'affiliate_id'), 
-             'payment' => array(self::HAS_MANY, 'Payment', 'affiliate_id'),
-             'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'affiliate_id'),
-             'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'affiliate_id'),
-             'adminInfo' => array(self::BELONGS_TO, 'Admin', 'admin_id'),
-             'postDocument' => array(self::HAS_MANY, 'PostDocument', 'affiliate_id'), 
-             'postMessage' => array(self::HAS_MANY, 'DmvPostMessage', 'affiliate_id'), 
+            'affiliateCommission' => array(self::HAS_ONE, 'DmvAffiliateCommission', 'affiliate_id'),
+            'affInstructor' => array(self::HAS_MANY, 'DmvAffInstructor', 'affiliate_id'),
+            'affiliate_instructor' => array(self::BELONGS_TO, 'DmvAffInstructor', 'affiliate_id'),
+            'affSchedules' => array(self::HAS_MANY, 'DmvClasses', 'affiliate_id'),
+            'students' => array(self::HAS_MANY, 'Students', 'affiliate_id'),
+            'payment' => array(self::HAS_MANY, 'Payment', 'affiliate_id'),
+            'bookOrders' => array(self::HAS_MANY, 'BookOrders', 'affiliate_id'),
+            'leadersGuide' => array(self::HAS_MANY, 'LeadersGuide', 'affiliate_id'),
+            'adminInfo' => array(self::BELONGS_TO, 'Admin', 'admin_id'),
+            'postDocument' => array(self::HAS_MANY, 'PostDocument', 'affiliate_id'),
+            'postMessage' => array(self::HAS_MANY, 'DmvPostMessage', 'affiliate_id'),
         );
     }
 
@@ -171,21 +192,19 @@ class DmvAffiliateInfo extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-        
-          
-        
-        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
-        {    
+
+
+
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
             $criteria->condition = "admin_id = :admin_id";
-            $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
+            $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
         }
-        
-        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-        {    
+
+        if (isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id != "") {
             $this->affiliateid = Yii::app()->user->affiliate_id;
-            $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
-        }  
-        
+            $criteria->addCondition("t.affiliate_id = " . $this->affiliateid);
+        }
+
         //$criteria->compare('affiliate_id', $this->affiliate_id);     
         $criteria->compare('agency_code', $this->agency_code, true);
         $criteria->compare('agency_name', $this->agency_name, true);
@@ -220,8 +239,8 @@ class DmvAffiliateInfo extends CActiveRecord {
         $criteria->compare('owner_suffix', $this->owner_suffix, true);
         $criteria->compare('agency_approved_date', $this->agency_approved_date, true);
         $criteria->compare('aff_notes', $this->aff_notes, true);
-        
-      
+
+
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => 'agency_name ASC',
@@ -242,48 +261,44 @@ class DmvAffiliateInfo extends CActiveRecord {
     public static function model($className = __CLASS__) {
         return parent::model($className);
     }
-    
-    public function getConcatened()
-    {
-        return $this->agency_code.' '.$this->agency_name;
+
+    public function getConcatened() {
+        return $this->agency_code . ' ' . $this->agency_name;
     }
-    
-    public function getConcatened_search()
-    {
-       return $this->agency_name. " (".$this->agency_code.")"; 
-    }        
-    
-     public static function all_affliates($status = null) {
-        $criteria = new CDbCriteria;      
-         
+
+    public function getConcatened_search() {
+        return $this->agency_name . " (" . $this->agency_code . ")";
+    }
+
+    public static function all_affliates($status = null) {
+        $criteria = new CDbCriteria;
+
         $criteria->condition = "admin_id = :admin_id";
-        $criteria->params=(array(':admin_id'=>Yii::app()->user->admin_id));
-        
-        if($status!="")
-        $criteria->addCondition("enabled='$status'");
-           
-        $criteria->order = 'agency_code ASC';   
-       
+        $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
+
+        if ($status != "")
+            $criteria->addCondition("enabled='$status'");
+
+        $criteria->order = 'agency_code ASC';
+
         $affiliate_list = DmvAffiliateInfo::model()->findAll($criteria);
-        
-        if($status!="")
-        $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened_search'); 
-        else    
-        $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened'); 
-       
+
+        if ($status != "")
+            $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened_search');
+        else
+            $val = CHtml::listData($affiliate_list, 'affiliate_id', 'concatened');
+
         return $val;
     }
-    
-    public static function getAffiliateInfo()
-    {
+
+    public static function getAffiliateInfo() {
         $affinfo = array();
-       if(isset(Yii::app()->user->affiliate_id))
-       {
-          $pk = Yii::app()->user->affiliate_id;
-          $affinfo =  DmvAffiliateInfo::model()->findByPk($pk);         
-       }  
+        if (isset(Yii::app()->user->affiliate_id)) {
+            $pk = Yii::app()->user->affiliate_id;
+            $affinfo = DmvAffiliateInfo::model()->findByPk($pk);
+        }
         return $affinfo;
-    }        
+    }
 
     public function dataProvider() {
         return new CActiveDataProvider($this, array(
