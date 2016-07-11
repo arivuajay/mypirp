@@ -47,6 +47,7 @@ $country = Myclass::getallcountries();
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'clas_date', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'clas_date'); ?>
                     </div>
                 </div>
@@ -74,6 +75,7 @@ $country = Myclass::getallcountries();
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'date2', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'date2'); ?>
                     </div>                    
                 </div>
@@ -153,6 +155,7 @@ $country = Myclass::getallcountries();
                                     <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                     <input type="text" value=""  id='txt_Date<?php echo $j; ?>' name="txt_Date<?php echo $j; ?>"  class="form-control date">
                                 </div> 
+                                (MM/DD/YYYY)
                             </div>
                         </div>
                         <?php

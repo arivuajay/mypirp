@@ -28,7 +28,8 @@
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, 'startdate', array('class' => 'form-control date')); ?>                               
-                            </div>   
+                            </div>
+                            (MM/DD/YYYY)
                             <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
                         </div>
                     </div> 
@@ -40,6 +41,7 @@
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, 'enddate', array('class' => 'form-control date')); ?>                               
                             </div> 
+                            (MM/DD/YYYY)
                             <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
                         </div>
                     </div> 

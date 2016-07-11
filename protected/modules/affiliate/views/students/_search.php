@@ -53,6 +53,7 @@
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date')); ?>
                             </div> 
+                            (MM/DD/YYYY)
                         </div>
                     </div> 
                     
@@ -63,6 +64,7 @@
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date')); ?>
                             </div> 
+                            (MM/DD/YYYY)
                         </div>
                     </div> 
 

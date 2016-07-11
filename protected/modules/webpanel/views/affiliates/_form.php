@@ -334,6 +334,7 @@ $country = Myclass::getallcountries();
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'agency_approved_date', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'agency_approved_date'); ?>
                     </div> 
                 </div>

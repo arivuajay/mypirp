@@ -36,7 +36,8 @@
                             <div class="input-group">
                                 <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, 'clasdate', array('class' => 'form-control date')); ?>
-                            </div>   
+                            </div>  
+                            (MM/DD/YYYY)
                         </div>
                     </div> 
 

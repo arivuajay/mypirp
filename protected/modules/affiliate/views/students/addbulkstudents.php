@@ -67,6 +67,7 @@ $form = $this->beginWidget('CActiveForm', array(
                             <span class="input-group-addon"> <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, '[' . $i . ']' . 'dob', array('class' => 'form-control date', 'size' => 25)); ?>
                         </div> 
+                        (MM/DD/YYYY)
                     </td>
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'licence_number', array('class' => 'form-control', 'size' => 25)); ?></td>
                     <td>
@@ -74,6 +75,7 @@ $form = $this->beginWidget('CActiveForm', array(
                             <span class="input-group-addon"> <i class="fa fa-calendar"></i></span>
                                 <?php echo $form->textField($model, '[' . $i . ']' . 'course_completion_date', array('class' => 'ccomplete form-control date', 'size' => 25)); ?>
                         </div>
+                        (MM/DD/YYYY)
                         <?php
                         if ($i == 1) {
                             echo $form->checkBox($model, 'completion_date_all', array('value' => "Yes", 'uncheckValue' => "No"));

@@ -72,6 +72,7 @@ $instructors = array();
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'payment_date'); ?>
                     </div>
                 </div>

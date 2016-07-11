@@ -136,6 +136,7 @@
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'dob', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'dob'); ?>
                     </div>
                 </div>
@@ -164,6 +165,7 @@
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
                             <?php echo $form->textField($model, 'course_completion_date', array('class' => 'form-control date')); ?>
                         </div> 
+                        (MM/DD/YYYY)
                         <?php echo $form->error($model, 'course_completion_date'); ?>
                     </div>
                 </div>
