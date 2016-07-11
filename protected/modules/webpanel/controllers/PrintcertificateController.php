@@ -190,6 +190,14 @@ class PrintcertificateController extends Controller {
                 $pmodel->class_id = $class_id;
               
                 if ($pmodel->save()) {
+                    
+                    if($pmodel->notes!="" && $student_id!="")
+                    {
+                        $smodel = Students::model()->findByPk($student_id);
+                        $smodel->notes = $pmodel->notes;
+                        $smodel->save(FALSE);
+                    }    
+                    
                     Myclass::addAuditTrail("Notes Updated Successfully. Student id - {$student_id}", "printcertificate");
                     
                     $sresults_info = Students::model()->with("dmvAffiliateInfo")->findByPk($student_id);

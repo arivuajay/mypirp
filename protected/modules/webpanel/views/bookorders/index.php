@@ -12,8 +12,9 @@ $this->breadcrumbs = array(
     <div class="row">
         <?php
         if (AdminIdentity::checkAccess('webpanel.bookorders.create')) {
-            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Book Order', array('/webpanel/bookorders/create'), array('class' => 'btn btn-success pull-right'));
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Book Order', array('/webpanel/bookorders/create'), array('class' => 'marginleft btn btn-success pull-right'));
         }
+         echo CHtml::link('<i class="fa fa-print"></i>&nbsp;&nbsp;Print', array(''), array('class' => 'btn btn-primary pull-right',"id"=>"printdiv"));
         ?>
     </div>
 </div>
@@ -40,7 +41,7 @@ $this->breadcrumbs = array(
                         'htmlOptions' => array('role' => 'form')
                     ));
                     ?>
-                    <div class="col-lg-2 col-md-2">
+                    <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'startdate', array('class' => ' control-label')); ?>
                             <div class="input-group">
@@ -52,7 +53,7 @@ $this->breadcrumbs = array(
                         </div>
                     </div> 
 
-                    <div class="col-lg-2 col-md-2">
+                    <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'enddate', array('class' => ' control-label')); ?>
                             <div class="input-group">
@@ -70,15 +71,15 @@ $this->breadcrumbs = array(
                             <?php echo $form->dropDownList($model, 'affiliate_id', $affiliates, array('class' => 'form-control')); ?>            
                         </div>
                     </div> 
-                    
-                    <div class="col-lg-2 col-md-2">
+
+                    <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <?php echo CHtml::submitButton('Filter', array("id" => 'print_res', 'class' => 'btn btn-primary form-control')); ?>
                         </div>
                     </div>
                     <div class="clearfix"></div> 
-                    <?php echo $form->hiddenField($model, 'bookorder_page',array("value"=>"1")); ?>
+                    <?php echo $form->hiddenField($model, 'bookorder_page', array("value" => "1")); ?>
                     <?php $this->endWidget(); ?>
                 </div>
             </section>
@@ -86,66 +87,80 @@ $this->breadcrumbs = array(
         </div>
     </div>
 </div>
-<div class="col-lg-12 col-md-12">
-    <div class="row">
-        <?php
-        $gridColumns = array(
-             array(
-                'header' => 'Agency code',
-                'name' => 'affiliateInfo.agency_code',
-                'value' => $data->affiliateInfo->agency_code,
-            ),
-            array(
-                'name' => 'payment_date',
-                'value' => function($data) {
-                    if (true == strtotime($data->payment_date))
-                        echo Myclass::date_dispformat($data->payment_date);
-                    else
-                        echo "-";
-                }
-            ),
-            'number_of_books',
-            'book_fee',
-            'shipping_fee',
-            'payment_amount',
-            array(
-                'name' => 'payment_type',
-                'value' => function($data) {
-                    if ($data->payment_type != "") {
-                        $card_types = Myclass::card_types();
-                        if (array_key_exists($data->payment_type, $card_types)) {
-                            echo $card_types[$data->payment_type];
-                        } else {
+<div id="Getprintval">
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <?php
+            $gridColumns = array(
+                array(
+                    'header' => 'Agency code',
+                    'name' => 'affiliateInfo.agency_code',
+                    'value' => $data->affiliateInfo->agency_code,
+                ),
+                array(
+                    'name' => 'payment_date',
+                    'value' => function($data) {
+                        if (true == strtotime($data->payment_date))
+                            echo Myclass::date_dispformat($data->payment_date);
+                        else
                             echo "-";
+                    }
+                ),
+                'number_of_books',
+                'book_fee',
+                'shipping_fee',
+                'payment_amount',
+                array(
+                    'name' => 'payment_type',
+                    'value' => function($data) {
+                        if ($data->payment_type != "") {
+                            $card_types = Myclass::card_types();
+                            if (array_key_exists($data->payment_type, $card_types)) {
+                                echo $card_types[$data->payment_type];
+                            } else {
+                                echo "-";
+                            }
                         }
                     }
-                }
-            ),
-            // 'cheque_number',
-            //'payment_complete',
-            //'payment_notes',
-            array(
-                'header' => 'Actions',
-                'class' => 'booster.widgets.TbButtonColumn',
-                'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
-                'template' => '{update}&nbsp;&nbsp;{delete}',
-                'buttons' => array(
-                    'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.bookorders.update')"),
-                    'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.bookorders.delete')"),
+                ),
+                array(
+                    'header' => 'Actions',
+                    'class' => 'booster.widgets.TbButtonColumn',
+                    'htmlOptions' => array('style' => 'width: 180px;;text-align:center', 'vAlign' => 'middle', 'class' => 'action_column'),
+                    'template' => '{update}&nbsp;&nbsp;{delete}',
+                    'buttons' => array(
+                        'update' => array('visible' => "AdminIdentity::checkAccess('webpanel.bookorders.update')"),
+                        'delete' => array('visible' => "AdminIdentity::checkAccess('webpanel.bookorders.delete')"),
+                    )
                 )
-            )
-        );
+            );
 
-        $this->widget('booster.widgets.TbExtendedGridView', array(
-            //  'filter' => $model,
-            'type' => 'striped bordered datatable',
-            'enableSorting' => false,
-            'dataProvider' => $model->search(),
-            'responsiveTable' => true,
-            'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  Book Orders</h3></div><div class="panel-body">{items}{pager}</div></div>',
-            'columns' => $gridColumns
-                )
-        );
-        ?>
+            $this->widget('booster.widgets.TbExtendedGridView', array(
+                //  'filter' => $model,
+                'type' => 'striped bordered datatable',
+                'enableSorting' => false,
+                'dataProvider' => $model->search(),
+                'responsiveTable' => true,
+                'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title">  Book Orders</h3></div><div class="panel-body">{items}{pager}</div></div>',
+                'columns' => $gridColumns
+                    )
+            );
+            ?>
+        </div>
     </div>
 </div>
+<?php
+$js = <<< EOD
+$(document).ready(function(){
+ 
+    $("#printdiv").click(function() {   
+        var innerContents = document.getElementById("Getprintval").innerHTML;
+        var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+        popupWinindow.document.open();
+        popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="/themes/adminlte/css/print.css" /></head><body onload="window.print()">' + innerContents + '</html>');    popupWinindow.document.close();  
+        return false;
+    });     
+});
+EOD;
+Yii::app()->clientScript->registerScript('_form_instructor', $js);
+?>
