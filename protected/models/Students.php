@@ -66,7 +66,7 @@ class Students extends MyActiveRecord  {
         return array(
             'dmvClasses' => array(self::BELONGS_TO, 'DmvClasses', 'clas_id'),
             'dmvAffiliateInfo' => array(self::BELONGS_TO, 'DmvAffiliateInfo', 'affiliate_id'),
-            'StudentCertificate' => array(self::HAS_MANY, 'PrintCertificate', 'student_id'),
+            'StudentCertificate' => array(self::HAS_ONE, 'PrintCertificate', 'student_id'),
         );
     }
 
@@ -194,9 +194,8 @@ class Students extends MyActiveRecord  {
         $criteria->compare('t.phone', $this->phone, true);
         $criteria->compare('t.email', $this->email, true);
         $criteria->compare('t.gender', $this->gender, true);
-        //$criteria->compare('course_completion_date', $this->course_completion_date, true);
-
-        $criteria->with = array("dmvAffiliateInfo", 'dmvClasses');
+      
+        $criteria->with = array("dmvAffiliateInfo", 'dmvClasses','StudentCertificate');
         $criteria->together = true;
 
         if ($_action == "printstudents")

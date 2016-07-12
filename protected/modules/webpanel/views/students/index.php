@@ -26,13 +26,20 @@ $this->breadcrumbs = array(
             <?php
             $gridColumns = array(
                 'first_name',
-                 'middle_name',
+                'middle_name',
                 'last_name',
                 array(
                     'header' => 'Class Date',
                     'name' => 'dmvClasses.clas_date',
                     'value' => function($data) {
                         echo ($data->dmvClasses->clas_date != "") ? Myclass::date_dispformat($data->dmvClasses->clas_date) : "-";
+                    }
+                ),
+                array(
+                    'header' => 'Date Sent',
+                    'name' => 'StudentCertificate.issue_date',
+                    'value' => function($data) {
+                        echo ($data->StudentCertificate->issue_date != "") ? Myclass::date_dispformat($data->StudentCertificate->issue_date) : "-";
                     }
                 ),
                 array(
@@ -47,10 +54,9 @@ $this->breadcrumbs = array(
 //                        echo ($data->course_completion_date != "") ? Myclass::date_dispformat($data->course_completion_date) : "-";
 //                    }
 //                ),
-               
-               // 'city',
-               // 'phone',
-              //  'email',
+                // 'city',
+                // 'phone',
+                //  'email',
 //                array(
 //                    'header' => 'Gender',
 //                    'name' => 'gender',

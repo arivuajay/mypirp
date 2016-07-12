@@ -45,7 +45,13 @@
                         ?>    
                     </div>
                 </div>
-
+                 <?php
+                 if (!$model->isNewRecord) {?>
+                <div class="form-group">                   
+                    <label class="col-sm-2 control-label">Date Sent</label>
+                    <div class="col-sm-5"> <?php echo ($model->StudentCertificate->issue_date != "") ? Myclass::date_dispformat($model->StudentCertificate->issue_date) : "-";?></div>
+                </div>
+                 <?php }?>
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'first_name', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
