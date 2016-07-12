@@ -21,8 +21,6 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             echo '&nbsp;&nbsp;';
             echo CHtml::link('<i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;Delete Selected', '', array('class' => 'marginleft btn btn-danger pull-right','id'=>'class-deleted'));
          }
-        ?>
-        <?php
         if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
             echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right','id'=>'add-schedule'));
         }

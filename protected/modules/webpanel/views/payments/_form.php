@@ -24,7 +24,7 @@ $themeUrl = $this->themeUrl;
                         'id' => 'instructors-search-form',
                         'method' => 'get',
                         'action' => array('/webpanel/payments/create/'),
-                        'htmlOptions' => array('role' => 'form')
+                        'htmlOptions' => array('role' => 'form')                      
                     ));
                     ?>
                     <div class="col-lg-4 col-md-4">
@@ -46,7 +46,7 @@ $themeUrl = $this->themeUrl;
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-2 col-md-2">
                         <div class="form-group">
                             <label>&nbsp;</label>
                             <?php echo CHtml::submitButton('Search Class', array("id" => 'searchclass', "name"=>"searchclass" , 'class' => 'btn btn-primary form-control')); ?>
@@ -67,7 +67,11 @@ $themeUrl = $this->themeUrl;
             <?php
             $form = $this->beginWidget('CActiveForm', array(
             'id' => 'payment-form',
-            'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),            
+            'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),
+            'clientOptions' => array(
+                      'validateOnSubmit' => true,
+                  ),
+            'enableAjaxValidation' => true,
             ));
             ?>
             <div class="box-body">
@@ -176,35 +180,12 @@ $themeUrl = $this->themeUrl;
                         <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',"name"=>"paymentclass")); ?>
                     </div>
                 </div>
-            </div>
-            
-            <?php if ($model->isNewRecord) { ?>
-            <div class="box-body">
-                <div class="form-group">
-                    <?php echo $form->labelEx($model, 'class_id_payments', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5">
-                        <?php echo $form->dropDownList($model, 'class_id_payments', $delete_schedules, array('class' => 'form-control', "empty" => "Select Class")); ?>
-                        <div class="errorMessage" id="err_class_id_payments" style="display: none;">Please select any class.</div>
-                    </div>
-                    <div id="LoadingImage2" style="display: none"><img src="<?php echo $themeUrl;?>/img/loading.gif" /></div>
-                </div>
-                <div class="box-footer">
-                <div class="form-group">
-                    <div class="col-sm-0 col-sm-offset-2">
-                        <?php echo CHtml::submitButton('Delete Selected Class', array('id'=>'deletclassid','class' => 'btn btn-primary',"name"=>"deleteclass")); ?>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <?php }?>
-            
+            </div>            
             <?php $this->endWidget(); ?>
         </div>
     </div><!-- ./col -->
 </div>
 <?php
-$ajaxClassUrl = Yii::app()->createUrl('/webpanel/payments/getclasses');
-$ajaxClassPaymentUrl = Yii::app()->createUrl('/webpanel/payments/getclassesPayments');
 $payment_type = $model->payment_type;
 $js = <<< EOD
 $(document).ready(function(){
@@ -241,20 +222,7 @@ $(document).ready(function(){
         }  
     
        return true;     
-    });  
-    
-    $("#deletclassid").on('click',function(){
-        var classid=$("#Payment_class_id_payments").val();
-        $("#err_class_id_payments").hide();
-    
-        if(classid=="")
-        {
-           $("#err_class_id_payments").show();
-           return false;
-        }  
-    
-       return true;     
-    });  
+    });     
     
 });
 EOD;

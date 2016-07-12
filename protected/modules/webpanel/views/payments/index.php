@@ -17,10 +17,16 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php
+        if (AdminIdentity::checkAccess('webpanel.schedules.delete')) {
+            echo CHtml::link('<i class="fa fa-trash"></i>&nbsp;&nbsp;Delete Class', array('/webpanel/payments/deleteclass'), array('class' => 'marginleft btn btn-danger pull-right'));
+        }
+        ?>
+        <?php
         if (AdminIdentity::checkAccess('webpanel.payments.create')) {
             echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Payment For New Class', array('/webpanel/payments/create'), array('class' => 'btn btn-success pull-right'));
         }
-        ?>
+        ?>        
+      
     </div>
 </div>
 

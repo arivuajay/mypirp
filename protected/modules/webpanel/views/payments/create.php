@@ -10,5 +10,5 @@ $this->breadcrumbs=array(
 ?>
 
 <div class="user-create">
-    <?php $this->renderPartial('_form', compact('model', 'affiliates','schedules','delete_schedules')); ?>
+    <?php $this->renderPartial('_form', compact('model', 'schedules')); ?>
 </div>

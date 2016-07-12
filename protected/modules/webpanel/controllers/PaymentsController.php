@@ -28,7 +28,7 @@ class PaymentsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete'),
+                'actions' => array('index', 'view', 'create', 'update', 'admin', 'delete','deleteclass'),
                 'users' => array('@'),
                 'expression' => "AdminIdentity::checkAccess('webpanel.payments.{$this->action->id}')",
             ),
@@ -53,15 +53,13 @@ class PaymentsController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
+        $schedules = array();
         $model = new Payment;
         $model->scenario = "create";
-
-        //$affiliates = DmvAffiliateInfo::all_affliates();
-        $schedules = array();
-
+        
         $model->unsetAttributes();
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['Payment'])) {
 
@@ -74,7 +72,48 @@ class PaymentsController extends Controller {
                     Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
                     $this->redirect(array('index'));
                 }
-            } else if (isset($_POST['deleteclass'])) {
+            } 
+        }
+
+        if (isset($_GET['searchclass'])) {
+
+            $model->attributes = $_GET['Payment'];
+
+            $affcode = $model->affcode;
+            $classdate = ($model->classdate!="")?$model->classdate:NULL;
+            $criteria = new CDbCriteria;
+            $criteria->addCondition("admin_id='" . Yii::app()->user->admin_id . "'");
+            $criteria->addCondition("agency_code='" . $affcode . "'");
+            $affinfo = DmvAffiliateInfo::model()->find($criteria);
+
+            if (!empty($affinfo)) {
+                $affid = $affinfo->affiliate_id;
+                $model->affiliatesid = $affid;                
+                $schedules = $this->un_payment_class_infos($affid,$classdate);                
+            }
+        }        
+            
+        $this->render('create', compact('model', 'schedules', 'delete_schedules'));
+    }
+    
+    
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionDeleteclass() {
+        
+        if (!AdminIdentity::checkAccess('webpanel.schedules.delete')) {        
+             $this->redirect(array('index'));
+        }
+        
+        $model = new Payment;
+        
+        $delete_schedules = array();
+
+        if (isset($_POST['Payment'])) {
+
+           if (isset($_POST['deleteclass'])) {
                 // delete Class
                 $model->attributes = $_POST['Payment'];
 
@@ -91,7 +130,7 @@ class PaymentsController extends Controller {
                 $cmodel->delete();
 
                 Yii::app()->user->setFlash('success', 'Class deleted successfully!!!');
-                $this->redirect(array('create'));
+                $this->redirect(array('deleteclass'));
             }
         }
 
@@ -109,12 +148,11 @@ class PaymentsController extends Controller {
             if (!empty($affinfo)) {
                 $affid = $affinfo->affiliate_id;
                 $model->affiliatesid = $affid;                
-                $schedules = $this->un_payment_class_infos($affid,$classdate);
                 $delete_schedules = $this->all_class_infos($affid);
             }
         }
 
-        $this->render('create', compact('model', 'affiliates', 'schedules', 'delete_schedules'));
+        $this->render('deleteclass', compact('model', 'delete_schedules'));
     }
 
     public function un_payment_class_infos($affid,$classdate=null) {

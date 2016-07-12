@@ -96,7 +96,8 @@ class AdminIdentity extends CUserIdentity {
                               'webpanel.instructors.getinstructors','webpanel.instructors.exceldownload',                             
                               'webpanel.students.viewstudents','webpanel.students.exceldownload','webpanel.students.getclasses',
                               'webpanel.printcertificate.printstudentcertificate','webpanel.printcertificate.certificatedisplay',
-                              'webpanel.schedules.exceldownload','webpanel.schedules.deleteselectedall');
+                              'webpanel.schedules.exceldownload','webpanel.schedules.deleteselectedall',
+                              'webpanel.payments.deleteclass');
 
 
         if (in_array($resource, $exclude_list))
