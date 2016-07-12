@@ -23,7 +23,7 @@
  * @property string $phone
  * @property string $created_date
  */
-class DmvAddInstructor extends CActiveRecord {
+class DmvAddInstructor extends MyActiveRecord {
 
     public $Affiliate, $Instructor,$start_date, $end_date, $quarterlyannual;
 

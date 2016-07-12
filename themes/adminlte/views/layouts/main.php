@@ -19,8 +19,25 @@
         $cs->registerScript('initial','var basepath = "'.Yii::app()->baseUrl.'";');
         ?>       
     </head>
-    <body class="skin-blue">
-        <?php $this->renderPartial('//layouts/_headerBar'); ?>
+     <?php
+    $currentdb = (isset(Yii::app()->session['currentdb']))?Yii::app()->session['currentdb']:"livedb";
+    if ($currentdb == 'livedb') {
+        $dispdb   = 'History Mode On';
+        $changedb = 'olddb';
+        $skin_color = "skin-blue";
+    } else {
+        $dispdb   = 'History Mode Off';
+        $changedb = 'livedb';
+        $skin_color = "skin-red";
+    }
+    ?>
+    <body class="<?php echo $skin_color;?>">
+        <?php $this->renderPartial('//layouts/_headerBar',array('dispdb'=>$dispdb)); ?>
+         <?php
+            echo CHtml::beginForm('', 'post', array('id' => 'dbform'));
+            echo CHtml::hiddenField('_dbname', $changedb, array());
+            echo CHtml::endForm();
+        ?>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <?php $this->renderPartial('//layouts/_sidebarNav'); ?>
 

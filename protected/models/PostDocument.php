@@ -9,7 +9,7 @@
  * @property string $posted_date
  * @property string $file_name
  */
-class PostDocument extends CActiveRecord {
+class PostDocument extends MyActiveRecord  {
 
     public $image;
 

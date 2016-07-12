@@ -13,7 +13,7 @@
  * @property string $admin_last_login
  * @property integer $admin_login_ip
  */
-class Admin extends CActiveRecord {
+class Admin extends MyActiveRecord  {
 
     public $current_password, $re_password;
 

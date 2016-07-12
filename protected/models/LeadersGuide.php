@@ -18,7 +18,7 @@
  * @property string $cheque_number
  * @property string $payment_complete
  */
-class LeadersGuide extends CActiveRecord
+class LeadersGuide extends MyActiveRecord 
 {
 	/**
 	 * @return string the associated database table name

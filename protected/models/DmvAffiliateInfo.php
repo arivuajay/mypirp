@@ -39,7 +39,8 @@
  * @property string $agency_approved_date
  * @property string $aff_notes
  */
-class DmvAffiliateInfo extends CActiveRecord {
+class DmvAffiliateInfo extends MyActiveRecord 
+{
 
     public $start_date, $end_date, $existinguserid;
 

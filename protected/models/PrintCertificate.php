@@ -10,7 +10,7 @@
  * @property string $issue_date
  * @property string $notes
  */
-class PrintCertificate extends CActiveRecord {
+class PrintCertificate extends MyActiveRecord {
     public $startdate,$enddate;
     /**
      * @return string the associated database table name

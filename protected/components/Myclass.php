@@ -235,5 +235,16 @@ class Myclass extends CController {
     {
         return date("m/d/Y",strtotime($cdate));
     } 
+    
+    public static function getsqlcommand($sql)
+    {
+        if (isset(Yii::app()->session['currentdb']) && Yii::app()->session['currentdb'] == "olddb") {
+            $command = Yii::app()->dbold->createCommand($sql);     
+        }else{
+            $command = Yii::app()->db->createCommand($sql);     
+        }
+        
+        return $command;
+    }        
        
 }

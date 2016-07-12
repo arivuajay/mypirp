@@ -24,7 +24,7 @@
  * @property string $notes
  * @property string $course_completion_date
  */
-class Students extends CActiveRecord {
+class Students extends MyActiveRecord  {
 
     public $instructorid, $startdate, $enddate, $certificatenumber, $label_flag, $start_date, $end_date, $completion_date_all;
     public $agencycode, $agencyname, $clasdate;

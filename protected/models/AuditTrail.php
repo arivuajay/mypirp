@@ -15,7 +15,7 @@
  * The followings are the available model relations:
  * @property User $audUser
  */
-class AuditTrail extends CActiveRecord {
+class AuditTrail extends MyActiveRecord {
 
     public $start_date,$end_date,$admin_id;
     /**

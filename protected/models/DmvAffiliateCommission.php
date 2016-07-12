@@ -11,7 +11,7 @@
  * @property string $referral_code
  * @property double $referral_amt
  */
-class DmvAffiliateCommission extends CActiveRecord
+class DmvAffiliateCommission extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

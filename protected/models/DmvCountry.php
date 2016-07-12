@@ -8,7 +8,7 @@
  * @property string $country_code
  * @property string $country_desc
  */
-class DmvCountry extends CActiveRecord
+class DmvCountry extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

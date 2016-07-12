@@ -84,6 +84,7 @@ return array(
         ),
         // database settings are configured in database.php
         'db' => require(dirname(__FILE__) . '/database.php'),
+        'dbold' => require(dirname(__FILE__) . '/database2.php'),
         'errorHandler' => array(
             'errorAction' => DEFAULT_MODULE . '/default/error',
         ),

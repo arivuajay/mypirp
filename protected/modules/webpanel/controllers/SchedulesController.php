@@ -245,9 +245,11 @@ class SchedulesController extends Controller {
             $from_date = $_GET['DmvClasses']['startdate'];
             $to_date = $_GET['DmvClasses']['enddate'];
 
-            $ret_result = Yii::app()->db->createCommand("SELECT dmc.clas_id as 'Class ID',dmc.clas_date as 'Class Date',dmc.start_time as 'Start Time',dmc.end_time as 'End Time',
+            $sql = "SELECT dmc.clas_id as 'Class ID',dmc.clas_date as 'Class Date',dmc.start_time as 'Start Time',dmc.end_time as 'End Time',
                dmc.loc_city as 'City',dmc.loc_state as 'State',dmc.zip as 'Zip',dmi.ins_first_name as 'Instructor First Name',dmi.instructor_last_name as 'Instructor Last Name',dma.agency_code as 'Agency Code'
-               FROM dmv_classes as dmc,dmv_add_instructor as dmi,dmv_affiliate_info as dma  WHERE  dma.admin_id = '" . $admin_id . "' AND dmc.affiliate_id = dma.affiliate_id AND dmc.instructor_id = dmi.instructor_id AND dmc.show_admin='Y' AND dmc.clas_date >= '" . Myclass::dateformat($from_date) . "' AND dmc.clas_date <= '" . Myclass::dateformat($to_date) . "'");
+               FROM dmv_classes as dmc,dmv_add_instructor as dmi,dmv_affiliate_info as dma  WHERE  dma.admin_id = '" . $admin_id . "' AND dmc.affiliate_id = dma.affiliate_id AND dmc.instructor_id = dmi.instructor_id AND dmc.show_admin='Y' AND dmc.clas_date >= '" . Myclass::dateformat($from_date) . "' AND dmc.clas_date <= '" . Myclass::dateformat($to_date) . "'";
+           
+            $ret_result = Myclass::getsqlcommand($sql);
             $file_name = 'schedules_' . date('m-d-Y') . '.csv';
 
             Yii::import('ext.ECSVExport');

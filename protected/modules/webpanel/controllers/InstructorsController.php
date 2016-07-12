@@ -260,10 +260,12 @@ class InstructorsController extends Controller {
             $from_date = $_GET['DmvAddInstructor']['start_date'];
             $to_date = $_GET['DmvAddInstructor']['end_date'];
 
-            $ret_result = Yii::app()->db->createCommand("SELECT instructor_id as 'Instructor ID',instructor_ss as 'Instructor ss',instructor_last_name as 'Last Name',ins_first_name as 'First Name',
+            $sql = "SELECT instructor_id as 'Instructor ID',instructor_ss as 'Instructor ss',instructor_last_name as 'Last Name',ins_first_name as 'First Name',
                     instructor_initial as 'Initial',instructor_suffix as 'Instructor Suffix',instructor_code as 'Instructor Code',instructor_client_id as 'Client id',instructor_dob as 'Instructor DOB',
                     enabled as 'Enabled',gender as 'Gender',addr1 as 'Address1',addr2 as 'Address2',city as 'City',state as 'State',zip as 'Zip',phone as 'Phone',created_date as 'Created Date'
-                    FROM dmv_add_instructor WHERE  admin_id = '" . $admin_id . "' AND created_date >= '" . Myclass::dateformat($from_date) . "' AND created_date <= '" . Myclass::dateformat($to_date) . "'");
+                    FROM dmv_add_instructor WHERE  admin_id = '" . $admin_id . "' AND created_date >= '" . Myclass::dateformat($from_date) . "' AND created_date <= '" . Myclass::dateformat($to_date) . "'";
+            
+            $ret_result = Myclass::getsqlcommand($sql);
             $file_name = 'instructors_' . date('Y-m-d') . '.csv';
 
             Yii::import('ext.ECSVExport');

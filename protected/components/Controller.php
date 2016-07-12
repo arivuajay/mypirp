@@ -37,18 +37,13 @@ class Controller extends CController {
         $this->themeUrl = Yii::app()->theme->baseUrl;
         
         $app = Yii::app();
-        if (isset($_POST['_lang'])) {
-            $app->language = $_POST['_lang'];
-            $app->session['_lang'] = $app->language;
-            Yii::app()->session['language'] = $app->language;
-            $this->refresh();
-        } else if (isset($app->session['_lang'])) {
-            $app->language = $app->session['_lang'];
-            Yii::app()->session['language'] = $app->language;
-        } else {
-            $app->language = 'en';
-            Yii::app()->session['language'] = $app->language;
+        if (isset($_POST['_dbname'])) {            
+            Yii::app()->session['currentdb'] = $_POST['_dbname'];
+            $this->refresh();            
+        } else if (isset($app->session['_dbname'])) {        
+             Yii::app()->session['currentdb'] = $app->session['_dbname'];
         }
+        
     }
 
     public function accessRules() {        
@@ -56,9 +51,8 @@ class Controller extends CController {
 
     public function __construct($id, $module = null) {
         
-        if (empty(Yii::app()->session['language'])) {
-            Yii::app()->language = 'en';
-            Yii::app()->session['language'] = strtoupper(Yii::app()->language);
+        if (empty(Yii::app()->session['currentdb'])) {
+            Yii::app()->session['currentdb'] = Yii::app()->params->currentdb;
         }
         parent::__construct($id, $module);
     }

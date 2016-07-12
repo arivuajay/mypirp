@@ -15,7 +15,7 @@
  * The followings are the available model relations:
  * @property DmvAdminResources[] $dmvAdminResources
  */
-class DmvResources extends CActiveRecord
+class DmvResources extends MyActiveRecord 
 {
 	/**
 	 * @return string the associated database table name

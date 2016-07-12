@@ -10,7 +10,8 @@
  * @property string $posted_date
  * @property integer $admin_id
  */
-class DmvPostMessage extends CActiveRecord {
+class DmvPostMessage extends MyActiveRecord 
+{
 
     /**
      * @return string the associated database table name

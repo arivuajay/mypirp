@@ -16,7 +16,8 @@
  * @property string $moneyorder_number
  * @property integer $total_students
  */
-class Payment extends CActiveRecord {
+class Payment extends MyActiveRecord 
+{
 
     public $affcode, $start_date, $end_date,$affiliatesid,$print_certificate,$refcode;
     public $startdate, $enddate, $listperpage,$class_id_payments,$totalpayment,$classdate;

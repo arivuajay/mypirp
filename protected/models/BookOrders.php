@@ -19,10 +19,10 @@
  * @property string $payment_complete
  * @property string $payment_notes
  */
-class BookOrders extends CActiveRecord {
+class BookOrders extends MyActiveRecord {
 
     public $startdate, $enddate, $bookorder_page;
-
+   
     /**
      * @return string the associated database table name
      */

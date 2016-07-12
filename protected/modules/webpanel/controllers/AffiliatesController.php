@@ -202,13 +202,15 @@ class AffiliatesController extends Controller {
             $from_date = Myclass::dateformat($_GET['DmvAffiliateInfo']['start_date']);
             $to_date = Myclass::dateformat($_GET['DmvAffiliateInfo']['end_date']);                
         }
-            $ret_result = Yii::app()->db->createCommand("SELECT ai.affiliate_id as 'Agency ID',ai.agency_code as 'Agency Code',ai.agency_name as 'Agency Name',ai.user_id as 'User Name',
+            $sql = "SELECT ai.affiliate_id as 'Agency ID',ai.agency_code as 'Agency Code',ai.agency_name as 'Agency Name',ai.user_id as 'User Name',
                     ai.password as 'Password',ai.enabled as 'Enabled',ai.aff_created_date as 'Created Date',ai.sponsor_code as 'Sponsor Code',ai.file_type as 'File Type',ai.email_addr as 'Email Address',
                     ai.record_type as 'Record Type',ai.trans_type as 'Trans Type',ai.ssn as 'SSN',ai.fedid as 'Fedid',ai.addr1 as 'Address1',ai.addr2 as 'Address2',ai.city as 'City',ai.state as 'State',ai.zip as 'Zip',
                     ai.country_code as Country_Code,ai.last_name as Last_Name,ai.first_name as First_Name,ai.initial as Initial,ai.contact_suffix as Contact_Suffix,ai.con_title as Con_Title,ai.phone as Phone,
                     ai.phone_ext as 'Phone Ext',ai.fax as 'Fax',ai.owner_last_name as 'Owner Last Name',ai.owner_first_name as 'Owner First Name',ai.owner_initial as 'Owner Initial',ai.owner_suffix as 'Owner Suffix',ai.agency_approved_date as 'Agency Approved Date',
                     ac.commission_id as 'Commission Id',ac.student_fee as 'student Fee',ac.aff_book_fee as 'Book Fee',ac.referral_code as 'Referral Code',ac.referral_amt as 'Referral Amount'
-                    FROM dmv_affiliate_info as ai, dmv_affiliate_commission as ac WHERE  ai.affiliate_id = ac.affiliate_id AND ai.admin_id = '".$admin_id."' AND ai.aff_created_date >= '".$from_date."' AND ai.aff_created_date <= '".$to_date."'");
+                    FROM dmv_affiliate_info as ai, dmv_affiliate_commission as ac WHERE  ai.affiliate_id = ac.affiliate_id AND ai.admin_id = '".$admin_id."' AND ai.aff_created_date >= '".$from_date."' AND ai.aff_created_date <= '".$to_date."'";
+            
+            $ret_result = Myclass::getsqlcommand($sql);
             
             $file_name = 'affiliates_' . date('m-d-Y').'.csv';
                   

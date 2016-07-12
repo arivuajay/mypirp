@@ -23,7 +23,8 @@
  * @property string $show_admin
  * @property integer $pending
  */
-class DmvClasses extends CActiveRecord {
+class DmvClasses extends MyActiveRecord 
+{
     
     public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid,$startdate,$enddate,$clasdate,$pnewclassid;
     /**
@@ -218,6 +219,7 @@ class DmvClasses extends CActiveRecord {
 //    }
     
     public static function unpaid_classes_totalstudents($affid = null,$classdate = null){
+        
         $val = array();
         $add_qry = "";
         
@@ -234,7 +236,9 @@ class DmvClasses extends CActiveRecord {
                 LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
                 WHERE 
                 b.affiliate_id=".$affid." AND payment_date IS NULL ".$add_qry." GROUP BY a.clas_id ORDER BY clas_date DESC";
-        $command = Yii::app()->db->createCommand($sql);       
+        
+        $command = Myclass::getsqlcommand($sql);
+        
         $classed_list = $command->query(); // execute a query SQL
         foreach($classed_list as $cinfos)
         {
@@ -253,7 +257,9 @@ class DmvClasses extends CActiveRecord {
                 LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
                 WHERE 
                 b.affiliate_id=".$affid." GROUP BY a.clas_id ORDER BY clas_date DESC";
-        $command = Yii::app()->db->createCommand($sql);       
+        
+        $command = Myclass::getsqlcommand($sql);
+        
         $classed_list = $command->query(); // execute a query SQL
         foreach($classed_list as $cinfos)
         {

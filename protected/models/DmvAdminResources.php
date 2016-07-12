@@ -14,7 +14,7 @@
  * @property DmvResources $resource
  * @property DmvAdmin $admin
  */
-class DmvAdminResources extends CActiveRecord {
+class DmvAdminResources extends MyActiveRecord  {
 
     /**
      * @return string the associated database table name

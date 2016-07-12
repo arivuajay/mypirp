@@ -8,7 +8,7 @@
  * @property integer $affiliate_id
  * @property integer $instructor_id
  */
-class DmvAffInstructor extends CActiveRecord
+class DmvAffInstructor extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name
