@@ -113,7 +113,8 @@ class AffiliatesController extends Controller {
                 $model->agency_approved_date = ($model->agency_approved_date!="")?Myclass::dateformat($model->agency_approved_date):"";
                 if ($model->save()) {
                     Myclass::addAuditTrail("{$model->agency_code} - {$model->agency_name} affiliate updated successfully. Aff id - {$model->affiliate_id}", "affiliates");
-
+                    $refmodel->affiliate_id = $model->affiliate_id;
+                    $refmodel->save();
                     Yii::app()->user->setFlash('success', 'Affiliate Info Updated Successfully!!!');
                     $this->redirect(array('index'));
                 }
