@@ -55,8 +55,10 @@ class MessagesController extends Controller {
         $model = new DmvPostMessage;        
         $model->unsetAttributes(); 
         
-        $affiliates = DmvAffiliateInfo::all_affliates();
-
+        $affiliates_arr = DmvAffiliateInfo::all_affliates();
+        $firstItem      = array('0' => '- ALL -');
+        $affiliates     = $firstItem + $affiliates_arr;
+        
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
          // 
@@ -64,9 +66,42 @@ class MessagesController extends Controller {
             $model->attributes = $_POST['DmvPostMessage'];
             $model->posted_date = ($model->posted_date!="")?Myclass::dateformat($model->posted_date):"";
             $model->view_status = 0;
-            if ($model->save()) {
-                Myclass::addAuditTrail("{$model->message_title} message created successfully. Message id - {$model->message_id}", "messages");
+            
+            if ($model->validate()) {
                 
+                if($model->affiliate_id==0)
+                {
+                    $strarr = array();
+                    $affinfos = DmvAffiliateInfo::all_affliates("Y");
+                    
+                    foreach($affinfos as $affid => $afinfo )
+                    {
+                        $strarr[] = array(
+                                    'message_title' => $model->message_title,
+                                    'descr'         => $model->descr,
+                                    'posted_date'   => $model->posted_date,                        
+                                    'affiliate_id'  => $affid,
+                                    'view_status'   => $model->view_status,                       
+                                ); 
+                    }  
+                    
+                    if(!empty($strarr))
+                    {   
+                        if (isset(Yii::app()->session['currentdb']) && Yii::app()->session['currentdb'] == "olddb") {
+                         $builder=Yii::app()->dbold->schema->commandBuilder; 
+                        }else{
+                         $builder=Yii::app()->db->schema->commandBuilder;    
+                        }
+                        $command=$builder->createMultipleInsertCommand('dmv_post_message', $strarr);                    
+                        $command->execute();
+                    }    
+                    
+                }else{
+                    $model->save();
+                }    
+
+                Myclass::addAuditTrail("{$model->message_title} message created successfully. Message id - {$model->message_id}", "messages");
+
                 Yii::app()->user->setFlash('success', 'Message Created Successfully!!!');
                 $this->redirect(array('index'));
             }

@@ -12,7 +12,7 @@ $this->breadcrumbs = array(
     <div class="row">
         <?php
         if (AdminIdentity::checkAccess('webpanel.messages.create')) {
-        echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Message', array('/webpanel/messages/create'), array('class' => 'btn btn-success pull-right'));
+            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Create Message', array('/webpanel/messages/create'), array('class' => 'btn btn-success pull-right'));
         }
         ?>
     </div>
@@ -27,7 +27,7 @@ $this->breadcrumbs = array(
             array('header' => 'SN.',
                 'value' => '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
             ),
-             array(
+            array(
                 'name' => 'Affliate.agency_name',
                 'value' => $data->dmvAffiliateInfo->agency_name,
             ),
@@ -38,6 +38,15 @@ $this->breadcrumbs = array(
                     echo Myclass::date_dispformat($data->posted_date);
                 },
             ),
+            array(
+                'header' => 'View status',
+                'name' => 'view_status',
+                'htmlOptions' => array('style' => 'width: 180px;text-align:center', 'vAlign' => 'middle'),
+                'type' => 'raw',
+                'sortable' => false,
+                'value' => function($data) {
+            echo ($data->view_status == "1") ? "<i class='fa fa-circle text-green'></i>" : "<i class='fa fa-circle text-red'></i>";
+        }),
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',
@@ -51,7 +60,7 @@ $this->breadcrumbs = array(
         );
 
         $this->widget('booster.widgets.TbExtendedGridView', array(
-           // 'filter' => $model,
+            // 'filter' => $model,
             'type' => 'striped bordered datatable',
             'dataProvider' => $model->search(),
             'responsiveTable' => true,
