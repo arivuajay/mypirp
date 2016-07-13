@@ -5,9 +5,9 @@
  */
 
 class Sendmail {
-    function send($to, $subject, $body, $fromName = '', $from = '', $attachment = null, $path=null) {       
+    function send($to, $subject, $body, $fromName = '', $from = '', $attachment = null, $path=null, $ccaddress= array()) {       
         if (MAILSENDBY == 'phpmail'):
-            $this->sendPhpmail($to, $subject, $body, $attachment);
+            $this->sendPhpmail($to, $subject, $body, $attachment,$ccaddress);
         elseif (MAILSENDBY == 'smtp'):
             Yii::import('application.extensions.phpmailer.JPhpMailer');
             if (empty($from))
@@ -27,6 +27,16 @@ class Sendmail {
             $mailer->From = $from;
             $mailer->FromName = $fromName;
             $mailer->AddAddress($to);
+            
+            if(!empty($ccaddress))
+            { 
+                foreach($ccaddress as $cadd_info)
+                {    
+                    $mailer->AddCC($cadd_info);
+                }            
+            }            
+            
+            
             // $mailer->
 
             $mailer->Subject = $subject;
@@ -74,12 +84,7 @@ class Sendmail {
         return $message;
     }
 
-    function sendPhpmail($to, $subject, $body, $attachment = null) {
-       // $headers = 'MIME-Version: 1.0' . "\r\n";
-       // $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-        // Additional headers
-      //  $headers .= 'From: ' . SITENAME . ' <' . NOREPLYMAIL . '>' . "\r\n";
+    function sendPhpmail($to, $subject, $body, $attachment = null,$ccaddress=array()) {
         
         $uid = md5(uniqid(time()));
         if($attachment!='')
@@ -92,9 +97,13 @@ class Sendmail {
             fclose($handle);
             $content = chunk_split(base64_encode($content));
         }    
-        
-       
-        $header = "From: ".SITENAME." <".NOREPLYMAIL.">\r\n";        
+               
+        $header = "From: ".SITENAME." <".NOREPLYMAIL.">\r\n";     
+        if(!empty($ccaddress))
+        {    
+            $cc_infos = implode(",",$ccaddress);
+            $header .= "Cc: ".$cc_infos . "\r\n";
+        }    
         $header .= "MIME-Version: 1.0\r\n";
         $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
     
@@ -110,8 +119,7 @@ class Sendmail {
             $nmessage .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
             $nmessage .= $content."\r\n\r\n";
             $nmessage .= "--".$uid."--";
-        }
-        
+        }     
         mail($to, $subject, $nmessage, $header);
     }
 }

@@ -22,16 +22,15 @@ return array(
     'SMTPPASS' => 'ninja12345',
     'SMTPAUTH' => true, // Auth : true or false
     'SMTPSECURE' => 'ssl', // Secure :tls or ssl
-    'NOREPLYMAIL' => 'noreply@mypirpclass.com',
-//    'SITENAME' => 'Optiguide.com',
+    'NOREPLYMAIL' => 'webmaster@mypirpclass.com',
     'JS_SHORT_DATE_FORMAT' => 'yy-mm-dd',
     'PHP_SHORT_DATE_FORMAT' => 'Y-m-d',
 
-    'ADMIN_EMAIL'   => 'vasanth@arkinfotec.com',
+    'ADMIN_EMAIL'   => 'webmaster@mypirpclass.com',
     'EMAILHEADERIMAGE' => '/themes/site/images/header-logo.png',    
     'COPYRIGHT' => '&copy; 2016 MypirpClass.',
     
-    'DEFAULTPAYS' => 1,  
+    'DEFAULTPAYS' => 1, 
     
     'LISTPERPAGE' => 100,
     'PAGE_SIZE' => 15,
