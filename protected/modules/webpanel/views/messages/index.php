@@ -29,7 +29,9 @@ $this->breadcrumbs = array(
             ),
             array(
                 'name' => 'Affliate.agency_name',
-                'value' => $data->dmvAffiliateInfo->agency_name,
+                'value' => function($data) {
+                    echo ($data->affiliate_id>0)?$data->Affliate->agency_name:"-All-";
+                }
             ),
             'message_title',
             array(
@@ -37,16 +39,7 @@ $this->breadcrumbs = array(
                 'value' => function($data) {
                     echo Myclass::date_dispformat($data->posted_date);
                 },
-            ),
-            array(
-                'header' => 'View status',
-                'name' => 'view_status',
-                'htmlOptions' => array('style' => 'width: 180px;text-align:center', 'vAlign' => 'middle'),
-                'type' => 'raw',
-                'sortable' => false,
-                'value' => function($data) {
-            echo ($data->view_status == "1") ? "<i class='fa fa-circle text-green'></i>" : "<i class='fa fa-circle text-red'></i>";
-        }),
+            ),           
             array(
                 'header' => 'Actions',
                 'class' => 'booster.widgets.TbButtonColumn',

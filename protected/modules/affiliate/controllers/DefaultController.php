@@ -56,7 +56,7 @@ class DefaultController extends Controller
         $total_documents = PostDocument::model()->count($criteria2);
         
         // Messages
-        $total_messages  = DmvPostMessage::model()->count("affiliate_id = ".Yii::app()->user->affiliate_id);
+        $total_messages  = DmvPostMessage::model()->count($criteria2);
         
         $this->render('index', compact('total_schedules','total_students','total_documents','total_messages'));
     }

@@ -78,20 +78,22 @@ class DmvPostMessage extends MyActiveRecord
 
         $criteria = new CDbCriteria;
 
-
          if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
         {  
-            $criteria->condition = "Affliate.admin_id = :admin_id";
+            $criteria->condition = "admin_id = :admin_id";
             $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
         }    
         
         if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
         {    
-            $criteria->addCondition("t.affiliate_id = ".Yii::app()->user->affiliate_id);  
+            $admin_id = DmvAffiliateInfo::model()->findByPk(Yii::app()->user->affiliate_id)->admin_id;
+            $criteria->condition = "admin_id = :admin_id";
+            $criteria->params = (array(':admin_id' => $admin_id));
+            $criteria->addCondition("affiliate_id = ".Yii::app()->user->affiliate_id." || affiliate_id=0");  
         }  
 
-        $criteria->with = array("Affliate");
-        $criteria->together = true;
+       // $criteria->with = array("Affliate");
+       // $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
             'sort' => array(

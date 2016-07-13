@@ -49,13 +49,8 @@ class DefaultController extends Controller {
         // documents 
         $total_documents = PostDocument::model()->count($chckadmn_condition);
         
-        // Messages     
-        $criteria2 = new CDbCriteria;       
-        $criteria2->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id); 
-        $criteria2->with = array("Affliate");
-        $criteria2->together = true;
-        
-        $total_messages  = DmvPostMessage::model()->count($criteria2);       
+        // Messages             
+        $total_messages  = DmvPostMessage::model()->count($chckadmn_condition);       
         
         // Schedules    
         $criteria = new CDbCriteria;
