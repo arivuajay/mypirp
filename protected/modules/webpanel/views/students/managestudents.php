@@ -10,22 +10,22 @@ $themeUrl = $this->themeUrl;
 $cs = Yii::app()->getClientScript();
 $cs_pos_end = CClientScript::POS_END;
 ?>
-<?php if ($model->affiliateid != "" || $model->agencycode != "" || $model->agencyname != "") { ?>
-<div class="col-lg-12 col-md-12">
-    <div class="row">
-        <?php
-        if (AdminIdentity::checkAccess('webpanel.students.create')) {
-            echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right')); 
-        }
-        ?>
-        
+<?php if ($model->affiliateid != "" || $model->agencycode != "" || $model->agencyname != "" || $model->start_date != "" || $model->end_date != "") { ?>
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <?php
+            if (AdminIdentity::checkAccess('webpanel.students.create')) {
+                echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student', array('/webpanel/students/create'), array('class' => 'btn btn-success pull-right'));
+            }
+            ?>
+
+        </div>
     </div>
-</div>
-<?php }?>
+<?php } ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
 <?php $this->renderPartial('_search_students', compact('model', 'affiliates')); ?>
 
-<?php if ($model->affiliateid != "" || $model->agencycode != "" || $model->agencyname != "") { ?>
+<?php if ($model->affiliateid != "" || $model->agencycode != "" || $model->agencyname != "" || $model->start_date != "" || $model->end_date != "") { ?>
     <div class="col-lg-12 col-md-12">
         <div class="row">
             <?php
@@ -44,15 +44,15 @@ $cs_pos_end = CClientScript::POS_END;
                     'header' => 'Schedule Date and time',
                     'name' => 'clas_date',
                     'value' => function($data) {
-                         echo date("F d,Y", strtotime($data->clas_date))." ".$data->start_time." to ".$data->end_time;
+                        echo date("F d,Y", strtotime($data->clas_date)) . " " . $data->start_time . " to " . $data->end_time;
                     },
                 ),
                 array(
                     'header' => 'Action',
                     'name' => 'studentsCount',
                     'filter' => false,
-                    'value' => function($data) {                           
-                            echo ( $data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";                          
+                    'value' => function($data) {
+                        echo ( $data->studentsCount > 0) ? "<a href='" . Yii::app()->createAbsoluteUrl("/webpanel/students/viewstudents/aid/" . $data->affiliate_id . "/cid/" . $data->clas_id) . "'>View/Edit students</a>" : "There are no records in this class";
                     }
                 ),
             );
@@ -70,4 +70,5 @@ $cs_pos_end = CClientScript::POS_END;
         </div>
     </div>
     <?php
-}?>
+}
+?>

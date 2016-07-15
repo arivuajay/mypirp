@@ -22,7 +22,8 @@
                         'action' => array('/webpanel/students/managestudents'),
                         'htmlOptions' => array('role' => 'form')
                     ));
-                    ?>
+                    ?>                   
+                    
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <?php echo $form->labelEx($model, 'affiliateid', array('class' => 'control-label')); ?>                   
@@ -43,15 +44,39 @@
                             <?php echo $form->textField($model, 'agencyname', array('class' => 'form-control')); ?>
                         </div>
                     </div> 
+                    <div class="clearfix"></div>      
+                     <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'start_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'start_date', array('class' => 'form-control date')); ?>                               
+                            </div> 
+                            (MM/DD/YYYY)
+                            <div style="display: none;" id="startdate_error" class="errorMessage">Please select start date.</div>
+                        </div>
+                    </div> 
+
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group">
+                            <?php echo $form->labelEx($model, 'end_date', array('class' => ' control-label')); ?>
+                            <div class="input-group">
+                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                <?php echo $form->textField($model, 'end_date', array('class' => 'form-control date')); ?>                               
+                            </div> 
+                            (MM/DD/YYYY)
+                            <div style="display: none;" id="enddate_error" class="errorMessage">Please select end date.</div>
+                        </div>
+                    </div> 
 
 
-                    <div class="col-lg-2 col-md-2">
+                    <div class="col-lg-3 col-md-3">
                         <div class="form-group">
                             <label>&nbsp;</label>
-                            <?php echo CHtml::submitButton('Filter', array('class' => 'btn btn-primary form-control')); ?>
+                            <?php echo CHtml::submitButton('Filter', array("id"=>"managestuds",'class' => 'btn btn-primary form-control')); ?>
                         </div>
                     </div>
-                    <div class="clearfix"></div>                  
+                    <div class="clearfix"></div>                       
                     <?php $this->endWidget(); ?>
                 </div>
             </section>
