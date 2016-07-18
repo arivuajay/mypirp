@@ -23,10 +23,10 @@
  * @property string $show_admin
  * @property integer $pending
  */
-class DmvClasses extends MyActiveRecord 
-{
-    
-    public $agencycode,$agencyname,$start_date,$end_date,$composite_error,$affiliateid,$startdate,$enddate,$clasdate,$pnewclassid;
+class DmvClasses extends MyActiveRecord {
+
+    public $agencycode, $agencyname, $start_date, $end_date, $composite_error, $affiliateid, $startdate, $enddate, $clasdate, $pnewclassid;
+
     /**
      * @return string the associated database table name
      */
@@ -55,9 +55,9 @@ class DmvClasses extends MyActiveRecord
             // @todo Please remove those attributes that should not be searched.
             array('clas_id, affiliate_id, clas_date, clas_name, start_time, end_time, date2, start_time2, end_time2, location, loc_addr, loc_city, loc_state, zip, country, instructor_id, show_admin, pending', 'safe', 'on' => 'search'),
             array('*', 'compositeUniqueKeysValidator'),
-         );
+        );
     }
-    
+
     /**
      * Validates composite unique keys
      *
@@ -67,14 +67,14 @@ class DmvClasses extends MyActiveRecord
     public function compositeUniqueKeysValidator() {
         $this->validateCompositeUniqueKeys();
     }
-    
+
     public function behaviors() {
         return array(
             'ECompositeUniqueKeyValidatable' => array(
                 'class' => 'ext.ECompositeUniqueKeyValidatable',
                 'uniqueKeys' => array(
                     'attributes' => 'affiliate_id, instructor_id, clas_date, start_time, end_time',
-                    'errorAttributes' => 'composite_error',                  
+                    'errorAttributes' => 'composite_error',
                     'errorMessage' => 'Schedule already exist!!'
                 )
             ),
@@ -141,48 +141,45 @@ class DmvClasses extends MyActiveRecord
     public function search() {
         // @todo Please modify the following code to remove attributes that should not be searched.
         $datamod = array();
-        $datamod = $_GET; 
-        
+        $datamod = $_GET;
+
         $criteria = new CDbCriteria;
-        
+
         $default_order = 'clas_id DESC';
-        
-        if(isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id!="")
-        {    
+
+        if (isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id != "") {
             $criteria->select = 't.show_admin,t.clas_date,t.start_time,t.end_time,t.loc_city,t.loc_state,t.zip';
             $this->affiliateid = Yii::app()->user->affiliate_id;
             $default_order = 't.clas_date DESC';
-        }else{
+        } else {
             $criteria->addCondition("show_admin = 'Y'");
-        }    
-                
-        if($this->affiliateid!="")
-        $criteria->addCondition("t.affiliate_id = ".$this->affiliateid);  
-        
-        if($this->agencycode!="")
-        {    
-            $criteria->addCondition("Affliate.agency_code = '".$this->agencycode."'");             
-        }    
-        
-        if($this->agencyname!="")
-        $criteria->compare('Affliate.agency_name', $this->agencyname, true);
-        
-        if(isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id!="")
-        $criteria->addCondition("Affliate.admin_id = ".Yii::app()->user->admin_id);
-        
-        if($this->start_date!="" && $this->end_date!="")
-        {    
+        }
+
+        if ($this->affiliateid != "")
+            $criteria->addCondition("t.affiliate_id = " . $this->affiliateid);
+
+        if ($this->agencycode != "") {
+            $criteria->addCondition("Affliate.agency_code = '" . $this->agencycode . "'");
+        }
+
+        if ($this->agencyname != "")
+            $criteria->compare('Affliate.agency_name', $this->agencyname, true);
+
+        if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "")
+            $criteria->addCondition("Affliate.admin_id = " . Yii::app()->user->admin_id);
+
+        if ($this->start_date != "" && $this->end_date != "") {
             $criteria->addCondition('clas_date >= :startDate AND clas_date <= :endDate');
             $criteria->params = array(':startDate' => Myclass::dateformat($this->start_date), ':endDate' => Myclass::dateformat($this->end_date));
-            
+
             $datamod['DmvClasses']['start_date'] = Myclass::dateformat($this->start_date);
             $datamod['DmvClasses']['end_date'] = Myclass::dateformat($this->end_date);
-        }    
-        
-        $criteria->with = array("Affliate",'Instructor');
+        }
+
+        $criteria->with = array("Affliate", 'Instructor');
         $criteria->together = true;
-        
-       
+
+
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => $default_order,
@@ -191,64 +188,65 @@ class DmvClasses extends MyActiveRecord
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
                 'params' => $datamod
-                
             )
         ));
     }
-    
-     public function getConcatened()
-    {
-        return date("F d,Y", strtotime($this->clas_date)) . " " . $this->start_time . " to " . $this->end_time; 
+
+    public function getConcatened() {
+        return date("F d,Y", strtotime($this->clas_date)) . " " . $this->start_time . " to " . $this->end_time;
     }
-    
-    public static function all_classes($affid = null){
+
+    public static function all_classes($affid = null) {
         $criteria = new CDbCriteria;
         $criteria->condition = "affiliate_id = :affiliate_id";
-        $criteria->params = (array(':affiliate_id' => $affid));    
+        $criteria->params = (array(':affiliate_id' => $affid));
         $criteria->order = 'clas_date DESC';
-        
+
         $classed_list = DmvClasses::model()->findAll($criteria);
         $val = CHtml::listData($classed_list, 'clas_id', 'concatened');
-        return $val;  
+        return $val;
     }
-    
-    
+
 //    public function getConcatened_totalstudents()
 //    {
 //       return date("F d,Y", strtotime($this->clas_date)) . " " . $this->start_time . " to " . $this->end_time."  (Students : " . $this->studentsCount . ")"; 
 //    }
-    
-    public static function unpaid_classes_totalstudents($affid = null,$classdate = null){
-        
+
+    public static function unpaid_classes_totalstudents($affid = null, $classdate = null) {
+
         $val = array();
         $add_qry = "";
-        
-        if($classdate!="")
-        {       
-           $classdate =  Myclass::dateformat($classdate);
-           $add_qry   = " and a.clas_date='".$classdate."'";    
-        }    
-        
-        $sql = "SELECT  a.clas_id,clas_date,start_time,end_time,agency_code,COUNT(c.clas_id) AS stdcounts,d.payment_date,d.payment_amount
-                FROM  dmv_classes a
-                LEFT JOIN dmv_affiliate_info b ON a.affiliate_id=b.affiliate_id
+
+        if ($classdate != "") {
+            $classdate = Myclass::dateformat($classdate);
+            $add_qry = " and a.clas_date='" . $classdate . "'";
+        }
+
+        $sql = "SELECT  a.clas_id,clas_date,start_time,end_time,COUNT(c.clas_id) AS stdcounts
+                FROM  dmv_classes a               
                 LEFT JOIN dmv_students c ON a.clas_id=c.clas_id
                 LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
                 WHERE 
-                b.affiliate_id=".$affid." AND payment_date IS NULL ".$add_qry." GROUP BY a.clas_id ORDER BY clas_date DESC";
-        
+                a.affiliate_id=".$affid." AND payment_date IS NULL ".$add_qry." GROUP BY a.clas_id ORDER BY clas_date DESC";
+
+//        $sql = "SELECT  a.clas_id,clas_date,start_time,end_time
+//                FROM  dmv_classes a
+//                LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
+//                WHERE 
+//                a.affiliate_id=" . $affid . " AND payment_date IS NULL " . $add_qry . " GROUP BY a.clas_id ORDER BY clas_date DESC";
+
         $command = Myclass::getsqlcommand($sql);
-        
+
         $classed_list = $command->query(); // execute a query SQL
-        foreach($classed_list as $cinfos)
-        {
-            $clas_id  = $cinfos['clas_id'];
-            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time']."  (Students : " . $cinfos['stdcounts'] . ")"; 
+        foreach ($classed_list as $cinfos) {
+            $clas_id = $cinfos['clas_id'];
+            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time'] . "  (Students : " . $cinfos['stdcounts'] . ")";
+            // $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time'];
         }
-        return $val;  
+        return $val;
     }
-    
-     public static function all_classes_totalstudents_payments($affid = null){
+
+    public static function all_classes_totalstudents_payments($affid = null) {
         $val = array();
         $sql = "SELECT  a.clas_id,clas_date,start_time,end_time,agency_code,COUNT(c.clas_id) AS stdcounts,d.payment_date,d.payment_amount
                 FROM  dmv_classes a
@@ -256,17 +254,16 @@ class DmvClasses extends MyActiveRecord
                 LEFT JOIN dmv_students c ON a.clas_id=c.clas_id
                 LEFT JOIN dmv_payment d ON a.clas_id=d.class_id
                 WHERE 
-                b.affiliate_id=".$affid." GROUP BY a.clas_id ORDER BY clas_date DESC";
-        
+                b.affiliate_id=" . $affid . " GROUP BY a.clas_id ORDER BY clas_date DESC";
+
         $command = Myclass::getsqlcommand($sql);
-        
+
         $classed_list = $command->query(); // execute a query SQL
-        foreach($classed_list as $cinfos)
-        {
-            $clas_id  = $cinfos['clas_id'];
-            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time']."  (Students : " . $cinfos['stdcounts'] . ") (Payment : ".$cinfos['payment_amount'].")"; 
+        foreach ($classed_list as $cinfos) {
+            $clas_id = $cinfos['clas_id'];
+            $val[$clas_id] = date("F d,Y", strtotime($cinfos['clas_date'])) . " " . $cinfos['start_time'] . " to " . $cinfos['end_time'] . "  (Students : " . $cinfos['stdcounts'] . ") (Payment : " . $cinfos['payment_amount'] . ")";
         }
-        return $val;  
+        return $val;
     }
 
     /**

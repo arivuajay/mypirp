@@ -34,7 +34,8 @@
             <?php if ($i == 3 || $j == $totalrec) { ?></tr><?php } ?>
         <?php if ($i == 3) { ?>
             <tr><td colspan="3">&nbsp;</td></tr>
-            <tr><td colspan="3">&nbsp;</td></tr>    
+            <tr><td colspan="3">&nbsp;</td></tr>   
+            <tr><td colspan="3">&nbsp;</td></tr>
             <?php
             $i = 0;
         }

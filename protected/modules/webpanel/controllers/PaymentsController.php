@@ -62,17 +62,15 @@ class PaymentsController extends Controller {
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Payment'])) {
-
-            if (isset($_POST['paymentclass'])) {
-                $model->attributes = $_POST['Payment'];
-                $model->payment_date = Myclass::dateformat($model->payment_date);
-                $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-                if ($model->save()) {
-                    Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
-                    Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
-                    $this->redirect(array('index'));
-                }
-            } 
+            $model->attributes = $_POST['Payment'];
+            $model->payment_date = ($model->payment_date!="")?Myclass::dateformat($model->payment_date):"";
+            $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
+       
+            if ($model->save()) {
+                Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
+                Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
+                $this->redirect(array('index'));
+            }          
         }
 
         if (isset($_GET['searchclass'])) {
@@ -91,7 +89,8 @@ class PaymentsController extends Controller {
                 $model->affiliatesid = $affid;                
                 $schedules = $this->un_payment_class_infos($affid,$classdate);                
             }
-        }        
+        } 
+        
             
         $this->render('create', compact('model', 'schedules', 'delete_schedules'));
     }
@@ -217,10 +216,10 @@ class PaymentsController extends Controller {
     public function actionDelete($id) {
         $pmodel = $this->loadModel($id);
         $class_id = $pmodel->class_id;
-        Myclass::addAuditTrail("Payment deleted successfully and its related class , students , certificates also deleted. Class id - {$class_id} ", "payments");
+        Myclass::addAuditTrail("Payment deleted successfully and its related certificates also deleted. Class id - {$class_id} ", "payments");
         PrintCertificate::model()->deleteAll("class_id=" . $class_id);
-        Students::model()->deleteAll("clas_id=" . $class_id);
-        DmvClasses::model()->deleteAll("clas_id=" . $class_id);
+       // Students::model()->deleteAll("clas_id=" . $class_id);
+      //  DmvClasses::model()->deleteAll("clas_id=" . $class_id);
         $pmodel->delete();
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

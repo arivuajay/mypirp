@@ -4,99 +4,100 @@
 /* @var $form CActiveForm */
 $cardtypes = Myclass::card_types();
 $themeUrl = $this->themeUrl;
-
 ?>
 <?php if ($model->isNewRecord) { ?>
-<div class="col-lg-12 col-md-12">
-    <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <i class="glyphicon glyphicon-search"></i>  Search
-                </h3>
-                <div class="clearfix"></div>
-            </div>
-
-            <section class="content">
-                <div class="row">
-                    <?php
-                    $form = $this->beginWidget('CActiveForm', array(
-                        'id' => 'instructors-search-form',
-                        'method' => 'get',
-                        'action' => array('/webpanel/payments/create/'),
-                        'htmlOptions' => array('role' => 'form')                      
-                    ));
-                    ?>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="form-group">
-                            <?php echo $form->labelEx($model, 'affcode', array('class' => ' control-label')); ?>
-                            <?php echo $form->textField($model, 'affcode', array('class' => 'form-control')); ?>
-                             <div class="errorMessage" id="err_affcode" style="display: none;">Please give agency code.</div>
-                        </div>
-                    </div> 
-                    
-                      <div class="col-lg-4 col-md-4">
-                        <div class="form-group">
-                            <?php echo $form->labelEx($model, 'classdate', array('class' => ' control-label')); ?>
-                            <div class="input-group">
-                                <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                                <?php echo $form->textField($model, 'classdate', array('class' => 'form-control date')); ?>
-                            </div> 
-                            (MM/DD/YYYY)
-                        </div>
-                    </div>
-
-                    <div class="col-lg-2 col-md-2">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <?php echo CHtml::submitButton('Search Class', array("id" => 'searchclass', "name"=>"searchclass" , 'class' => 'btn btn-primary form-control')); ?>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>                  
-                    <?php $this->endWidget(); ?>
+    <div class="col-lg-12 col-md-12">
+        <div class="row">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="glyphicon glyphicon-search"></i>  Search
+                    </h3>
+                    <div class="clearfix"></div>
                 </div>
-            </section>
 
+                <section class="content">
+                    <div class="row">
+                        <?php
+                        $form = $this->beginWidget('CActiveForm', array(
+                            'id' => 'instructors-search-form',
+                            'method' => 'get',
+                            'action' => array('/webpanel/payments/create/'),
+                            'htmlOptions' => array('role' => 'form')
+                        ));
+                        ?>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <?php echo $form->labelEx($model, 'affcode', array('class' => ' control-label')); ?>
+                                <?php echo $form->textField($model, 'affcode', array('class' => 'form-control')); ?>
+                                <div class="errorMessage" id="err_affcode" style="display: none;">Please give agency code.</div>
+                            </div>
+                        </div> 
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <?php echo $form->labelEx($model, 'classdate', array('class' => ' control-label')); ?>
+                                <div class="input-group">
+                                    <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                                    <?php echo $form->textField($model, 'classdate', array('class' => 'form-control date')); ?>
+                                </div> 
+                                (MM/DD/YYYY)
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <?php echo CHtml::submitButton('Search Class', array("id" => 'searchclass', "name" => "searchclass", 'class' => 'btn btn-primary form-control')); ?>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>                  
+                        <?php $this->endWidget(); ?>
+                    </div>
+                </section>
+
+            </div>
         </div>
     </div>
-</div>
-<?php }?>
+<?php } ?>
 <div class="row">
     <div class="col-lg-12 col-xs-12">
         <div class="box box-primary">
             <?php
             $form = $this->beginWidget('CActiveForm', array(
-            'id' => 'payment-form',
-            'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),
-            'clientOptions' => array(
-                      'validateOnSubmit' => true,
-                  ),
-            'enableAjaxValidation' => true,
+                'id' => 'payment-form',
+                'htmlOptions' => array('role' => 'form', 'class' => 'form-horizontal'),
+                'clientOptions' => array(
+                    'validateOnSubmit' => true,
+                ),
+                'enableAjaxValidation' => true,
             ));
             ?>
             <div class="box-body">
                 <?php if ($model->isNewRecord) { ?>
-                   <?php echo $form->hiddenField($model, 'affiliatesid'); ?>
-<!--                <div class="form-group">
-                    <?php //echo $form->labelEx($model, 'affiliatesid', array('class' => 'col-sm-2 control-label')); ?>
-                    <div class="col-sm-5"> 
-                        <?php //echo $form->dropDownList($model, 'affiliatesid', $affiliates, array('class' => 'form-control', "empty" => "Select Agency")); ?>
-                        <?php //echo $form->error($model, 'affiliatesid'); ?>
-                    </div>
-                </div>-->
+                    <?php echo $form->hiddenField($model, 'affiliatesid'); ?>
+                    <!--                <div class="form-group">
+                    <?php //echo $form->labelEx($model, 'affiliatesid', array('class' => 'col-sm-2 control-label'));  ?>
+                                        <div class="col-sm-5"> 
+                    <?php //echo $form->dropDownList($model, 'affiliatesid', $affiliates, array('class' => 'form-control', "empty" => "Select Agency"));  ?>
+                    <?php //echo $form->error($model, 'affiliatesid'); ?>
+                                        </div>
+                                    </div>-->
                 <?php }
                 ?>
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'class_id', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php if ($model->isNewRecord){ ?>
-                        <?php echo $form->dropDownList($model, 'class_id', $schedules, array('class' => 'form-control', "empty" => "Select Class")); ?>
-                        <?php }else{
-                           echo Myclass::date_dispformat($model->dmvClasses->clas_date)." ".$model->dmvClasses->start_time." TO ".$model->dmvClasses->end_time;
-                        }?>
+                        <?php if ($model->isNewRecord) { ?>
+                            <?php echo $form->dropDownList($model, 'class_id', $schedules, array('class' => 'form-control', "empty" => "Select Class")); ?>
+                            <?php
+                        } else {
+                            echo Myclass::date_dispformat($model->dmvClasses->clas_date) . " " . $model->dmvClasses->start_time . " TO " . $model->dmvClasses->end_time;
+                        }
+                        ?>
                         <?php echo $form->error($model, 'class_id'); ?>
                     </div>
-                     <div id="LoadingImage1" style="display: none"><img src="<?php echo $themeUrl;?>/img/loading.gif" /></div>
+                    <div id="LoadingImage1" style="display: none"><img src="<?php echo $themeUrl; ?>/img/loading.gif" /></div>
                 </div>
 
                 <div class="form-group">
@@ -159,8 +160,10 @@ $themeUrl = $this->themeUrl;
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'payment_complete', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">
-                        <?php $chck = ($model->payment_complete=="Y")?"checked":"";                       
-                              echo $form->checkBox($model, 'payment_complete', array('class' => 'form-control','checked'=>$chck)); ?>
+                        <?php
+                        $chck = ($model->payment_complete == "Y") ? "checked" : "";
+                        echo $form->checkBox($model, 'payment_complete', array('class' => 'form-control', 'checked' => $chck));
+                        ?>
                         <?php echo $form->error($model, 'payment_complete'); ?>
                     </div>
                 </div>
@@ -177,7 +180,7 @@ $themeUrl = $this->themeUrl;
             <div class="box-footer">
                 <div class="form-group">
                     <div class="col-sm-0 col-sm-offset-2">
-                        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',"name"=>"paymentclass")); ?>
+                        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array("id"=>"paymentclick",'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', "name" => "paymentclass")); ?>
                     </div>
                 </div>
             </div>            
@@ -222,8 +225,48 @@ $(document).ready(function(){
         }  
     
        return true;     
-    });     
+    }); 
     
+    $("#paymentclick").click(function () {
+    var flag=0;
+    var classid = $("#Payment_class_id").val();
+    var pdate   = $("#Payment_payment_date").val();
+    var pamount = $("#Payment_payment_amount").val();
+    var ptype   = $("#Payment_payment_type").val();
+   
+     if(classid!="" && pdate!="" & pamount!="")
+     {
+        flag=1;
+        if(ptype==""){
+           flag=0;
+        }else if(ptype=="CQ"){
+    
+            var cnum   = $("#Payment_cheque_number").val();
+            if(cnum==""){
+               flag=0;
+            }else{
+               flag=1;
+            }
+
+        }else if(ptype=="MO"){
+    
+            var cmoney   = $("#Payment_moneyorder_number").val();
+            if(cmoney=="")
+            {
+               flag=0;
+            }else{
+               flag=1;
+            }
+        }    
+     }
+    
+    if(flag==1){
+       $("#payment-form").submit();
+       $(this).val("Please Wait...").attr('disabled', 'disabled');
+    }
+     
+   }); 
+        
 });
 EOD;
 Yii::app()->clientScript->registerScript('_form_payment', $js);

@@ -311,7 +311,7 @@ class ReportsController extends Controller {
                 $criteria->addCondition("course_completion_date >= '" . $startdate . "' AND course_completion_date <= '" . $enddate . "'");
 
             if ($affiliate_id)
-                $criteria->addCondition('affiliate_id = ' . $affiliate_id);
+                $criteria->addCondition('t.affiliate_id = ' . $affiliate_id);
 
             if ($model->agencycode != "")
                 $criteria->addCondition("dmvAffiliateInfo.agency_code = '" . $model->agencycode . "'");
@@ -322,6 +322,8 @@ class ReportsController extends Controller {
 
             $criteria->with = array("dmvAffiliateInfo");
             $criteria->together = true;
+            
+            $criteria->order =  't.first_name asc';
 
             $std_infos = Students::model()->findAll($criteria);
 

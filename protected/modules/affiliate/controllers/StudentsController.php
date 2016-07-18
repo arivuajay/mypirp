@@ -79,11 +79,13 @@ class StudentsController extends Controller {
 
             $criteria = new CDbCriteria;
             $criteria->addCondition('first_name != ""');
-            $criteria->addCondition('affiliate_id = ' . Yii::app()->user->affiliate_id);
+            $criteria->addCondition('t.affiliate_id = ' . Yii::app()->user->affiliate_id);
 
             if ($startdate != "" && $enddate != "")
                 $criteria->addCondition("course_completion_date >= '" . Myclass::dateformat($startdate) . "' AND course_completion_date <= '" . Myclass::dateformat($enddate) . "'");
-
+            
+            $criteria->order =  't.first_name asc';
+             
             $std_infos = Students::model()->findAll($criteria);
 
             if (!empty($std_infos)) {
