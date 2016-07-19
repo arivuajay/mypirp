@@ -15,7 +15,7 @@
         $std_address[] = $infos->address1;
         $std_address[] = $infos->address2;
         $final_address = array_filter($std_address);
-        $std_add_info = implode(",", $final_address);
+        $std_add_info = implode(" ", $final_address);
 
         $std_city[] = $infos->city;
         $std_city[] = $infos->state;
