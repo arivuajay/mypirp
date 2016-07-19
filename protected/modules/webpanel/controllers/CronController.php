@@ -21,7 +21,8 @@ class CronController extends Controller {
         $mail = new Sendmail;
 
         //$to = "vasanth@arkinfotec.com";
-        $to = "danielle@americansafetyinstitute.com";
+        //$to = "danielle@americansafetyinstitute.com";
+          $to = "nadine@americansafetyinstitute.com";
 
         //$ccaddress = array("vasashiner@gmail.com", "testman1@gmail.com");
          $ccaddress = array("catherine@americansafetyinstitute.com","bartjr@americansafetyinstitute.com");

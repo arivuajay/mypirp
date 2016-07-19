@@ -150,7 +150,7 @@ class ReportsController extends Controller {
                     inner join dmv_add_instructor DMI on DMC.instructor_id =DMI.instructor_id 
                     where  DFI.admin_id = '" . $admin_id . "' and (course_completion_date  between '$from_date' and '$to_date') 
                     order by student_id";
-            $ret_result = Myclass::getsqlcommand($sql);
+            $command = Myclass::getsqlcommand($sql);
             $rowCount = $command->execute(); // execute the non-query SQL
             $dataReader = $command->query(); // execute a query SQL
 
@@ -322,8 +322,8 @@ class ReportsController extends Controller {
 
             $criteria->with = array("dmvAffiliateInfo");
             $criteria->together = true;
-            
-            $criteria->order =  't.first_name asc';
+
+            $criteria->order = 't.first_name asc';
 
             $std_infos = Students::model()->findAll($criteria);
 
@@ -331,6 +331,34 @@ class ReportsController extends Controller {
                 $html2pdf = Yii::app()->ePdf->HTML2PDF();
                 $html2pdf->WriteHTML($this->renderPartial('printlabel_view', array("std_infos" => $std_infos), true));
                 $html2pdf->Output(time() . ".pdf", EYiiPdf::OUTPUT_TO_DOWNLOAD);
+                //$html2pdf->Output();
+
+//                Yii::import('ext.pdflabel.*');
+//                $pdf = new PDF_Label('5160', 'mm', 1, 1);
+//                $pdf->Open();
+               // $pdf->AddPage();
+
+//                foreach ($std_infos as $infos) {
+//                    
+//                  
+//                    $std_address = array();
+//
+//                    $std_name = $infos->first_name." ".$infos->last_name;
+//
+//                    $std_address[] = $infos->address1;
+//                    $std_address[] = $infos->address2;
+//                    $final_address = array_filter($std_address);
+//                    $std_add_info = implode(",", $final_address);
+//
+//                    $std_city  = $infos->city;
+//                    $std_state = $infos->state;
+//                    $std_zip   = $infos->zip;
+//                    
+//                    $pdf->Add_PDF_Label(sprintf("%s\n%s\n%s, %s, %s", $std_name, $std_add_info, $std_city, $std_state, $std_zip));
+//                }
+//                
+//                $pdf->Output("Lables-".time(),"D");               
+                
             } else {
                 Yii::app()->user->setFlash('danger', 'No records found!!!');
                 $this->redirect(array('printlabels'));
@@ -342,18 +370,17 @@ class ReportsController extends Controller {
 
     public function actionReferralreport() {
         $model = new Payment();
-        
+
         if (isset($_GET['pageSize'])) {
-             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            Yii::app()->user->setState('pageSize', (int) $_GET['pageSize']);
         }
-        
-        if(isset($_GET['listperpage']) && $_GET['listperpage']!='')
-        {
-          $listperpage = $_GET['listperpage'];
-        }else{    
-          $listperpage = 100;
-        }        
-         
+
+        if (isset($_GET['listperpage']) && $_GET['listperpage'] != '') {
+            $listperpage = $_GET['listperpage'];
+        } else {
+            $listperpage = 100;
+        }
+
         $model->listperpage = $listperpage;
 
         $criteria = new CDbCriteria();
