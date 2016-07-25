@@ -84,7 +84,7 @@ class StudentsController extends Controller {
             if ($startdate != "" && $enddate != "")
                 $criteria->addCondition("course_completion_date >= '" . Myclass::dateformat($startdate) . "' AND course_completion_date <= '" . Myclass::dateformat($enddate) . "'");
             
-            $criteria->order =  't.first_name asc';
+            $criteria->order =  't.student_id asc';
              
             $std_infos = Students::model()->findAll($criteria);
 

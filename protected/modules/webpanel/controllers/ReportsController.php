@@ -323,7 +323,7 @@ class ReportsController extends Controller {
             $criteria->with = array("dmvAffiliateInfo");
             $criteria->together = true;
 
-            $criteria->order = 't.first_name asc';
+            $criteria->order = 't.student_id asc';
 
             $std_infos = Students::model()->findAll($criteria);
 
