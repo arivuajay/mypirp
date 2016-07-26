@@ -21,6 +21,7 @@
             <div class="menu_section">
                 <h3>Dashboard</h3>
                 <?php
+                $suadminid = Yii::app()->user->id;
                 // Current controller name
                 $_controller = Yii::app()->controller->id;                  
                 $_action = Yii::app()->controller->action->id;
@@ -30,9 +31,10 @@
                     'activateItems' => true,
                     'items' => array(
                         array('label' => '<i class="fa fa-home"></i> <span>Home</span>', 'url' => array('/suadmin/default'), 'active' => ($_controller == 'default' &&  $_action == "index")),
-                        array('label' => '<i class="fa fa-users"></i> <span>Client Users</span>', 'url' => array('/suadmin/admin'), 'active' => ($_controller == 'admin' && $_action== 'index')),
-                        array('label' => '<i class="fa fa-bullhorn"></i> <span>Log Activities</span>', 'url' => array('/suadmin/logactivities'), 'active' => $_controller == 'logactivities'),                        
+                        array('label' => '<i class="fa fa-users"></i> <span>Client Users</span>', 'url' => array('/suadmin/admin'), 'active' => ($_controller == 'admin' && $_action== 'index'),'visible'=>($suadminid==1)),
+                        array('label' => '<i class="fa fa-bullhorn"></i> <span>Log Activities</span>', 'url' => array('/suadmin/logactivities'), 'active' => $_controller == 'logactivities','visible'=>($suadminid==1)),                        
                         array('label' => '<i class="fa fa-user"></i> <span>Create Affiliate</span>', 'url' => array('/suadmin/default/createaffiliate'), 'active' => ( $_controller == 'default' && $_action== 'createaffiliate')),                        
+                        array('label' => '<i class="fa fa-users"></i> <span>Sub Admins</span>', 'url' => array('/suadmin/subadmin'), 'active' => ( $_controller == 'subadmin' && $_action== 'index'),'visible'=>($suadminid==1)),                        
                         array('label' => '<i class="fa fa-desktop"></i> <span>Edit Profile</span>', 'url' => array('/suadmin/default/profile'), 'active' => ($_controller == 'default' &&  $_action == "profile")),
                         array('label' => '<i class="fa fa-sign-out"></i> <span>Logout</span>', 'url' => array('/suadmin/default/logout')),
                     ),

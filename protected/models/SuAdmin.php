@@ -97,11 +97,13 @@ class SuAdmin extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id);
+        //$criteria->compare('id', $this->id);
         $criteria->compare('username', $this->username, true);
-        $criteria->compare('password', $this->password, true);
-        $criteria->compare('status', $this->status, true);
+       // $criteria->compare('password', $this->password, true);
+        //$criteria->compare('status', $this->status, true);
         $criteria->compare('email', $this->email, true);
+        
+        $criteria->condition = "id!=1";
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
