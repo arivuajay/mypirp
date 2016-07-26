@@ -9,8 +9,6 @@ $themeUrl = $this->themeUrl;
 $cs = Yii::app()->getClientScript();
 $cs_pos_end = CClientScript::POS_END;
 
-$cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
-$cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
 $country = Myclass::getallcountries();
 ?>
 <!-- page content -->
@@ -150,14 +148,3 @@ $country = Myclass::getallcountries();
         </div>
     </div>
 </div>
-<?php
-$js = <<< EOD
-$(document).ready(function(){
-        
-$('.year').datepicker({ dateFormat: 'yyyy' });
-$('.date').datepicker({ format: 'yyyy-mm-dd' }); 
-    
-});
-EOD;
-Yii::app()->clientScript->registerScript('_form_affiliate', $js);
-?>

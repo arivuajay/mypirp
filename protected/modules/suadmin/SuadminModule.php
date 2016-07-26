@@ -5,6 +5,8 @@ class SuAdminModule extends CWebModule
     
     public $homeUrl = array('/suadmin/default/index');
     public $layout = '//layouts/main';
+    public $resourceAccess = array();
+
 
     public function init() {
       
@@ -34,6 +36,7 @@ class SuAdminModule extends CWebModule
 
     public function beforeControllerAction($controller, $action) {
         if (parent::beforeControllerAction($controller, $action)) {
+              $this->resourceAccess = CHtml::listData (DmvSuadminSresources::model()->findAll("suadmin_id = '" . Yii::app()->user->id . "'"),'adres_id','resource_key');
             // this method is called before any module controller action is performed
             // you may place customized code here
             return true;

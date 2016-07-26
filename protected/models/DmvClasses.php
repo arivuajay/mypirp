@@ -25,7 +25,7 @@
  */
 class DmvClasses extends MyActiveRecord {
 
-    public $agencycode, $agencyname, $start_date, $end_date, $composite_error, $affiliateid, $startdate, $enddate, $clasdate, $pnewclassid;
+    public $agencycode, $agencyname, $start_date, $end_date, $composite_error, $affiliateid, $startdate, $enddate, $clasdate, $pnewclassid,$adminid;
 
     /**
      * @return string the associated database table name
@@ -49,7 +49,7 @@ class DmvClasses extends MyActiveRecord {
             array('loc_city', 'length', 'max' => 20),
             array('show_admin', 'length', 'max' => 1),
             array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname,clasdate', 'safe'),
-            array('pnewclassid', 'safe'),
+            array('pnewclassid,adminid', 'safe'),
             //array('affiliate_id, instructor_id, start_time, end_time,clas_date','unique',),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

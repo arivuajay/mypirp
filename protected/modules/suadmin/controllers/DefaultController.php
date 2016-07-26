@@ -21,13 +21,14 @@ class DefaultController extends Controller {
     {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('login', 'error', 'forgotpassword'),
+                'actions' => array('login', 'error', 'forgotpassword','resetpassword'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('logout', 'index', 'profile','changepassword','createaffiliate'),
+                'actions' => array('logout', 'index', 'profile','changepassword','createaffiliate','printcertificates'),
                 'users' => array('@'),
-                'expression'=> 'SuAdminIdentity::checkAdmin()',
+                'expression'=> "SuAdminIdentity::checkAccess('suadmin.default.{$this->action->id}')",
+                
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -68,6 +69,85 @@ class DefaultController extends Controller {
 
         $this->render('createaffiliate', compact('model', 'refmodel','adminvals'));
     }
+    
+    public function actionPrintcertificates()
+    {
+        
+        $model = new DmvClasses();
+        $class_infos = array();
+        
+        $admininfos = Admin::model()->findAll(array("order" => "username"));
+        $adminvals = CHtml::listData($admininfos, 'admin_id', 'username');
+       
+
+        if (isset($_POST['printcert']) && $_POST['printcert'] == "Print Certificate") {
+
+            $classid = $_POST['DmvClasses']['pnewclassid'];
+
+            $stud_count = Students::model()->count("clas_id=" . $classid);
+
+            if ($stud_count > 0) {
+                $stud_infos = Students::model()->findAll("clas_id=" . $classid);
+
+                $payment_id = Payment::model()->find("class_id=" . $classid)->payment_id;
+                $pmodel = Payment::model()->findByPk($payment_id);
+                $pmodel->print_certificate = 'Y';
+                $pmodel->save();
+
+                foreach ($stud_infos as $sinfos) {
+                    $pc_model = new PrintCertificate;
+                    $pc_model->class_id   = $classid;
+                    $pc_model->student_id = $sinfos->student_id;
+                    $pc_model->issue_date = date("Y-m-d", time());
+                    $pc_model->save();
+                }
+
+                Yii::app()->user->setFlash('success', 'Certificates generated successfully!!');
+                $this->redirect(array('default/printcertificates'));
+            } else {
+
+                $redirecturl = Yii::app()->request->urlReferrer;
+                Yii::app()->user->setFlash('danger', 'No students are available for this class!!!');
+                $this->redirect($redirecturl);
+            }
+        }
+
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['DmvClasses'])) {
+            $model->attributes = $_GET['DmvClasses'];
+            $agencycode = $model->agencycode;
+            $clasdate   = $model->clasdate;
+            $adminid    = $model->adminid; 
+            
+            $criteria = new CDbCriteria;
+            
+            if ($adminid != "") {
+                $criteria->addCondition("Affliate.admin_id='" . $adminid . "'");
+            }
+
+            if ($clasdate != "") {
+                $clasdate = Myclass::dateformat($clasdate);
+                $criteria->addCondition("dmvClasses.clas_date= '" . $clasdate . "'");
+            }
+
+            if ($agencycode != "") {
+                $criteria->addCondition("Affliate.agency_code='" . $agencycode . "'");
+            }
+
+            $criteria->addCondition("payment_complete='Y' and print_certificate='N'");
+
+            $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
+            $criteria->together = true;
+
+            $classes_info = Payment::model()->findAll($criteria);
+
+            foreach ($classes_info as $infos) {
+                $class_infos[$infos->dmvClasses->clas_id] = $infos->dmvClasses->Affliate->agency_code . " " . date("F d,Y", strtotime($infos->dmvClasses->clas_date)) . " " . $infos->dmvClasses->start_time . " to " . $infos->dmvClasses->end_time;
+            }
+        }
+
+        $this->render('pendingcertificates', compact('model', 'class_infos','adminvals'));
+    }        
 
     public function actionIndex() 
     {      
@@ -140,12 +220,45 @@ class DefaultController extends Controller {
         {
             $model->attributes = $_POST['PasswordResetRequestForm'];
             if ($model->validate() && $model->suadmin_authenticate()):                    
-                Yii::app()->user->setFlash('success', Myclass::t('APP17'));
+                Yii::app()->user->setFlash('success', "Please check your mail to reset your password.");
                 $this->redirect(array('/suadmin/default/login'));     
             endif;
         }
 
         $this->render('forgotpassword', array(
+            'model' => $model,
+        ));
+    }
+    
+    public function actionResetpassword($token=null) 
+    {
+        
+        $this->layout = '//layouts/login';
+        
+        if($token==null)
+        {
+            Yii::app()->user->setFlash('error', "Invalid Attempt!!!");
+            $this->redirect(array('/suadmin/default/login'));
+        }    
+
+        if (!Yii::app()->user->isGuest) 
+        {
+            $this->redirect(array('/suadmin/default/index'));
+        }
+        
+        $model = new PasswordResetForm();
+        $model->remember_token = $token;
+        if (isset($_POST['PasswordResetForm'])) 
+        {
+            $model->attributes = $_POST['PasswordResetForm'];
+            if ($model->validate() && $model->suadmin_authenticate()):                    
+                Yii::app()->user->setFlash('success', "Password reset successfully!!!");
+                $this->redirect(array('/suadmin/default/login'));     
+            endif;
+        }
+
+        
+        $this->render('resetpassword', array(
             'model' => $model,
         ));
     }

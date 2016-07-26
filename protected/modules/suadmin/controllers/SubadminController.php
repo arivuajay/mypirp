@@ -51,7 +51,7 @@ class SubadminController extends Controller {
         $model = new SuAdmin;
 
         $resourses = DmvSresources::model()->findAll('parent_id=0');
-      
+        
 
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);

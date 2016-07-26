@@ -72,8 +72,12 @@ class PasswordResetRequestForm extends CFormModel {
         if ($userinfo === null):
             $this->addError('email', Myclass::t('APP15'));  // Error Code : 1               
         else:
-            $randpass   = Myclass::getRandomString(5);           
-            $userinfo->password = Myclass::refencryption($randpass);           
+            // $randpass   = Myclass::getRandomString(5);    
+            // $userinfo->password = Myclass::refencryption($randpass); 
+            $getToken=rand(0, 99999);
+            $getTime=date("H:i:s");       
+            $remember_token = md5($getToken.$getTime);
+            $userinfo->remember_token = $remember_token;                     
             $userinfo->save(false);    
             $toemail = $userinfo->email;           
             $mail    = new Sendmail;
@@ -81,10 +85,9 @@ class PasswordResetRequestForm extends CFormModel {
                 "{NAME}"      => $userinfo->username,
                 "{SITENAME}"  => SITENAME,
                 "{USEREMAIL}" => $userinfo->username,
-                "{USEREPASS}" => $randpass,
-                "{NEXTSTEPURL}" => Yii::app()->createAbsoluteUrl('/suadmin/default/login')   
+                "{NEXTSTEPURL}" => Yii::app()->createAbsoluteUrl('/suadmin/default/resetpassword/token/'.$remember_token)   
             );
-            $message = $mail->getMessage('adminforgotpassword', $trans_array);
+            $message = $mail->getMessage('suadminforgotpassword', $trans_array);
             
             $reset_subject = Myclass::t('APP16');
             $Subject = $mail->translate('{SITENAME}: '.$reset_subject);

@@ -16,9 +16,10 @@ var CURRENT_URL = window.location.href.split('?')[0],
 
 // Sidebar
 $(document).ready(function() {
+    
     // TODO: This is some kind of easy fix, maybe we can improve this
     var setContentHeight = function () {
-        // reset height
+        // reset height      
         $RIGHT_COL.css('min-height', $(window).height());
 
         var bodyHeight = $BODY.outerHeight(),
@@ -31,6 +32,9 @@ $(document).ready(function() {
 
         $RIGHT_COL.css('min-height', contentHeight);
     };
+    
+    // DOne by V
+    setContentHeight();
 
     $SIDEBAR_MENU.find('a').on('click', function(ev) {
         var $li = $(this).parent();

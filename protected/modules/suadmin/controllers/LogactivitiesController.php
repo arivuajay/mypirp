@@ -30,8 +30,8 @@ class LogactivitiesController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'delete'),
-                'users' => array('@'),
-                'expression'=> 'SuAdminIdentity::checkAdmin()',
+                'users' => array('@'),               
+                'expression'=> "SuAdminIdentity::checkAccess('suadmin.logactivities.{$this->action->id}')",
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array(''),

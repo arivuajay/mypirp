@@ -90,4 +90,23 @@ class SuAdminIdentity extends CUserIdentity {
         }
         return $return;
     }
+    
+    public static function checkAccess($resource, $checks = true) {
+        
+        // Super admin have all access
+        if(Yii::app()->user->id==1)
+        return true;
+
+        $exclude_list = array('suadmin.default.logout','suadmin.default.index', 'suadmin.default.profile','suadmin.default.changepassword');
+        
+        if (in_array($resource, $exclude_list))
+        return true;
+
+        $return = false;
+        if (self::checkAdmin() && in_array($resource, Yii::app()->getModule('suadmin')->resourceAccess)) {
+            $return = true;
+        }
+
+        return $return;
+    }
 }

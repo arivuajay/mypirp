@@ -31,7 +31,7 @@ class AdminController extends Controller {
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('index', 'create', 'update', 'delete'),
                 'users' => array('@'),
-                'expression'=> 'SuAdminIdentity::checkAdmin()',
+                'expression'=> "SuAdminIdentity::checkAccess('suadmin.admin.{$this->action->id}')",
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions' => array(''),
