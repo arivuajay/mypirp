@@ -121,15 +121,18 @@ class DefaultController extends Controller {
             
             $criteria = new CDbCriteria;
             
-            if ($adminid != "") {
-                $criteria->addCondition("Affliate.admin_id='" . $adminid . "'");
-            }
-
+            $criteria->addCondition("dmvClasses.clas_id != ''");
+             
             if ($clasdate != "") {
                 $clasdate = Myclass::dateformat($clasdate);
                 $criteria->addCondition("dmvClasses.clas_date= '" . $clasdate . "'");
             }
+                        
+            if ($adminid != "") {
+                $criteria->addCondition("Affliate.admin_id='" . $adminid . "'");
+            }
 
+            
             if ($agencycode != "") {
                 $criteria->addCondition("Affliate.agency_code='" . $agencycode . "'");
             }
@@ -138,6 +141,8 @@ class DefaultController extends Controller {
 
             $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
             $criteria->together = true;
+            
+            $criteria->order = "dmvClasses.clas_date DESC";
 
             $classes_info = Payment::model()->findAll($criteria);
 
@@ -304,6 +309,7 @@ class DefaultController extends Controller {
             $model->attributes = $_POST['SuAdmin'];
             if ($model->validate()):    
                 $model->save(false);
+                Yii::app()->user->name = $model->username;
                 Yii::app()->user->setFlash('success', Myclass::t('APP20'));
                 $this->refresh();
             endif;
