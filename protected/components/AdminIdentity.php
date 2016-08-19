@@ -100,7 +100,7 @@ class AdminIdentity extends CUserIdentity {
                               'webpanel.payments.deleteclass');
 
 
-        if (in_array($resource, $exclude_list))
+        if (self::checkAdmin() && in_array($resource, $exclude_list))
             return true;
 
         $return = false;

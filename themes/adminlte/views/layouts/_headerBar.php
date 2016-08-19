@@ -11,7 +11,7 @@
 
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-                <?php if (Yii::app()->user->admin_id == 1) { ?>
+                <?php if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id == 1) { ?>
 
                     <?php if (isset(Yii::app()->session['currentdb']) && Yii::app()->session['currentdb'] == "olddb") { ?>
                         <li>
