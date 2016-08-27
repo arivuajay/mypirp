@@ -62,15 +62,26 @@ class PaymentsController extends Controller {
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Payment'])) {
+            
             $model->attributes = $_POST['Payment'];
             $model->payment_date = ($model->payment_date!="")?Myclass::dateformat($model->payment_date):"";
-            $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-       
-            if ($model->save()) {
-                Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
-                Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
-                $this->redirect(array('index'));
-            }          
+            $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";            
+            
+            $criteria = new CDbCriteria;
+            $criteria->addCondition("class_id='" . $model->class_id . "'");
+            $checkexisting_payment = Payment::model()->find($criteria);
+            
+            if (empty($checkexisting_payment)) {                  
+                if ($model->save()) {
+                    Myclass::addAuditTrail("Payment created successfully. Class id - {$model->class_id} ", "payments");
+                    Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
+                    $this->redirect(array('index'));
+                }   
+            
+            }else{
+               Yii::app()->user->setFlash('success', 'Payment Created Successfully!!!');
+               $this->redirect(array('index'));
+            }
         }
 
         if (isset($_GET['searchclass'])) {
