@@ -4,11 +4,11 @@ if (!empty($sinfo)) {
     $std_liveplace = array();
     $std_place = "";
     $agency_code = $sinfo->dmvAffiliateInfo->agency_code;
-    $agency_name = $sinfo->dmvAffiliateInfo->agency_name;      
+    $agency_name = $sinfo->dmvAffiliateInfo->agency_name;
     $class_id = $sinfo->clas_id;
     $student_id = $sinfo->student_id;
     $certificate_no = PrintCertificate::model()->find("class_id=" . $class_id . " and student_id=" . $student_id)->certificate_number;
-    
+
     // Student Info
     $first_name = $sinfo->first_name;
     $middle_name = $sinfo->middle_name;
@@ -16,7 +16,7 @@ if (!empty($sinfo)) {
     $address1 = $sinfo->address1;
     $address2 = $sinfo->address2;
     $std_address = trim($sinfo->address1 . " " . $sinfo->address2);
-    $std_place = $sinfo->city.", ".$sinfo->state." " .$sinfo->zip;
+    $std_place = $sinfo->city . ", " . $sinfo->state . " " . $sinfo->zip;
 
     $dob = ($sinfo->dob != "0000-00-00") ? Myclass::date_dispformat($sinfo->dob) : "-";
     $gender = ($sinfo->gender == "F") ? "Female" : "Male";
@@ -87,10 +87,13 @@ if (!empty($sinfo)) {
             </tr>
         </table>  	
     </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <?php if( strlen($agency_name)<33)
-    {?>   
-    <br><br><br>
-    <?php }?>
+    <?php if (strlen($agency_name) <= 35) {
+        ?>   
+        <br><br><br>
+    <?php } else { ?>
+        <br><br> 
+    <?php }
+    ?>
     <br><br><br><br><span style="font-size:12pt;"><?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?><br><?php echo $std_address; ?><br><?php echo $std_place; ?></span>
         <?php
     }
