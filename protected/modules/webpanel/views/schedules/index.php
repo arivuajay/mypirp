@@ -22,7 +22,9 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             echo CHtml::link('<i class="glyphicon glyphicon-trash"></i>&nbsp;&nbsp;Delete Selected', '', array('class' => 'marginleft btn btn-danger pull-right','id'=>'class-deleted'));
          }
         if (AdminIdentity::checkAccess('webpanel.schedules.create')) {
+            echo CHtml::link('<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Schedule', array('/webpanel/schedules/uploadschedule'), array('class' => 'marginleft btn btn-info pull-right','id'=>'upload-schedule'));
             echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Schedule', array('/webpanel/schedules/create'), array('class' => 'btn btn-success pull-right','id'=>'add-schedule'));
+            
         }
         ?>
         

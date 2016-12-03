@@ -40,5 +40,7 @@ return array(
     'REPORT_PATH' => '/stdreports/',
     'defaultPageSize'=> 20,
     'pageSizeOptions'=> array(10=>10,50=>50,100=>100,150=>150,200=>200),
-    'currentdb' => "livedb"   
+    'currentdb' => "livedb"   ,
+    'XL_PATH_ADM' => 'uploads/admin_schedules/',  
+    'XL_PATH_AFF' => 'uploads/affiliate_schedules/',  
 );

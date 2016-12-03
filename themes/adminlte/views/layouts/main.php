@@ -55,11 +55,19 @@
         $cs->registerCssFile($themeUrl . '/css/datepicker/datepicker3.css');
         $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $cs_pos_end);
         $cs->registerScriptFile($themeUrl . '/js/bootstrap.min.v334.js', $cs_pos_end);
-        $cs->registerScriptFile($themeUrl . '/js/bootstrap-select.js', $cs_pos_end);       
+        $cs->registerScriptFile($themeUrl . '/js/bootstrap-select.js', $cs_pos_end);  
+         $cs->registerCssFile($themeUrl . '/css/datepicker/bootstrap-datetimepicker.css');
+         $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datetimepicker.js', $cs_pos_end);
         $js = <<< EOD
                 
         jQuery('.year').datepicker({dateFormat: 'yyyy', forceParse: false});
-        jQuery('.date').datepicker({format: 'mm/dd/yyyy', forceParse: false});   
+        jQuery('.date').datepicker({format: 'mm/dd/yyyy', forceParse: false});
+        jQuery(".form_datetime").datetimepicker({
+            format: "mm/dd/yyyy HH:ii P",
+            showMeridian: true,
+            autoclose: true,
+            todayBtn: true
+        });
 EOD;
         $cs->registerScript('_additional_s', $js);
         ?>

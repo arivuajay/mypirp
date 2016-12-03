@@ -105,9 +105,9 @@ $themeUrl = $this->themeUrl;
                     <div class="col-sm-5">                       
                         <div class="input-group">
                             <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
-                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control date')); ?>
-                        </div> 
-                        (MM/DD/YYYY)
+                            <?php echo $form->textField($model, 'payment_date', array('class' => 'form-control form_datetime')); ?>
+                        </div>                        
+                        (MM/DD/YYYY HH:ii P) (Example : 11/23/2016 03:30 PM)
                         <?php echo $form->error($model, 'payment_date'); ?>
                     </div>
                 </div>
@@ -180,7 +180,7 @@ $themeUrl = $this->themeUrl;
             <div class="box-footer">
                 <div class="form-group">
                     <div class="col-sm-0 col-sm-offset-2">
-                        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array("id"=>"paymentclick",'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', "name" => "paymentclass")); ?>
+                        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array("id" => "paymentclick", 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', "name" => "paymentclass")); ?>
                     </div>
                 </div>
             </div>            
@@ -188,12 +188,13 @@ $themeUrl = $this->themeUrl;
         </div>
     </div><!-- ./col -->
 </div>
+
 <?php
 $payment_type = $model->payment_type;
 $js = <<< EOD
 $(document).ready(function(){
     var payment_type  = '{$payment_type}';  
-   
+    
     if(payment_type=="CQ")
         $("#chequenumber").show();
     else if(payment_type=="MO")

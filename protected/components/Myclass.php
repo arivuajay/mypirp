@@ -236,6 +236,21 @@ class Myclass extends CController {
         return date("m/d/Y",strtotime($cdate));
     } 
     
+     public static function datetimeformat($cdate)
+    {
+        return date("Y-m-d H:i",strtotime($cdate));
+    }  
+    
+    public static function datetime_dispformat($cdate)
+    {
+        return date("m/d/Y h:i A",strtotime($cdate));
+    } 
+    
+     public static function time_dispformat($cdate)
+    {
+        return date("h:i A",strtotime($cdate));
+    } 
+    
     public static function getsqlcommand($sql)
     {
         if (isset(Yii::app()->session['currentdb']) && Yii::app()->session['currentdb'] == "olddb") {

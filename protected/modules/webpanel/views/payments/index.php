@@ -26,7 +26,7 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
             echo CHtml::link('<i class="fa fa-plus"></i>&nbsp;&nbsp;Add Payment For New Class', array('/webpanel/payments/create'), array('class' => 'btn btn-success pull-right'));
         }
         ?>        
-      
+
     </div>
 </div>
 
@@ -61,6 +61,16 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                 'value' => function($data) {
                     if (true == strtotime($data->payment_date))
                         echo Myclass::date_dispformat($data->payment_date);
+                    else
+                        echo "-";
+                }
+            ),
+            array(
+                'header' => 'Payment Time',
+                'name' => 'payment_date',
+                'value' => function($data) {
+                    if (true == strtotime($data->payment_date))
+                        echo Myclass::time_dispformat($data->payment_date) . ' EST';
                     else
                         echo "-";
                 }

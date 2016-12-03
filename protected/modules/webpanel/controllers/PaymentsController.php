@@ -64,9 +64,9 @@ class PaymentsController extends Controller {
         if (isset($_POST['Payment'])) {
             
             $model->attributes = $_POST['Payment'];
-            $model->payment_date = ($model->payment_date!="")?Myclass::dateformat($model->payment_date):"";
+            $model->payment_date = ($model->payment_date!="")?Myclass::datetimeformat($model->payment_date):"";
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";            
-            
+           
             $criteria = new CDbCriteria;
             $criteria->addCondition("class_id='" . $model->class_id . "'");
             $checkexisting_payment = Payment::model()->find($criteria);
@@ -204,7 +204,7 @@ class PaymentsController extends Controller {
         if (isset($_POST['Payment'])) {
             $model->attributes = $_POST['Payment'];
             $model->payment_complete = ($model->payment_complete == 1) ? "Y" : "N";
-            $model->payment_date = Myclass::dateformat($model->payment_date);
+            $model->payment_date = Myclass::datetimeformat($model->payment_date);
             if ($model->save()) {
                 Myclass::addAuditTrail("Payment updated successfully. Class id - {$model->class_id} ", "payments");
                 Yii::app()->user->setFlash('success', 'Payment Updated Successfully!!!');
@@ -212,7 +212,7 @@ class PaymentsController extends Controller {
             }
         }
 
-        $model->payment_date = Myclass::date_dispformat($model->payment_date);
+        $model->payment_date = Myclass::datetime_dispformat($model->payment_date);
 
         $this->render('update', array(
             'model' => $model,

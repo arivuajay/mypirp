@@ -42,7 +42,7 @@ class CronController extends Controller {
         //find number of students and amount today
         $criteria_3 = new CDbCriteria;
         $criteria_3->addCondition("payment_amount > 0");
-        $criteria_3->addCondition("payment_date >= '" . $today_date . "' AND payment_date <= '" . $today_date . "'");
+        $criteria_3->addCondition("DATE(payment_date) >= '" . $today_date . "' AND DATE(payment_date) <= '" . $today_date . "'");
         $criteria_3->with = array("dmvClasses", "dmvClasses.Affliate", "dmvClasses.Affliate.affiliateCommission");
         $criteria_3->together = true;
         $ref_results = Payment::model()->findAll($criteria_3);
@@ -60,7 +60,7 @@ class CronController extends Controller {
         //find number of students and amount based on month
         $criteria_4 = new CDbCriteria;
         $criteria_4->addCondition("payment_amount > 0");
-        $criteria_4->addCondition("payment_date  between '$month_start' and '$month_end'");
+        $criteria_4->addCondition("DATE(payment_date)  between '$month_start' and '$month_end'");
         $criteria_4->with = array("dmvClasses", "dmvClasses.Affliate", "dmvClasses.Affliate.affiliateCommission");
         $criteria_4->together = true;
         $ref_mont_results = Payment::model()->findAll($criteria_4);

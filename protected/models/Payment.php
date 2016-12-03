@@ -160,7 +160,7 @@ class Payment extends MyActiveRecord
             $datamod['Payment']['startdate'] = Myclass::dateformat($this->startdate);
             $datamod['Payment']['enddate'] = Myclass::dateformat($this->enddate);
             
-            $criteria->addCondition("payment_date >= '" . Myclass::dateformat($this->startdate) . "' AND payment_date <= '" . Myclass::dateformat($this->enddate) . "'");
+            $criteria->addCondition("DATE(payment_date) >= '" . Myclass::dateformat($this->startdate) . "' AND DATE(payment_date) <= '" . Myclass::dateformat($this->enddate) . "'");            
         }
         
         if($this->affiliatesid!=""){
@@ -169,7 +169,7 @@ class Payment extends MyActiveRecord
 
         $criteria->with = array("dmvClasses", "dmvClasses.Affliate");
         $criteria->together = true;
-
+       
         return new CActiveDataProvider($this, array(
             'sort' => array(
                 'defaultOrder' => 'payment_date DESC',
@@ -232,7 +232,7 @@ class Payment extends MyActiveRecord
             $datamod['Payment']['startdate'] = Myclass::dateformat($this->startdate);
             $datamod['Payment']['enddate'] = Myclass::dateformat($this->enddate);
             
-            $criteria->addCondition("payment_date >= '" . Myclass::dateformat($this->startdate) . "' AND payment_date <= '" . Myclass::dateformat($this->enddate) . "'");
+            $criteria->addCondition("DATE(payment_date) >= '" . Myclass::dateformat($this->startdate) . "' AND DATE(payment_date) <= '" . Myclass::dateformat($this->enddate) . "'");
         }  
         
         if ($this->refcode != "" ) {

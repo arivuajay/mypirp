@@ -33,7 +33,17 @@ if ($model->startdate != "" || $model->enddate != "") {
                         'name' => 'payment_date',
                         'value' => function($data) {
                             if (true == strtotime($data->payment_date))
-                                echo Myclass::date_dispformat($data->payment_date);
+                                echo $data->payment_date;
+                            else
+                                echo "-";
+                        }
+                    ),
+                    array(
+                        'header' => 'Payment Time',
+                        'name' => 'payment_date',
+                        'value' => function($data) {
+                            if (true == strtotime($data->payment_date))
+                                echo Myclass::time_dispformat($data->payment_date).' EST';
                             else
                                 echo "-";
                         }

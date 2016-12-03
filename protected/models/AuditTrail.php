@@ -83,15 +83,21 @@ class AuditTrail extends MyActiveRecord {
      * based on the search/filter conditions.
      */
     public function search() {
+        $datamod = array();
+        $datamod = $_GET;
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
         
         if($this->admin_id!="")
         $criteria->addCondition("t.admin_id=".$this->admin_id);
-        
+                
         if($this->start_date!="" && $this->end_date!="")
-        $criteria->addBetweenCondition('DATE(aud_created_date)',$this->start_date,$this->end_date);
+        {
+            $datamod['AuditTrail']['start_date'] = Myclass::dateformat($this->start_date);
+            $datamod['AuditTrail']['end_date'] = Myclass::dateformat($this->end_date);
+            $criteria->addBetweenCondition('DATE(aud_created_date)',Myclass::dateformat($this->start_date),Myclass::dateformat($this->end_date));
+        }    
         
         $criteria->with = array('Admin');        
         return new CActiveDataProvider($this, array(
@@ -101,6 +107,7 @@ class AuditTrail extends MyActiveRecord {
             'criteria' => $criteria,
             'pagination' => array(
                 'pageSize' => PAGE_SIZE,
+                'params' => $datamod
             )
         ));
     }
