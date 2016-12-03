@@ -148,7 +148,7 @@ class SchedulesController extends Controller {
                         $audit_desc = "Schedule file uploaded successfully. Some fields are incorrect. Filename - " . $filename;
                     }
 
-                    Myclass::addAuditTrail("Schedules {$audit_desc} created successfully.", "schedules");
+                    Myclass::addAuditTrail($audit_desc, "schedules");
 
                     $this->redirect(array('index'));
                 } else {

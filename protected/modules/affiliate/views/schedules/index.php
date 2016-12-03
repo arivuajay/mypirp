@@ -7,8 +7,16 @@ $this->breadcrumbs = array(
 );
 ?>
 <div class="col-lg-12 col-md-12">&nbsp;</div>
-<p><strong>Note: ASI staff will enter your class schedules. Once you see your class appear here then you can enter your students into that class. </strong></p>
 <?php //$this->renderPartial('_search', compact('model')); ?>
+<div class="col-lg-12 col-md-12">
+    <div class="row">
+        <p class='marginleft pull-left'><strong>Note: ASI staff will enter your class schedules. Once you see your class appear here then you can enter your students into that class. </strong></p>
+        <?php       
+            echo CHtml::link('<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Schedule', array('/affiliate/schedules/uploadschedule'), array('class' => 'marginleft btn btn-info pull-right','id'=>'upload-schedule'));           
+        ?>        
+    </div>
+</div>
+<div class="col-lg-12 col-md-12">&nbsp;</div>
 <div class="col-lg-12 col-md-12">
     <div class="row">
         <?php

@@ -10,7 +10,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-           
+
             <?php
             $totalcount = $model->search()->getTotalItemCount();
             $form = $this->beginWidget('CActiveForm', array(
@@ -23,7 +23,7 @@
             <div class="col-lg-3 col-md-3">
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'admin_id', array('class' => ' control-label')); ?>
-                   <?php echo $form->dropDownList($model, 'admin_id', $adminvals, array('class' => 'form-control', "empty" => "ALL")); ?> 
+                    <?php echo $form->dropDownList($model, 'admin_id', $adminvals, array('class' => 'form-control', "empty" => "ALL")); ?> 
                 </div>
             </div> 
 
@@ -47,26 +47,33 @@
                 </div>
             </div> 
 
+            <div class="col-lg-2 col-md-3">
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'aud_message', array('class' => ' control-label')); ?>                     
+                    <?php echo $form->textField($model, 'aud_message', array('class' => 'form-control')); ?>                
+                </div>
+            </div> 
+
             <div class="col-lg-2 col-md-2">
                 <div class="form-group">
                     <label>&nbsp;</label>
                     <?php echo CHtml::submitButton('Filter', array('class' => 'btn btn-primary form-control')); ?>                    
                 </div>
             </div>
-            <?php if($totalcount>0 && ($model->admin_id!="" || $model->start_date!="" || $model->end_date!="")) {?>
-             <div class="col-lg-2 col-md-2">
-                <div class="form-group">
-                    <label>&nbsp;</label>                  
-                     <?php echo CHtml::submitButton('Delete', array('class' => 'btn btn-danger form-control','onClick'=>'return confirm("Are you sure?");' ,"name"=>"deleteacts","id"=>"deleteacts"));                    
-                     ?>
+            <?php if ($totalcount > 0 && ($model->admin_id != "" || $model->start_date != "" || $model->end_date != "")) { ?>
+                <div class="col-lg-2 col-md-2">
+                    <div class="form-group">
+                        <label>&nbsp;</label>                  
+                        <?php echo CHtml::submitButton('Delete', array('class' => 'btn btn-danger form-control', 'onClick' => 'return confirm("Are you sure?");', "name" => "deleteacts", "id" => "deleteacts"));
+                        ?>
+                    </div>
                 </div>
-            </div>
-            <?php }?>
+            <?php } ?>
             <div class="clearfix"></div>                  
             <?php $this->endWidget(); ?>
-             <?php if($totalcount>0 && ($model->admin_id!="" || $model->start_date!="" || $model->end_date!="")) {?>
-            <p>Hint: Click the <strong>Delete</strong> button to delete all searched log activities.</p>
-              <?php }?>
+            <?php if ($totalcount > 0 && ($model->admin_id != "" || $model->start_date != "" || $model->end_date != "")) { ?>
+                <p>Hint: Click the <strong>Delete</strong> button to delete all searched log activities.</p>
+            <?php } ?>
         </div>
     </div>
 </div>

@@ -17,7 +17,8 @@
  */
 class AuditTrail extends MyActiveRecord {
 
-    public $start_date,$end_date,$admin_id;
+    public $start_date, $end_date, $admin_id;
+
     /**
      * @return string the associated database table name
      */
@@ -25,7 +26,6 @@ class AuditTrail extends MyActiveRecord {
         return '{{dmv_audit_trail}}';
     }
 
-    
     /**
      * @return array validation rules for model attributes.
      */
@@ -33,11 +33,11 @@ class AuditTrail extends MyActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('aud_message', 'required'),
+            //array('aud_message', 'required'),
             array('admin_id', 'numerical', 'integerOnly' => true),
             array('aud_class, aud_ip_address', 'length', 'max' => 100),
             array('aud_action, aud_message', 'length', 'max' => 255),
-            array('start_date , end_date', 'safe'),
+            array('start_date , end_date,aud_message', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('aud_id, admin_id, aud_class, aud_action, aud_message, aud_ip_address, aud_created_date', 'safe', 'on' => 'search'),
@@ -88,20 +88,22 @@ class AuditTrail extends MyActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-        
-        if($this->admin_id!="")
-        $criteria->addCondition("t.admin_id=".$this->admin_id);
-                
-        if($this->start_date!="" && $this->end_date!="")
-        {
+
+        if ($this->admin_id != "")
+            $criteria->addCondition("t.admin_id=" . $this->admin_id);
+
+        if ($this->start_date != "" && $this->end_date != "") {
             $datamod['AuditTrail']['start_date'] = Myclass::dateformat($this->start_date);
             $datamod['AuditTrail']['end_date'] = Myclass::dateformat($this->end_date);
-            $criteria->addBetweenCondition('DATE(aud_created_date)',Myclass::dateformat($this->start_date),Myclass::dateformat($this->end_date));
-        }    
-        
-        $criteria->with = array('Admin');        
+            $criteria->addBetweenCondition('DATE(aud_created_date)', Myclass::dateformat($this->start_date), Myclass::dateformat($this->end_date));
+        }
+
+        if ($this->aud_message != "")
+        $criteria->addSearchCondition('aud_message', $this->aud_message);
+
+        $criteria->with = array('Admin');
         return new CActiveDataProvider($this, array(
-             'sort' => array(
+            'sort' => array(
                 'defaultOrder' => 'aud_created_date DESC',
             ),
             'criteria' => $criteria,
@@ -133,7 +135,13 @@ class AuditTrail extends MyActiveRecord {
 
     protected function beforeSave() {
         if ($this->isNewRecord) {
-            $this->admin_id = Yii::app()->user->id;
+
+            if (isset(Yii::app()->user->role) && Yii::app()->user->role == "Affiliate") {
+                $affiliate_id = Yii::app()->user->affiliate_id;
+                $this->admin_id = DmvAffiliateInfo::model()->findByPk($affiliate_id)->admin_id;
+            } else {
+                $this->admin_id = Yii::app()->user->id;
+            }
             $this->aud_created_date = new CDbExpression('NOW()');
             $this->aud_action = Yii::app()->controller->module->id . "." . Yii::app()->controller->id . "." . Yii::app()->controller->action->id;
             $this->aud_ip_address = Yii::app()->request->getUserHostAddress();
