@@ -79,16 +79,17 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                         'label' => "<i class='fa fa-list-ol'></i>",
                         'url' => 'Yii::app()->createAbsoluteUrl("/webpanel/students/addbulkstudents/aid/".$data->affiliate_id."/cid/".$data->clas_id)',
                         'options' => array('class' => 'newWindow', 'title' => 'Add Bulk Students'),
-                        'visible' => "AdminIdentity::checkAccess('webpanel.students.addbulkstudents')"
+                        'visible' => '(AdminIdentity::checkAccess("webpanel.students.addbulkstudents") && ($data->Affliate->enabled=="Y"))'
                     ),
                 ),
             )
         );
         $this->widget('booster.widgets.TbExtendedGridView', array(
             //'filter' => $model,
-            'type' => 'striped bordered datatable',
+            'type' => 'bordered datatable',
             'enableSorting' => false,
             'dataProvider' => $model->search(),
+            'rowCssClassExpression'=>'($data->Affliate->enabled=="Y")?"aff_active":"aff_disbaled"',
             'responsiveTable' => true,
             'template' => '<div class="panel panel-primary"><div class="panel-heading"><div class="pull-right">{summary}</div><h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> Schedules</h3></div><div class="panel-body">{items}{pager}</div></div>',
             'columns' => $gridColumns

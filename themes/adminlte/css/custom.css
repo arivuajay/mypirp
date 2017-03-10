@@ -243,3 +243,7 @@ body > .header .logo{
     color: #ffffff;
     font-weight: bold;
 }
+
+.aff_disbaled {
+    background-color: #c0cedd;
+}
