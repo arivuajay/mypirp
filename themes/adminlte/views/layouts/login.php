@@ -11,7 +11,7 @@
         $cs->registerCssFile($themeUrl . '/lib/bs3/css/bootstrap.css');
         $cs->registerCssFile($themeUrl . '/css/font-awesome/css/font-awesome.css');
         $cs->registerCssFile($themeUrl . '/css/AdminLTE.css');
-        $cs->registerCssFile('http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css');
+        $cs->registerCssFile('https://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css');
         $cs->registerCssFile($themeUrl . '/css/bootstrap-theme.css');
         $cs->registerCssFile($themeUrl . '/css/custom.css');
         ?>
