@@ -18,8 +18,9 @@ class AdminIdentity extends CUserIdentity {
      * @return boolean whether authentication succeeds.
      */
     public function authenticate() {
-
-        $host = 'https://'.$_SERVER['HTTP_HOST'];         
+  
+        $host = ($_SERVER['HTTPS'] == 'on')?'https://'.$_SERVER['HTTP_HOST']:'http://'.$_SERVER['HTTP_HOST'];  
+        
         $user = Admin::model()->find("username = '".$this->username."' and domain_url = '".$host."'");
 
         if ($user === null) {

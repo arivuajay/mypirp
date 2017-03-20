@@ -19,7 +19,8 @@ class AffiliateIdentity extends CUserIdentity {
      * @return boolean whether authentication succeeds.
      */
     public function authenticate() {
-        $host = 'https://'.$_SERVER['HTTP_HOST'];    
+         
+        $host = ($_SERVER['HTTPS'] == 'on')?'https://'.$_SERVER['HTTP_HOST']:'http://'.$_SERVER['HTTP_HOST'];  
         $affiliate = DmvAffiliateInfo::model()->with("adminInfo")->find("t.user_id = '".$this->username."' and t.password = '".$this->password."' and adminInfo.domain_url = '".$host."'");
      
         if ($affiliate === null) {

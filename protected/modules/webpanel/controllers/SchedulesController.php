@@ -209,6 +209,14 @@ class SchedulesController extends Controller {
                         $zip = $data->val($i, $j);
                     } else if ($j == 11) {
                         $country_code = $data->val($i, $j);
+                    } else if ($j == 12) {
+                        $date_2 = $data->val($i, $j);
+                        if($date_2!="")
+                        $date_2 = date("Y-m-d",strtotime($date_2));
+                    } else if ($j == 13) {
+                        $start_time2 = $data->val($i, $j);
+                    } else if ($j == 14) {
+                        $end_time2 = $data->val($i, $j);
                     }
                 }
 
@@ -237,6 +245,10 @@ class SchedulesController extends Controller {
                         $smodel->clas_date = $schedule_date;
                         $smodel->start_time = $start_time;
                         $smodel->end_time = $end_time;
+                        if($date_2!="")
+                        $smodel->date2  = $date_2;
+                        $smodel->start_time2 = $start_time2;
+                        $smodel->end_time2 = $end_time2;
                         $smodel->location = $location;
                         $smodel->loc_addr = $location_addr;
                         $smodel->loc_city = $city;
