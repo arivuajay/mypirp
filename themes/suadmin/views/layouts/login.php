@@ -13,7 +13,7 @@
 
         $cs->registerCssFile($themeUrl . '/vendors/bootstrap/dist/css/bootstrap.min.css');
         $cs->registerCssFile($themeUrl . '/vendors/font-awesome/css/font-awesome.min.css');
-        $cs->registerCssFile('https://colorlib.com/polygon/gentelella/css/animate.min.css');
+       // $cs->registerCssFile('https://colorlib.com/polygon/gentelella/css/animate.min.css');
         $cs->registerCssFile($themeUrl . '/build/css/custom.min.css');
         $cs->registerCssFile($themeUrl . '/css/custom.css');
         ?>

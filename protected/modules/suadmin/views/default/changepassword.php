@@ -27,9 +27,9 @@ $this->breadcrumbs[] = $this->title;
                 ?>
                 <?php echo $form->errorSummary(array($model)); ?>
                 <div class="form-group">
-                    <?php echo $form->labelEx($model, 'password', array('class' => 'col-lg-2 col-sm-2 control-label')); ?>
+                    <?php echo $form->labelEx($model, 'old_password', array('class' => 'col-lg-2 col-sm-2 control-label')); ?>
                     <div class="col-lg-6">
-                        <?php echo $form->passwordField($model, 'password', array('class' => 'form-control')); ?>
+                        <?php echo $form->passwordField($model, 'old_password', array('class' => 'form-control')); ?>
                     </div>
                 </div>
                 <div class="form-group">

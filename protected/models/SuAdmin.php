@@ -15,7 +15,7 @@
  */
 class SuAdmin extends CActiveRecord {
 
-    public $current_password, $re_password;
+    public $current_password, $re_password,$old_password;
 
     /**
      * @return string the associated database table name
@@ -35,9 +35,9 @@ class SuAdmin extends CActiveRecord {
             array('username, email', 'unique'),
             array('email', 'email'),
             array('email', 'required', 'on' => 'forgotpassword'),
-            array('password,current_password,re_password', 'required', 'on' => 'changepassword'),
+            array('old_password,current_password,re_password', 'required', 'on' => 'changepassword'),
             array('current_password', 'compare', 'compareAttribute' => 're_password', 'on' => 'changepassword'),
-            array('password', 'equalPasswords', 'on' => 'changepassword'),
+            array('old_password', 'equalPasswords', 'on' => 'changepassword'),
             array('username, password, email', 'length', 'max' => 255),
             array('status', 'length', 'max' => 1),           
             // The following rule is used by search().
@@ -74,8 +74,9 @@ class SuAdmin extends CActiveRecord {
             'password' => Myclass::t('APP4'),
             'status' => Myclass::t('APP5'),
             'email' => Myclass::t('APP6'),
-            'current_password' => Myclass::t('APP7'),
-            're_password' => Myclass::t('APP8'),
+            'old_password' => "Old Password",
+            'current_password' => "New Password",
+            're_password' => "Retype New Password",
             'modified_at' => "Last modified",
         );
     }
