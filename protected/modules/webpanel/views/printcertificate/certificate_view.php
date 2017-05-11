@@ -1,6 +1,7 @@
 <?php
 $themeUrl = $this->themeUrl;
 if (!empty($sinfo)) {
+    
     $std_liveplace = array();
     $std_place = "";
     $agency_code = $sinfo->dmvAffiliateInfo->agency_code;
@@ -58,7 +59,7 @@ if (!empty($sinfo)) {
                         <tr>
                             <td align="left" style="font-size:11pt" width="60%">
                                 Student DL#: <?php echo $licence_number; ?><br><br>
-                                StudentName: <?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?><br><br>
+                                StudentName: <?php echo $first_name; ?>&nbsp;<?php echo ($middle_name!="")?$middle_name."&nbsp;":""; ?><?php echo $last_name; ?><br><br>
                                 Date of Birth: <?php echo $dob; ?> &nbsp;&nbsp;&nbsp; Sex: <?php echo $gender; ?><br><br>
                                 Course Completion Date: <?php echo $clas_date; ?>
                             </td>
@@ -94,7 +95,7 @@ if (!empty($sinfo)) {
         <br><br> 
     <?php }
     ?>
-    <br><br><br><br><span style="font-size:12pt;"><?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?><br><?php echo $std_address; ?><br><?php echo $std_place; ?></span>
+    <br><br><br><br><span style="font-size:12pt;"><?php echo $first_name; ?>&nbsp;<?php echo ($middle_name!="")?$middle_name."&nbsp;":""; ?><?php echo $last_name; ?><br><?php echo $std_address; ?><br><?php echo $std_place; ?></span>
         <?php
     }
     ?>

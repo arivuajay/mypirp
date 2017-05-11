@@ -151,6 +151,7 @@ class PrintcertificateController extends Controller {
                     $html = '';
                     $pdf->AddPage();	
                     $html =  $this->renderPartial('certificate_view', array("sinfo" => $sinfo), true);
+                    echo $html;exit;
                     $pdf->writeHTML($html, true, false, true, false, '');
                 }
             }

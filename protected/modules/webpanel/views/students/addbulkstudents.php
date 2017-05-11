@@ -20,8 +20,8 @@ $form = $this->beginWidget('CActiveForm', array(
 ?>
 <div class="col-lg-12 col-md-12">
     <div class="row">
-        <?php echo CHtml::submitButton('Save and continue', array('class' => 'marginleft btn btn-primary pull-right', "name"=>"saveandcont")); ?> 
-        <?php echo CHtml::submitButton('Save', array('class' => 'btn btn-success pull-right', "name"=>"save")); ?>
+        <?php echo CHtml::submitButton('Save and continue', array('class' => 'marginleft btn btn-primary pull-right', "name" => "saveandcont")); ?> 
+        <?php echo CHtml::submitButton('Save', array('class' => 'btn btn-success pull-right', "name" => "save")); ?>
     </div>
 </div>
 <div class="clearfix">&nbsp;</div>
@@ -32,21 +32,21 @@ $form = $this->beginWidget('CActiveForm', array(
             <thead>
                 <tr>
                     <td align="center"><strong>No</strong></td>
-                    <td align="center"><strong>First name</strong></td>
-                    <td align="center"><strong>Middle name</strong></td>
+                    <td align="center"><strong>Lice. Num:</strong></td>
                     <td align="center"><strong>Last name</strong></td>     
-                    <td align="center"><strong>Suffix</strong></td>
+                    <td align="center"><strong>First name</strong></td>
+                    <td align="center"><strong>Middle name</strong></td>                   
+<!--                    <td align="center"><strong>Suffix</strong></td>-->
                     <td align="center"><strong>Address 1</strong></td>
-                    <td align="center"><strong>Address 2</strong></td>
+<!--                    <td align="center"><strong>Address 2</strong></td>-->
                     <td align="center"><strong>City</strong></td>
                     <td align="center"><strong>State</strong></td>
                     <td align="center"><strong>Zip code</strong></td>
+                    <td align="center"><strong>Gender</strong></td>
+                    <td align="center"><strong>DOB</strong></td>                     
                     <td align="center"><strong>Phone</strong></td>
-                    <td align="center"><strong>Email</strong></td>
-                    <td align="center"><strong> Gender</strong></td>
-                    <td align="center"><strong> DOB</strong></td>
-                    <td align="center"><strong> Lice. Num:</strong></td>
-                    <td align="center"><strong> Course Completion Dt</strong></td>
+                    <td align="center"><strong>Email</strong></td>                                    
+                    <td align="center"><strong>Course Completion Dt</strong></td>
                 </tr>                
             </thead>
             <?php
@@ -55,17 +55,16 @@ $form = $this->beginWidget('CActiveForm', array(
                 ?>
                 <tr>
                     <td><?php echo $i; ?></td>
+                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'licence_number', array('class' => 'form-control', 'size' => 25)); ?></td>
+                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'last_name', array('class' => 'form-control', 'size' => 25)); ?></td> 
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'first_name', array('class' => 'form-control', 'size' => 25)); ?></td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'middle_name', array('class' => 'form-control', 'size' => 25)); ?></td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'last_name', array('class' => 'form-control', 'size' => 25)); ?></td>                    
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'stud_suffix', array('class' => 'form-control', 'size' => 25)); ?></td>
+                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'middle_name', array('class' => 'form-control', 'size' => 25)); ?></td>                                      
+    <!--                    <td><?php //echo $form->textField($model, '[' . $i . ']' . 'stud_suffix', array('class' => 'form-control', 'size' => 25));     ?></td>-->
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'address1', array('class' => 'form-control', 'size' => 25)); ?></td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'address2', array('class' => 'form-control', 'size' => 25)); ?></td>
+    <!--                    <td><?php //echo $form->textField($model, '[' . $i . ']' . 'address2', array('class' => 'form-control', 'size' => 25));     ?></td>-->
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'city', array('class' => 'form-control', 'size' => 25)); ?></td>
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'state', array('class' => 'form-control', 'size' => 25)); ?></td>
                     <td><?php echo $form->textField($model, '[' . $i . ']' . 'zip', array('class' => 'form-control', 'size' => 25)); ?></td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'phone', array('class' => 'form-control', 'size' => 25)); ?></td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'email', array('class' => 'form-control', 'size' => 25)); ?></td>
                     <td><?php echo $form->dropDownList($model, '[' . $i . ']' . 'gender', array("" => "Select One", "F" => "Female", "M" => "Male"), array('class' => 'form-control')); ?></td>
                     <td>
                         <div class="input-group">
@@ -74,7 +73,8 @@ $form = $this->beginWidget('CActiveForm', array(
                         </div> 
                         (MM/DD/YYYY)
                     </td>
-                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'licence_number', array('class' => 'form-control', 'size' => 25)); ?></td>
+                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'phone', array('class' => 'form-control', 'size' => 25)); ?></td>
+                    <td><?php echo $form->textField($model, '[' . $i . ']' . 'email', array('class' => 'form-control', 'size' => 25)); ?></td>   
                     <td>
                         <div class="input-group">
                             <span class="input-group-addon"> <i class="fa fa-calendar"></i></span>
@@ -94,7 +94,8 @@ $form = $this->beginWidget('CActiveForm', array(
         </table>  
     </div>
 </div>
-<?php $this->endWidget(); 
+<?php
+$this->endWidget();
 $js = <<< EOD
     $(document).ready(function () {
 

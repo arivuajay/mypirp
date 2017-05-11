@@ -28,6 +28,7 @@ if ($student_id != "") {
         $gender = ($sinfo->gender == "F") ? "Female" : "Male";
         $licence_number = $sinfo->licence_number;
         $clas_date = ($sinfo->course_completion_date != "0000-00-00") ? Myclass::date_dispformat($sinfo->course_completion_date) : "-";
+        
         ?>
         <div class="certificate-cont">
             <table width="100" border="0" align="center" cellpadding="0" cellspacing="0" class="cert-table">
@@ -83,7 +84,7 @@ if ($student_id != "") {
                                                                     <td>&nbsp;</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td align="left" valign="top" width="50%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Student Name:&nbsp;<?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?></td>
+                                                                    <td align="left" valign="top" width="50%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Student Name:&nbsp;<?php echo $first_name; ?>&nbsp;<?php echo ($middle_name!="")?$middle_name."&nbsp;":""; ?><?php echo $last_name; ?></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>&nbsp;</td>
@@ -172,7 +173,7 @@ if ($student_id != "") {
             <table cellspacing="0" cellpadding="0" height="100" align="center" width="900px">
                 <tr>
                     <td align="left" nowrap="nowrap" valign="top">
-                        <?php echo $first_name; ?>&nbsp;<?php echo $last_name; ?>
+                        <?php echo $first_name; ?>&nbsp;<?php echo ($middle_name!="")?$middle_name."&nbsp;":""; ?><?php echo $last_name; ?>
                         <?php echo ($std_address!="")?"<br>".$std_address:""; ?>
                         <?php echo ($std_place!="")?"<br>".$std_place."  ":""; 
                         echo ($zip!="")?$zip:"";?>
