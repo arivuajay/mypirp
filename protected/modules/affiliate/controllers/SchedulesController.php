@@ -99,13 +99,24 @@ class SchedulesController extends Controller {
                     $model->scheduledoc->saveAs($upload_path . $filename);
 
                     // Read the Excelsheet and Insert Schedules to Database
-                    $inserted_count = $this->excelsheetschedules($filename,$affiliate_id,$agency_code,$agency_name,$admin_id);
-                    if ($inserted_count > 0) {
-                        Yii::app()->user->setFlash('success', $inserted_count . ' Classes Created Successfully!!!');
-                        $audit_desc = "Scheduled file uploaded by ".$agency_name." (".$agency_code.") and classes imported Successfully. Filename - " . $filename;
+                     $output_data = $this->excelsheetschedules($filename,$affiliate_id,$agency_code,$agency_name,$admin_id);
+
+                    if (isset($output_data['status'])) {
+
+                        if ($output_data['status'] == 1) {
+                            Yii::app()->user->setFlash('success', $output_data['message']);
+                            $audit_desc = "Scheduled file uploaded by ".$agency_name." (".$agency_code.") and classes imported Successfully. Filename - " . $filename;
+                        } else if ($output_data['status'] == 2) {
+                            Yii::app()->user->setFlash('danger', $output_data['message']);
+                            $audit_desc = $output_data['message'] . " Filename - " . $filename;
+                        } else if ($output_data['status'] == 3) {
+                            Yii::app()->user->setFlash('info', $output_data['message']);
+                            $audit_desc = "Scheduled file uploaded Successfully by ".$agency_name." (".$agency_code.")." . $output_data['message'] . ". Filename - " . $filename;
+                        }
                     } else {
-                        Yii::app()->user->setFlash('info', 'Please check the updated fields in the excelsheet!!!');
-                        $audit_desc = "Schedule file uploaded by ".$agency_name." (".$agency_code.") successfully. Some fields are incorrect. Filename - " . $filename;
+
+                        Yii::app()->user->setFlash('danger', 'Something is wrong!! Please check the updated fields in the excelsheet!!!');
+                        $audit_desc = "Schedule file uploaded successfully by ".$agency_name." (".$agency_code.")." . $output_data['message'] . ". Some fields are incorrect. Filename - " . $filename;
                     }
 
                     Myclass::addAuditTrail($audit_desc, "schedules");
@@ -122,7 +133,11 @@ class SchedulesController extends Controller {
     }
 
     public function excelsheetschedules($filename = null,$affiliate_id,$agency_code,$agency_name,$admin_id) {
+      
+        $result = array();
         $tot_schedules_inserted = 0;
+        $existing_schedules = 0;
+        $pblm_schedules = 0;
 
         $fpath = Yii::getPathOfAlias('webroot') . '/' . XL_PATH_AFF . $filename;
 
@@ -172,10 +187,16 @@ class SchedulesController extends Controller {
                         $country_code = $data->val($i, $j);
                     }
                 }
-
+//echo $instructor_code;
                 $instructor_id = DmvAddInstructor::model()->find("instructor_code = :x_instructor_code and admin_id = :x_admin_id", array(':x_instructor_code' => $instructor_code, ':x_admin_id' => $admin_id))->instructor_id;
                 $country_id = DmvCountry::model()->find("country_code = :x_country_code", array(':x_country_code' => $country_code))->id;
-
+//
+//                echo "Aff".$affiliate_id.'<br>' ;
+//                echo "schedule_date".$schedule_date.'<br>' ;
+//                echo "start_time".$start_time.'<br>' ;
+//                 echo "end_time".$end_time.'<br>' ;
+//                  echo "instructor_id".$instructor_id.'<br>' ;
+//                     exit;
                 if ($affiliate_id != "" && $schedule_date != "" && $start_time != "" && $end_time != "" && $instructor_id != "") {
 
                     /* Insert record in AffInstructor Table */
@@ -189,7 +210,7 @@ class SchedulesController extends Controller {
                     }
 
                     $condition = "affiliate_id='" . $affiliate_id . "' and  clas_date='" . $schedule_date . "' and start_time='" . $start_time . "' and end_time='" . $end_time . "' and instructor_id='" . $instructor_id . "'";
-           
+//           echo $condition; echo "<br>";
                     $scheduleexist = DmvClasses::model()->count($condition);
                     if ($scheduleexist == 0) {
                         /* Insert record in Classes Table */
@@ -206,18 +227,52 @@ class SchedulesController extends Controller {
                         $smodel->country = $country_id;
                         $smodel->instructor_id = $instructor_id;
                         $smodel->show_admin = "Y";
-                        $smodel->save();
+                        if($smodel->save()){
+                           $audit_desc = date("F d,Y", strtotime($smodel->clas_date)) . " " . $smodel->start_time . " to " . $smodel->end_time . " Class id - {$smodel->clas_id} ";
+                           Myclass::addAuditTrail("Schedules {$audit_desc} created by ".$agency_name." (".$agency_code.") successfully.", "schedules");
 
-                        $audit_desc = date("F d,Y", strtotime($smodel->clas_date)) . " " . $smodel->start_time . " to " . $smodel->end_time . " Class id - {$smodel->clas_id} ";
-                        Myclass::addAuditTrail("Schedules {$audit_desc} created by ".$agency_name." (".$agency_code.") successfully.", "schedules");
-
-                        $tot_schedules_inserted++;
+                           $tot_schedules_inserted++;
+                        }else{
+                            $pblm_schedules++;
+                        }
+                    }else {
+                        $existing_schedules++;
                     }
                 }
             }
+            
+             // Without header
+            $tot_rows = $rows - 1;
+//echo 'TR='.$tot_rows.'<br>';
+//echo 'TSI='.$tot_schedules_inserted.'<br>';
+//echo 'ES='.$existing_schedules.'<br>';
+//echo 'PS='.$pblm_schedules.'<br>';
+            if ($tot_rows == $tot_schedules_inserted) {
+                $result['inserted_count'] = $tot_schedules_inserted;
+                $result['existing_count'] = 0;
+                $result['message'] = $tot_schedules_inserted . ' Classes are Created Successfully!!!';
+                $result['status'] = 1;
+            } else if ($tot_rows == $existing_schedules) {
+                $result['inserted_count'] = 0;
+                $result['existing_count'] = $existing_schedules;
+                $result['message'] = 'Uploaded classes already exists!!!';
+                $result['status'] = 2;
+            } else if ($existing_schedules > 0 && $tot_schedules_inserted > 0) {
+                $msg = "";
+                $result['inserted_count'] = $tot_schedules_inserted;
+                $result['existing_count'] = $existing_schedules;
+                if($pblm_schedules>0)
+                    $msg = " And some schedules (".$pblm_schedules.") have problem to inserted in database!!!";
+                    
+                $result['message'] = $tot_schedules_inserted . ' Classes are Created Successfully and ' . $existing_schedules . ' Classes are already exists!!!'.$msg;
+                $result['status'] = 3;
+            }
+//            echo "<pre>";
+//            print_r($result); exit;
+            
         }
 
-        return $tot_schedules_inserted;
+        return $result;
     }
 
     /**

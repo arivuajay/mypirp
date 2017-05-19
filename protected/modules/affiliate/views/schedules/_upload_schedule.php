@@ -38,6 +38,7 @@ $this->breadcrumbs = array(
                 <ul>
                     <li>Please use the given excelsheet format ( Example: <a target="_blank" href="<?php echo Yii::app()->createAbsoluteUrl("/uploads/affiliate_schedules/Aff_Schedules.xls");?>">Sample Schedule Excel Sheet Format</a> )</li>
                     <li>Please fill the list of mandatory fields for each schedule. (INS_CODE, DATE, START_TIME, END_TIME, LOCATION, CITY, STATE, COUNTRY_CODE)</li>
+                     <li>Please fill the START_TIME and END_TIME using this syntax. Example: <strong>11:00 am</strong> (Need space between time and the meridians)</li>
                     <li>Please give your respective instructor code.</li>
                     <li>Please use the given "Country Code" from the CSV file ( Download : <a target="_blank" href="<?php echo Yii::app()->createAbsoluteUrl("/uploads/country.csv");?>">Country Code Formats</a> )</li>
                 </ul>                

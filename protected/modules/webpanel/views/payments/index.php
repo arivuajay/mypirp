@@ -89,7 +89,31 @@ $cs->registerScriptFile($themeUrl . '/js/datepicker/bootstrap-datepicker.js', $c
                     }
                 }
             ),
-            'cheque_number',
+            array(
+                'header' => 'Check / Money Order',
+                'name' => 'cheque_number',
+                'value' => function($data) {
+                    if ($data->payment_type != "") {
+                        
+                        $card_types = Myclass::card_types();
+                        
+                        if (array_key_exists($data->payment_type, $card_types)) {
+                            $cardtype =  $card_types[$data->payment_type];
+                            if($cardtype=='Check')
+                            {
+                                echo $data->cheque_number;
+                            }else  if($cardtype=='Money Order'){
+                                echo $data->moneyorder_number;
+                            } else {
+                                echo "-";
+                            }   
+                           
+                        } else {
+                            echo "-";
+                        }
+                    }
+                }
+            ), 
             /*
               'payment_complete',
               'payment_notes',

@@ -43,13 +43,14 @@ class DmvClasses extends MyActiveRecord {
         return array(
             array('affiliate_id, instructor_id, start_time, end_time, location, loc_city, country,clas_date', 'required'),
             array('affiliate_id, country, instructor_id, pending', 'numerical', 'integerOnly' => true),
-            array('clas_name, location', 'length', 'max' => 50),
-            array('start_time, end_time, start_time2, end_time2, loc_state, zip', 'length', 'max' => 10),
-            array('loc_addr', 'length', 'max' => 30),
-            array('loc_city', 'length', 'max' => 20),
+            array('clas_name', 'length', 'max' => 50),
+            array('location', 'length', 'max' => 150),
+            array('loc_addr', 'length', 'max' => 130),
+            array('loc_city', 'length', 'max' => 120),
             array('show_admin', 'length', 'max' => 1),
-            array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname,clasdate', 'safe'),
+            array('clas_date, date2,agencycode,start_date,end_date,composite_error,affiliateid,agencyname,clasdate,zip', 'safe'),
             array('pnewclassid,adminid', 'safe'),
+            array('clas_id, affiliate_id, clas_date, clas_name, start_time, end_time, date2, start_time2, end_time2, location, loc_addr, loc_city, loc_state, zip, country, instructor_id, show_admin, pending', 'safe'),
             //array('affiliate_id, instructor_id, start_time, end_time,clas_date','unique',),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
