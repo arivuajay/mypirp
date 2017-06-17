@@ -27,7 +27,13 @@ $cs_pos_end = CClientScript::POS_END;
             'last_name',
             'city',
             'phone',
-            'email',
+             array(
+                    'name' => 'dob',
+                    'type' => 'raw',
+                    'value' => function($data) {
+                       echo ($data->dob != "0000-00-00") ? Myclass::date_dispformat($data->dob) : "-";
+                    }
+                ),
             array(
                 'header' => 'Gender',
                 'name' => 'gender',

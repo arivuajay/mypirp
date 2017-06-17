@@ -39,7 +39,7 @@ return array(
     'IMG_PATH' => 'messagedoc/',   
     'REPORT_PATH' => '/stdreports/',
     'defaultPageSize'=> 20,
-    'pageSizeOptions'=> array(10=>10,50=>50,100=>100,150=>150,200=>200),
+    'pageSizeOptions'=> array(10=>10,50=>50,100=>100,150=>150,200=>200,300=>300,400=>400,500=>500),
     'currentdb' => "livedb"   ,
     'XL_PATH_ADM' => 'uploads/admin_schedules/',  
     'XL_PATH_AFF' => 'uploads/affiliate_schedules/',  
