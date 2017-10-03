@@ -106,6 +106,7 @@ if ($model->startdate != "" && $model->enddate != "") {
                         },
                     ),
                     'last_name',
+                    'middle_name',
                     'first_name',
                     'licence_number',
                     array(
