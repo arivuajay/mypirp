@@ -292,6 +292,8 @@ class ReportsController extends Controller {
     }
 
     public function actionPrintlabels() {
+        $admin_id = Yii::app()->user->getId();
+
         $model = new Students();
         $affiliates = DmvAffiliateInfo::all_affliates("Y");
 
@@ -316,6 +318,8 @@ class ReportsController extends Controller {
             if ($model->agencycode != "")
                 $criteria->addCondition("dmvAffiliateInfo.agency_code = '" . $model->agencycode . "'");
 
+            /* Affiliates for this respective admin */
+            $criteria->addCondition("dmvAffiliateInfo.admin_id = '" . $admin_id . "'");
 
             if ($model->agencyname != "")
                 $criteria->compare('dmvAffiliateInfo.agency_name', $model->agencyname, true);
