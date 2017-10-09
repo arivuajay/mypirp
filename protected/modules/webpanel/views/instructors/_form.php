@@ -161,6 +161,15 @@
                         <?php echo $form->error($model, 'phone'); ?>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'notes', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-sm-5">
+                        <?php echo $form->textArea($model, 'notes', array('class' => 'form-control', 'rows' => 6, 'cols' => 50)); ?>
+                        <?php echo $form->error($model, 'notes'); ?>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <?php echo $form->labelEx($model, 'enabled', array('class' => 'col-sm-2 control-label')); ?>
                     <div class="col-sm-5">

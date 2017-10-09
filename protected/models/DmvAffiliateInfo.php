@@ -43,6 +43,7 @@ class DmvAffiliateInfo extends MyActiveRecord
 {
 
     public $start_date, $end_date, $existinguserid;
+    public $aff_referral_code;
 
     /**
      * @return string the associated database table name
@@ -73,6 +74,7 @@ class DmvAffiliateInfo extends MyActiveRecord
             array('initial', 'length', 'max' => 5),
             array('phone, phone_ext, fax', 'length', 'max' => 15),
             array('aff_created_date, agency_approved_date, aff_notes,start_date,end_date,admin_id,existinguserid', 'safe'),
+            array('aff_referral_code', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('affiliate_id, agency_code, agency_name, user_id, password, enabled, aff_created_date, sponsor_code, file_type, email_addr, record_type, trans_type, ssn, fedid, addr1, addr2, city, state, zip, country_code, last_name, first_name, initial, contact_suffix, con_title, phone, phone_ext, fax, owner_last_name, owner_first_name, owner_initial, owner_suffix, agency_approved_date, aff_notes', 'safe', 'on' => 'search'),
@@ -194,8 +196,6 @@ class DmvAffiliateInfo extends MyActiveRecord
 
         $criteria = new CDbCriteria;
 
-
-
         if (isset(Yii::app()->user->admin_id) && Yii::app()->user->admin_id != "") {
             $criteria->condition = "admin_id = :admin_id";
             $criteria->params = (array(':admin_id' => Yii::app()->user->admin_id));
@@ -204,6 +204,10 @@ class DmvAffiliateInfo extends MyActiveRecord
         if (isset(Yii::app()->user->affiliate_id) && Yii::app()->user->affiliate_id != "") {
             $this->affiliateid = Yii::app()->user->affiliate_id;
             $criteria->addCondition("t.affiliate_id = " . $this->affiliateid);
+        }
+     //   echo $this->aff_referral_code; exit;
+        if ($this->aff_referral_code != "") {
+            $criteria->addCondition("affiliateCommission.referral_code = '" . $this->aff_referral_code."'");
         }
 
         //$criteria->compare('affiliate_id', $this->affiliate_id);     
@@ -241,6 +245,8 @@ class DmvAffiliateInfo extends MyActiveRecord
         $criteria->compare('agency_approved_date', $this->agency_approved_date, true);
         $criteria->compare('aff_notes', $this->aff_notes, true);
 
+        $criteria->with = array("affiliateCommission");
+        $criteria->together = true;
 
         return new CActiveDataProvider($this, array(
             'sort' => array(
