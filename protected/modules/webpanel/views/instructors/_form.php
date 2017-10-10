@@ -2,6 +2,7 @@
 /* @var $this InstructorsController */
 /* @var $model DmvAddInstructor */
 /* @var $form CActiveForm */
+
 ?>
 
 <div class="row">
@@ -167,6 +168,30 @@
                     <div class="col-sm-5">
                         <?php echo $form->textArea($model, 'notes', array('class' => 'form-control', 'rows' => 6, 'cols' => 50)); ?>
                         <?php echo $form->error($model, 'notes'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'approval_date', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                            <?php echo $form->textField($model, 'approval_date', array('class' => 'form-control date')); ?>
+                        </div>
+                        (MM/DD/YYYY)
+                        <?php echo $form->error($model, 'approval_date'); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <?php echo $form->labelEx($model, 'recertification_date', array('class' => 'col-sm-2 control-label')); ?>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">  <i class="fa fa-calendar"></i></span>
+                            <?php echo $form->textField($model, 'recertification_date', array('class' => 'form-control date')); ?>
+                        </div>
+                        (MM/DD/YYYY)
+                        <?php echo $form->error($model, 'recertification_date'); ?>
                     </div>
                 </div>
 

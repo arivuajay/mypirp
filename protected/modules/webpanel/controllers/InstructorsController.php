@@ -57,6 +57,8 @@ class InstructorsController extends Controller {
             $model->attributes = $_POST['DmvAddInstructor'];
             $model->admin_id = Yii::app()->user->admin_id;
             $model->instructor_dob = ($model->instructor_dob!="")?Myclass::dateformat($model->instructor_dob):"";
+            $model->approval_date = ($model->approval_date!="")?Myclass::dateformat($model->approval_date):"";
+            $model->recertification_date = ($model->recertification_date!="")?Myclass::dateformat($model->recertification_date):"";
             $model->created_date = date("Y-m-d", time());
             if ($model->save()) {
                 $instructor_id = $model->instructor_id;
@@ -90,6 +92,14 @@ class InstructorsController extends Controller {
             $model->instructor_dob = "";
         }
 
+        if ($model->approval_date == "0000-00-00") {
+            $model->approval_date = "";
+        }
+
+        if ($model->recertification_date == "0000-00-00") {
+            $model->recertification_date = "";
+        }
+
         $this->render('create', compact('model', 'affiliates', 'x_aff'));
     }
 
@@ -110,6 +120,8 @@ class InstructorsController extends Controller {
         if (isset($_POST['DmvAddInstructor'])) {
             $model->attributes = $_POST['DmvAddInstructor'];
             $model->instructor_dob = ($model->instructor_dob!="")?Myclass::dateformat($model->instructor_dob):"";
+            $model->approval_date = ($model->approval_date!="")?Myclass::dateformat($model->approval_date):"";
+            $model->recertification_date = ($model->recertification_date!="")?Myclass::dateformat($model->recertification_date):"";
             if ($model->save()) {
                 $instructor_id = $model->instructor_id;
                 // Save affliates for this instructor
@@ -153,6 +165,18 @@ class InstructorsController extends Controller {
             $model->instructor_dob = "";
         }else{
              $model->instructor_dob = ($model->instructor_dob!="")?Myclass::date_dispformat($model->instructor_dob):"";
+        }
+
+        if($model->approval_date=="" || $model->approval_date=="0000-00-00"){
+            $model->approval_date = "";
+        }else{
+            $model->approval_date = ($model->approval_date!="")?Myclass::date_dispformat($model->approval_date):"";
+        }
+
+        if($model->recertification_date=="" || $model->recertification_date=="0000-00-00"){
+            $model->recertification_date = "";
+        }else{
+            $model->recertification_date = ($model->recertification_date!="")?Myclass::date_dispformat($model->recertification_date):"";
         }
 
         $this->render('update', compact('model', 'affiliates', 'x_aff'));

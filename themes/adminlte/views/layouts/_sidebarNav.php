@@ -44,6 +44,7 @@
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Student Completion Report</span>', 'url' => array('/webpanel/reports/studentcompletionreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.studentcompletionreport')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Print Labels</span>', 'url' => array('/webpanel/reports/printlabels'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.printlabels')),
                         array('label' => '<i class="fa fa-angle-double-right"></i> <span>Duplicates</span>', 'url' => array('/webpanel/reports/duplicates'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.duplicates')),
+                        array('label' => '<i class="fa fa-angle-double-right"></i> <span>Instructor Report</span>', 'url' => array('/webpanel/reports/instructorreport'), 'visible' => AdminIdentity::checkAccess('webpanel.reports.instructorreport')),
                     ),
                     'visible' => AdminIdentity::checkAccess('webpanel.reports.index')
                 ),

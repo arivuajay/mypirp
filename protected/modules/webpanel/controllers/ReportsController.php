@@ -28,7 +28,7 @@ class ReportsController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('bookorderreport', 'certificatereport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport'),
+                'actions' => array('bookorderreport', 'certificatereport', 'paymentreport', 'quarterlyannualreport', 'monthlyreport', 'studentcompletionreport', 'duplicates', 'printlabels', 'referralreport','instructorreport'),
                 'expression' => "AdminIdentity::checkAccess('webpanel.reports.{$this->action->id}')",
             ),
             array('deny', // deny all users
@@ -68,6 +68,51 @@ class ReportsController extends Controller {
             $model->attributes = $_GET['Payment'];
 
         $this->render('paymentreport', compact('model', 'affiliates'));
+    }
+
+    public function actionInstructorreport() {
+        $model = new DmvAddInstructor();
+        $affiliates = DmvAffiliateInfo::all_affliates();
+        $from_date = '';
+        $to_date = '';
+        $query_arr = [];
+        $querystr = "";
+        $admin_id = Yii::app()->user->getId();
+        if (isset($_GET['DmvAddInstructor'])) {
+            $from_date = Myclass::dateformat($_GET['DmvAddInstructor']['start_date']);
+            $to_date = Myclass::dateformat($_GET['DmvAddInstructor']['end_date']);
+
+            if($_GET['DmvAddInstructor']['start_date']!="" && $_GET['DmvAddInstructor']['end_date']!=""){
+                $query_arr[] = " (DMI.created_date  BETWEEN '" . $from_date . "'  AND '" . $to_date . "') ";
+            }
+
+            if($_GET['DmvAddInstructor']['Affiliate']>0){
+                $_findaff   = $_GET['DmvAddInstructor']['Affiliate'];
+                $query_arr[] = " ( affInstructor.affiliate_id = '".$_findaff."' or affInstructor.affiliate_id='0' ) ";
+            }
+
+            $imp_query_str = implode(" AND ",$query_arr);
+            if($imp_query_str)
+                $querystr .= " AND ".$imp_query_str;
+
+            $sql = "SELECT
+                DFI.agency_name AS 'Agency Name', DFI.agency_code AS 'Agency Code',DMI.ins_first_name AS 'Instructor First Name',DMI.instructor_last_name AS 'Instructor Last Name', DMI.enabled AS 'Instructor Status', DMI.phone AS 'Instructor Phone'              
+                FROM dmv_add_instructor  DMI
+                LEFT OUTER JOIN dmv_aff_instructor as affInstructor ON (affInstructor.instructor_id=DMI.instructor_id)
+                LEFT OUTER JOIN dmv_affiliate_info as DFI    ON (DFI.affiliate_id = affInstructor.affiliate_id)
+                WHERE DFI.admin_id = '" . $admin_id . "' ".$querystr." ORDER BY DFI.agency_code ASC";
+
+
+            $ret_result = Myclass::getsqlcommand($sql);
+            $file_name = 'instructorreport ' . date('F-d-Y') . '.csv';
+
+            Yii::import('ext.ECSVExport');
+            $csv = new ECSVExport($ret_result);
+            $content = $csv->toCSV();
+            Yii::app()->getRequest()->sendFile($file_name, $content, "text/csv", false);
+        }
+
+        $this->render('instructorreport', compact('model','affiliates'));
     }
 
     public function actionQuarterlyannualreport() {
