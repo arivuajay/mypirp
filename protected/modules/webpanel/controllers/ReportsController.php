@@ -96,7 +96,7 @@ class ReportsController extends Controller {
                 $querystr .= " AND ".$imp_query_str;
 
             $sql = "SELECT
-                DFI.agency_name AS 'Agency Name', DFI.agency_code AS 'Agency Code',DMI.ins_first_name AS 'Instructor First Name',DMI.instructor_last_name AS 'Instructor Last Name', DMI.enabled AS 'Instructor Status', DMI.phone AS 'Instructor Phone'              
+                DFI.agency_name AS 'Agency Name', DFI.agency_code AS 'Agency Code',DMI.ins_first_name AS 'Instructor First Name',DMI.instructor_last_name AS 'Instructor Last Name',DMI.instructor_code AS 'Instructor Code', DMI.enabled AS 'Instructor Status', DMI.phone AS 'Instructor Phone'              
                 FROM dmv_add_instructor  DMI
                 LEFT OUTER JOIN dmv_aff_instructor as affInstructor ON (affInstructor.instructor_id=DMI.instructor_id)
                 LEFT OUTER JOIN dmv_affiliate_info as DFI    ON (DFI.affiliate_id = affInstructor.affiliate_id)
