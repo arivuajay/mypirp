@@ -176,6 +176,7 @@ class DmvAffiliateInfo extends MyActiveRecord
             'owner_suffix' => Myclass::t('Owner Suffix'),
             'agency_approved_date' => Myclass::t('Agency Approved Date'),
             'aff_notes' => Myclass::t('Notes'),
+            'sponser_email' => Myclass::t('Sponsor Email'),
         );
     }
 
